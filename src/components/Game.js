@@ -41,6 +41,7 @@ const PickPokemon = ({ starter, updateParty }) => {
             id: pokes[starterIndex].id,
             lvl: 5,
             xp: 0,
+            health: pokes[starterIndex].stats[0].base_stat,
             gender:
               Math.random() > pokes[starterIndex].genderRate / 8
                 ? "male"
@@ -102,6 +103,7 @@ export default function Game() {
         <Box>
           <Battle
             playerPokemon={player.party[0]}
+            opponentHealth={game.battle.opponentHealth}
             enemyPokemon={game.battle.opponentPokemon}
           />
           <Map

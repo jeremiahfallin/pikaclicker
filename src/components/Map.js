@@ -71,7 +71,6 @@ export default function Map({ player, updateCurrentHex, startBattle }) {
                 if (player.unlockedAreas.includes(hexArea)) {
                   updateCurrentHex({ q, r, s });
                   const potentialPokemon = getPokemonSpawnByHex(q, r, s);
-                  console.log(potentialPokemon);
                   const randomPokemonId =
                     potentialPokemon[
                       Math.floor(Math.random() * potentialPokemon.length)

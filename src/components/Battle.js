@@ -17,7 +17,7 @@ function Pokemon({ details, top, left, bottom, right }) {
   if (bottom === 0 && left === 0) {
     sprite = details?.sprites.front_default;
   }
-  console.log(details);
+
   return (
     <Box
       position="absolute"
@@ -27,18 +27,39 @@ function Pokemon({ details, top, left, bottom, right }) {
       bottom={bottom}
     >
       <Image src={sprite} alt={details?.name} />
-      <Progress value={100} colorScheme="green" />
+      <Progress
+        value={(100 * details.health) / details.stats[0].base_stat}
+        colorScheme="green"
+      />
     </Box>
   );
 }
 
-export default function Battle({ playerPokemon, enemyPokemon }) {
+export default function Battle({
+  playerPokemon,
+  enemyPokemon,
+  opponentHealth,
+}) {
   const myPokemon = pokes.find((val) => val.id === playerPokemon?.id);
   const otherPokemon = pokes.find((val) => val.id === enemyPokemon?.id);
+  console.log(otherPokemon);
+
   return (
     <Box background={"green"} position={"relative"} h={200}>
-      <Pokemon details={myPokemon} bottom={0} left={0} />
-      <Pokemon details={otherPokemon} top={0} right={0} />
+      {!!myPokemon && (
+        <Pokemon
+          details={{ ...myPokemon, health: playerPokemon.health }}
+          bottom={0}
+          left={0}
+        />
+      )}
+      {!!otherPokemon && (
+        <Pokemon
+          details={{ ...otherPokemon, health: opponentHealth }}
+          top={0}
+          right={0}
+        />
+      )}
       <div>Levels</div>
       <div>Genders</div>
     </Box>
