@@ -20,6 +20,7 @@ const intitialState = {
     },
     unlockedAreas: ["Area 1"],
   },
+  isInTown: true,
   events: {
     pickStarter: 0,
   },
@@ -34,7 +35,7 @@ export const useGameSession = () => {
       ...prevState,
       battle: {
         ...prevState.battle,
-        opponentHealth: pokemon.stats[0].base_stat,
+        opponentHealth: pokemon?.stats[0]?.base_stat,
         opponentPokemon: pokemon,
       },
     }));
@@ -48,6 +49,7 @@ export const useGameSession = () => {
         ...prevState.player,
         currentHex: newHex,
       },
+      isInTown: newHex.isTown || false,
     }));
   };
 
@@ -88,53 +90,72 @@ export const useGameSession = () => {
     const myPokemon = state.player.party[0];
     const myPokemonDetails = pokes.find((poke) => poke.id === myPokemon.id);
 
-    const opponentPokemon = state.battle.opponentPokemon;
+    if (state.isInTown) {
+      setState((prevState) => ({
+        ...prevState,
+        player: {
+          ...prevState.player,
+          party: [
+            {
+              ...prevState.player.party[0],
+              health: myPokemonDetails.stats[0].base_stat,
+            },
+            ...prevState.player.party.splice(1),
+          ],
+        },
+      }));
+    } else {
+      const opponentPokemon = state.battle.opponentPokemon;
 
-    const dmgDealt = calcDamage(
-      myPokemon.lvl,
-      Math.max(
-        myPokemonDetails.stats[1].base_stat,
-        myPokemonDetails.stats[3].base_stat
-      ),
-      80,
-      Math.max(
-        opponentPokemon.stats[2].base_stat,
-        opponentPokemon.stats[4].base_stat
-      ),
-      1,
-      1
-    );
-    const dmgTaken = calcDamage(
-      5,
-      Math.max(
-        opponentPokemon.stats[1].base_stat,
-        opponentPokemon.stats[3].base_stat
-      ),
-      80,
-      Math.max(
-        myPokemonDetails.stats[2].base_stat,
-        myPokemonDetails.stats[4].base_stat
-      ),
-      1,
-      1
-    );
-    setState((prevState) => ({
-      ...prevState,
-      player: {
-        ...prevState.player,
-        party: [
-          {
-            ...prevState.player.party[0],
-            health: Math.max(prevState.player.party[0].health - dmgTaken, 0),
-          },
-          ...prevState.player.party.splice(1),
-        ],
-      },
-      battle: {
-        ...prevState.battle,
-        opponentHealth: Math.max(prevState.battle.opponentHealth - dmgDealt, 0),
-      },
-    }));
+      const dmgDealt = calcDamage(
+        myPokemon.lvl,
+        Math.max(
+          myPokemonDetails.stats[1].base_stat,
+          myPokemonDetails.stats[3].base_stat
+        ),
+        80,
+        Math.max(
+          opponentPokemon.stats[2].base_stat,
+          opponentPokemon.stats[4].base_stat
+        ),
+        1,
+        1
+      );
+      const dmgTaken = calcDamage(
+        5,
+        Math.max(
+          opponentPokemon.stats[1].base_stat,
+          opponentPokemon.stats[3].base_stat
+        ),
+        80,
+        Math.max(
+          myPokemonDetails.stats[2].base_stat,
+          myPokemonDetails.stats[4].base_stat
+        ),
+        1,
+        1
+      );
+      setState((prevState) => ({
+        ...prevState,
+        player: {
+          ...prevState.player,
+          party: [
+            {
+              ...prevState.player.party[0],
+              health: Math.max(prevState.player.party[0].health - dmgTaken, 0),
+            },
+            ...prevState.player.party.splice(1),
+          ],
+        },
+        battle: {
+          ...prevState.battle,
+          opponentHealth: Math.max(
+            prevState.battle.opponentHealth - dmgDealt,
+            0
+          ),
+        },
+      }));
+    }
   };
 
   useInterval(() => {

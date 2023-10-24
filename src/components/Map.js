@@ -4,7 +4,7 @@ import areas from "../areas";
 import axial from "../map_axial";
 import hex from "../hex";
 import pokes from "../pokes";
-import { getPokemonSpawnByHex } from "@/utils";
+import { getHexDetails } from "@/utils";
 
 const tileImages = {};
 hex.tiles.forEach((tile) => {
@@ -69,8 +69,10 @@ export default function Map({ player, updateCurrentHex, startBattle }) {
                   }
                 }
                 if (player.unlockedAreas.includes(hexArea)) {
-                  updateCurrentHex({ q, r, s });
-                  const potentialPokemon = getPokemonSpawnByHex(q, r, s);
+                  const hexDetails = getHexDetails(q, r, s);
+                  const isTown = hexDetails.isTown;
+                  updateCurrentHex({ q, r, s, isTown });
+                  const potentialPokemon = hexDetails.pokemon;
                   const randomPokemonId =
                     potentialPokemon[
                       Math.floor(Math.random() * potentialPokemon.length)
