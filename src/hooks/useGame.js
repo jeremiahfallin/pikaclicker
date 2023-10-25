@@ -1,6 +1,6 @@
 import useStickyState from "./useStickyState";
 import useInterval from "./useInterval";
-import { calcDamage } from "@/utils";
+import { axialDistance, calcDamage } from "@/utils";
 import pokes from "../pokes";
 
 const intitialState = {
@@ -43,6 +43,7 @@ export const useGameSession = () => {
 
   // Function to update the player's current location
   const updateCurrentHex = (newHex) => {
+    console.log(axialDistance({ q: 13, r: 2 }, newHex));
     setState((prevState) => ({
       ...prevState,
       player: {
@@ -121,20 +122,23 @@ export const useGameSession = () => {
         1,
         1
       );
-      const dmgTaken = calcDamage(
-        5,
-        Math.max(
-          opponentPokemon.stats[1].base_stat,
-          opponentPokemon.stats[3].base_stat
-        ),
-        80,
-        Math.max(
-          myPokemonDetails.stats[2].base_stat,
-          myPokemonDetails.stats[4].base_stat
-        ),
-        1,
-        1
-      );
+      const dmgTaken =
+        state.battle.opponentHealth > 0
+          ? calcDamage(
+              5,
+              Math.max(
+                opponentPokemon.stats[1].base_stat,
+                opponentPokemon.stats[3].base_stat
+              ),
+              80,
+              Math.max(
+                myPokemonDetails.stats[2].base_stat,
+                myPokemonDetails.stats[4].base_stat
+              ),
+              1,
+              1
+            )
+          : 0;
       setState((prevState) => ({
         ...prevState,
         player: {
