@@ -72,15 +72,6 @@ export default function Map({ player, updateCurrentHex, startBattle }) {
                   const hexDetails = getHexDetails(q, r, s);
                   const isTown = hexDetails.isTown;
                   updateCurrentHex({ q, r, s, isTown });
-                  const potentialPokemon = hexDetails.pokemon;
-                  const randomPokemonId =
-                    potentialPokemon[
-                      Math.floor(Math.random() * potentialPokemon.length)
-                    ];
-                  const randomPokemon = pokes.find(
-                    (poke) => poke.id === randomPokemonId
-                  );
-                  startBattle(randomPokemon);
                 }
               }}
             />

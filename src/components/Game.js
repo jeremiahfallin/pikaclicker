@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
 import Head from "next/head";
 import { Pokedex } from "pokeapi-js-wrapper";
-import useStickyState from "../hooks/useStickyState";
-import { random } from "../utils";
+import { createPokemon, random } from "../utils";
 import AddPokemonToMap from "./AddPokemonToMap";
 import Party from "./Party";
 import Battle from "./Battle";
@@ -17,7 +15,7 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import Map from "./Map";
-import { useGameSession } from "@/hooks/useGame";
+import { useGameSession } from "@/hooks/useGameSession";
 
 const p = new Pokedex();
 
@@ -33,19 +31,13 @@ const starters = [
 
 const PickPokemon = ({ starter, updateParty }) => {
   const starterIndex = pokes.findIndex((val) => val.name === starter);
+  const starterDetails = createPokemon(pokes[starterIndex].id, 5);
   return (
     <div
       onClick={() => {
         updateParty([
           {
-            id: pokes[starterIndex].id,
-            lvl: 5,
-            xp: 0,
-            health: pokes[starterIndex].stats[0].base_stat,
-            gender:
-              Math.random() > pokes[starterIndex].genderRate / 8
-                ? "male"
-                : "female",
+            ...starterDetails,
           },
         ]);
       }}
@@ -103,8 +95,7 @@ export default function Game() {
         <Box>
           <Battle
             playerPokemon={player.party[0]}
-            opponentHealth={game.battle.opponentHealth}
-            enemyPokemon={game.battle.opponentPokemon}
+            enemyPokemon={game.battle.pokemon}
           />
           <Map
             player={player}

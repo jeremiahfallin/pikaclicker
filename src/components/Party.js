@@ -1,4 +1,4 @@
-import { Center, Image, Text } from "@chakra-ui/react";
+import { Center, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import pokes from "../pokes";
 
 const findIndex = (id) => pokes.findIndex((val) => val.id === id);
@@ -8,18 +8,17 @@ export default function Party({ party }) {
     <div>
       <div>Party</div>
 
-      {party.map((pokemon) => {
-        const details = findIndex(pokemon.id);
-        return (
-          <Center key={pokemon.id} flexDir={"column"}>
-            <Image
-              alt={pokes[details].name}
-              src={pokes[details].sprites.front_default}
-            />
-            <Text>{pokes[details].name}</Text>
-          </Center>
-        );
-      })}
+      <SimpleGrid columns={3} spacing={10}>
+        {party.map((pokemon) => {
+          return (
+            <Center key={pokemon.id} flexDir={"column"}>
+              <Image alt={pokemon.name} src={pokemon.image} />
+              <Text>{pokemon.name}</Text>
+              <Text>Lvl. {pokemon.level}</Text>
+            </Center>
+          );
+        })}
+      </SimpleGrid>
     </div>
   );
 }
