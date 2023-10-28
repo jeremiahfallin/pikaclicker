@@ -96,6 +96,7 @@ export default function Game() {
           <Battle
             playerPokemon={player.party[0]}
             enemyPokemon={game.battle.pokemon}
+            background={"forest"}
           />
           <Map
             player={player}

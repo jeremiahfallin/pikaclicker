@@ -32,9 +32,14 @@ function Pokemon({ details, top, left, bottom, right }) {
   );
 }
 
-export default function Battle({ playerPokemon, enemyPokemon }) {
+export default function Battle({ playerPokemon, enemyPokemon, background }) {
   return (
-    <Box background={"green"} position={"relative"} h={200}>
+    <Box
+      background={`url(backgrounds/${background}.png)`}
+      backgroundSize={"100% 100%"}
+      position={"relative"}
+      h={200}
+    >
       {!!playerPokemon && (
         <Pokemon
           details={{

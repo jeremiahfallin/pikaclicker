@@ -1,9 +1,9 @@
+import { useState } from "react";
 import { HexGrid, Layout, Hexagon, Pattern } from "react-hexgrid";
 
 import areas from "../areas";
 import axial from "../map_axial";
 import hex from "../hex";
-import pokes from "../pokes";
 import { getHexDetails } from "@/utils";
 
 const tileImages = {};
@@ -12,6 +12,7 @@ hex.tiles.forEach((tile) => {
 });
 
 export default function Map({ player, updateCurrentHex, startBattle }) {
+  const [areaHexes, setAreaHexes] = useState([]);
   return (
     <HexGrid
       width={"100%"}
@@ -59,6 +60,17 @@ export default function Map({ player, updateCurrentHex, startBattle }) {
               fill={fill}
               cellStyle={cellStyle}
               onClick={() => {
+                setAreaHexes((prev) => {
+                  if (
+                    prev.find(
+                      (val) => val.q === q && val.r === r && val.s === s
+                    ) !== undefined
+                  ) {
+                    return prev;
+                  }
+
+                  return [...prev, { q, r, s }];
+                });
                 let hexArea = "";
                 for (let area of areas) {
                   const areaIndex = area.hexes.findIndex(
@@ -73,6 +85,7 @@ export default function Map({ player, updateCurrentHex, startBattle }) {
                   const isTown = hexDetails.isTown;
                   updateCurrentHex({ q, r, s, isTown });
                 }
+                console.log(areaHexes);
               }}
             />
           );
