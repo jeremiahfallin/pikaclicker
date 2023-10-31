@@ -237,15 +237,15 @@ export const useGameSession = () => {
     });
   }, 1000);
 
-  //   const forestPokemon = new Set();
-  //   const hexes = areas[1].hexes;
-  //   for (let hex of hexes) {
-  //     console.log(hex);
-  //     const hexDetails = getHexDetails(hex.q, hex.r, hex.s);
-  //     forestPokemon.add(...hexDetails.pokemon);
-  //   }
+  const forestPokemon = new Set();
+  const hexes = areas[5].hexes;
+  for (let hex of hexes) {
+    console.log(hex);
+    const hexDetails = getHexDetails(hex.q, hex.r, hex.s);
+    forestPokemon.add(...hexDetails.pokemon);
+  }
 
-  //   console.log([...forestPokemon].sort((a, b) => parseInt(a) - parseInt(b)));
+  console.log([...forestPokemon].sort((a, b) => parseInt(a) - parseInt(b)));
 
   return {
     game: state,
