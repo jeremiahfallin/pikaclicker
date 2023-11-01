@@ -7,9 +7,17 @@ import {
   calcMaxHP,
   calcStat,
   catchChance,
+  experienceGain,
   getHexDetails,
   getWildPokemon,
   random,
+  homeHex,
+  fastGrowth,
+  slowGrowth,
+  erraticGrowth,
+  mediumFastGrowth,
+  mediumSlowGrowth,
+  fluctuatingGrowth,
 } from "@/utils";
 import pokes from "../pokes";
 import areas from "../areas";
@@ -25,16 +33,42 @@ const initialState = {
     currentHex: { q: 13, r: 2, s: 11 },
     party: [],
     bank: [],
+    coins: 1000,
     pokedex: {
       seen: new Set(),
       caught: new Set(),
     },
     unlockedAreas: ["Area 1"],
     isInTown: true,
+    items: [
+      {
+        name: "Pokeball",
+        quantity: 10,
+      },
+    ],
+    catchingStatus: "ALL",
   },
   events: {
     pickStarter: 0,
   },
+};
+
+const pokeballChances = {
+  Pokeball: 1,
+  Greatball: 1.5,
+  Ultraball: 2,
+  Masterball: 255,
+  Diveball: 3.5,
+};
+
+const levelFormulas = {
+  erratic: erraticGrowth,
+  fast: fastGrowth,
+  "medium-fast": mediumFastGrowth,
+  medium: mediumFastGrowth,
+  "medium-slow": mediumSlowGrowth,
+  slow: slowGrowth,
+  fluctuating: fluctuatingGrowth,
 };
 
 const gameReducer = (state, action) => {
@@ -90,6 +124,14 @@ const gameReducer = (state, action) => {
           unlockedAreas: [...state.player.unlockedAreas, action.payload.area],
         },
       };
+    case "UPDATE_ITEMS":
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          items: action.payload.newItems,
+        },
+      };
     case "UPDATE_EVENT":
       return {
         ...state,
@@ -141,19 +183,81 @@ export const useGameSession = () => {
     dispatch({ type: "START_BATTLE", payload: { pokemon } });
   };
 
+  const attemptCatch = (pokemon) => {
+    const { player } = state;
+    const { party, items } = player;
+    const pokeball = items.find((item) => item.name === "Pokeball");
+    if (pokeball.quantity <= 0) {
+      return;
+    }
+    const pokeballChance = pokeballChances[pokeball.name];
+    const captureRate = pokemon.captureRate;
+    const chance = catchChance(
+      captureRate,
+      pokemon.currentHP,
+      pokemon.maxHP,
+      1,
+      pokeballChance,
+      pokemon.level
+    );
+    const randomNum = random(0, 100);
+
+    if (randomNum <= chance) {
+      if (party.length < 6) {
+        const newParty = [...party, pokemon];
+        updateParty(newParty);
+        updatePokedex({
+          ...player.pokedex,
+          seen: new Set([...player.pokedex.seen, pokemon.id]),
+          caught: new Set([...player.pokedex.caught, pokemon.id]),
+        });
+      } else {
+        const newBank = [...player.bank, pokemon];
+        updateBank(newBank);
+        updatePokedex({
+          ...player.pokedex,
+          seen: new Set([...player.pokedex.seen, pokemon.id]),
+          caught: new Set([...player.pokedex.caught, pokemon.id]),
+        });
+      }
+      const newItems = items.map((item) => {
+        if (item.name === "Pokeball") {
+          return {
+            ...item,
+            quantity: item.quantity - 1,
+          };
+        }
+        return item;
+      });
+      updateItems(newItems);
+    } else {
+      const newItems = items.map((item) => {
+        if (item.name === "Pokeball") {
+          return {
+            ...item,
+            quantity: item.quantity - 1,
+          };
+        }
+        return item;
+      });
+      updateItems(newItems);
+      updatePokedex({
+        ...player.pokedex,
+        seen: new Set([...player.pokedex.seen, pokemon.id]),
+      });
+    }
+  };
+
   const updateCurrentHex = (newHex) => {
     const hex = getHexDetails(newHex.q, newHex.r, newHex.s);
-    console.log(hex);
+
     if (hex.isTown) {
       updateBattle({ pokemon: null });
       updatePlayer({
-        party: [
-          {
-            ...state.player.party[0],
-            currentHP: state.player.party[0].maxHP,
-          },
-          ...state.player.party.slice(1),
-        ],
+        party: state.player.party.map((poke) => ({
+          ...poke,
+          currentHP: poke.maxHP,
+        })),
       });
     } else {
       updateBattle({ pokemon: getWildPokemon(hex) });
@@ -167,6 +271,10 @@ export const useGameSession = () => {
 
   const updateBank = (newBank) => {
     dispatch({ type: "UPDATE_BANK", payload: { newBank } });
+  };
+
+  const updateItems = (newItems) => {
+    dispatch({ type: "UPDATE_ITEMS", payload: { newItems } });
   };
 
   const updatePokedex = (newPokedex) => {
@@ -189,36 +297,85 @@ export const useGameSession = () => {
     dispatch({ type: "UPDATE_PLAYER", payload });
   };
 
-  useInterval(() => {
+  const updateExperience = (pokemon) => {
+    const newParty = state.player.party.map((poke) => {
+      const newExperience =
+        poke.xp +
+        experienceGain(pokemon.baseExperience, pokemon.level, poke.level);
+      const nextLevelExperience = levelFormulas[poke.growthRate](
+        poke.level + 1
+      );
+      const newLevel = poke.level;
+      if (newExperience >= nextLevelExperience) {
+        newLevel = poke.level + 1;
+      }
+
+      if (newLevel > poke.level) {
+        const newMaxHP = calcMaxHP(poke.baseHP, newLevel);
+        const newAttack = calcStat(poke.baseAttack, newLevel);
+        const newDefense = calcStat(poke.baseDefense, newLevel);
+        const newSpecialAttack = calcStat(poke.baseSpecialAttack, newLevel);
+        const newSpecialDefense = calcStat(poke.baseSpecialDefense, newLevel);
+        const newSpeed = calcStat(poke.baseSpeed, newLevel);
+        return {
+          ...poke,
+          level: newLevel,
+          maxHP: newMaxHP,
+          currentHP: newMaxHP,
+          attack: newAttack,
+          defense: newDefense,
+          specialAttack: newSpecialAttack,
+          specialDefense: newSpecialDefense,
+          speed: newSpeed,
+        };
+      } else {
+        return {
+          ...poke,
+          xp: newExperience,
+        };
+      }
+    });
+
+    updateParty(newParty);
+  };
+
+  const handleTurn = () => {
     const { battle, player } = state;
     const { pokemon } = battle;
     const { party } = player;
+
     if (!pokemon) {
       return;
     }
+    if (party[0].currentHP === 0) {
+      const newLeadPokemon = party.findIndex((poke) => {
+        return poke.currentHP > 0;
+      });
+      if (newLeadPokemon === -1) {
+        updateCurrentHex(homeHex);
+        return;
+      } else {
+        updateParty([
+          party[newLeadPokemon],
+          ...party.slice(0, newLeadPokemon),
+          ...party.slice(newLeadPokemon + 1),
+        ]);
+      }
+      return;
+    }
+    if (pokemon.currentHP === 0) {
+      updateExperience(pokemon);
+      if (player.catchingStatus === "ALL") {
+        attemptCatch(pokemon);
+        updateCurrentHex(player.currentHex);
+        return;
+      }
+    }
     const playerPokemon = party[0];
-    const enemyPokemon = pokemon;
-    const dmgTaken = calcDamage(
-      playerPokemon,
-      enemyPokemon,
-      playerPokemon.level,
-      1,
-      1,
-      1,
-      1,
-      1
-    );
-    const damageDealt = calcDamage(
-      enemyPokemon,
-      playerPokemon,
-      enemyPokemon.level,
-      1,
-      1,
-      1,
-      1,
-      1
-    );
 
+    const enemyPokemon = pokemon;
+    const dmgTaken = calcDamage(playerPokemon.level, 1, 1, 1, 1, 1);
+    const damageDealt = calcDamage(enemyPokemon.level, 1, 1, 1, 1, 1);
     updateBattle({
       turn: state.battle.turn + 1,
       pokemon: {
@@ -235,17 +392,11 @@ export const useGameSession = () => {
         ...party.slice(1),
       ],
     });
+  };
+
+  useInterval(() => {
+    handleTurn();
   }, 1000);
-
-  const forestPokemon = new Set();
-  const hexes = areas[5].hexes;
-  for (let hex of hexes) {
-    console.log(hex);
-    const hexDetails = getHexDetails(hex.q, hex.r, hex.s);
-    forestPokemon.add(...hexDetails.pokemon);
-  }
-
-  console.log([...forestPokemon].sort((a, b) => parseInt(a) - parseInt(b)));
 
   return {
     game: state,

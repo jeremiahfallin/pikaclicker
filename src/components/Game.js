@@ -1,9 +1,9 @@
 import Head from "next/head";
-import { Pokedex } from "pokeapi-js-wrapper";
 import { createPokemon, random } from "../utils";
 import AddPokemonToMap from "./AddPokemonToMap";
 import Party from "./Party";
 import Battle from "./Battle";
+import Items from "./Items";
 
 import pokes from "../pokes";
 import {
@@ -16,8 +16,6 @@ import {
 } from "@chakra-ui/react";
 import Map from "./Map";
 import { useGameSession } from "@/hooks/useGameSession";
-
-const p = new Pokedex();
 
 const waterStarters = ["squirtle", "totodile", "mudkip", "piplup"];
 const grassStarters = ["bulbasaur", "chikorita", "treecko", "sprigatito"];
@@ -56,7 +54,6 @@ export default function Game() {
     updateCurrentHex,
     updateParty,
     updateBank,
-    updatePokedex,
   } = useGameSession();
 
   return (
@@ -69,7 +66,6 @@ export default function Game() {
       </Head>
       <SimpleGrid columns={3}>
         <Box>
-          <pre>{JSON.stringify(player, null, 2)}</pre>
           <Center>
             {player.party.length === 0 && (
               <Flex direction={"column"}>
@@ -81,7 +77,6 @@ export default function Game() {
                         <PickPokemon
                           starter={starter}
                           updateParty={updateParty}
-                          startBattle={startBattle}
                         />
                       </div>
                     );
@@ -98,14 +93,11 @@ export default function Game() {
             enemyPokemon={game.battle.pokemon}
             background={"forest"}
           />
-          <Map
-            player={player}
-            updateCurrentHex={updateCurrentHex}
-            startBattle={startBattle}
-          />
+          <Map player={player} updateCurrentHex={updateCurrentHex} />
         </Box>
         <Box>
           <Party party={player.party} />
+          <Items items={player.items} />
         </Box>
       </SimpleGrid>
     </>

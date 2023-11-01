@@ -11,7 +11,7 @@ hex.tiles.forEach((tile) => {
   tileImages[tile.id] = tile.image;
 });
 
-export default function Map({ player, updateCurrentHex, startBattle }) {
+export default function Map({ player, updateCurrentHex }) {
   const [areaHexes, setAreaHexes] = useState([]);
   return (
     <HexGrid
@@ -85,7 +85,6 @@ export default function Map({ player, updateCurrentHex, startBattle }) {
                   const isTown = hexDetails.isTown;
                   updateCurrentHex({ q, r, s, isTown });
                 }
-                console.log(areaHexes);
               }}
             />
           );

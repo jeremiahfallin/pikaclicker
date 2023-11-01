@@ -9,12 +9,14 @@ export default function Party({ party }) {
       <div>Party</div>
 
       <SimpleGrid columns={3} spacing={10}>
-        {party.map((pokemon) => {
+        {party.map((pokemon, idx) => {
           return (
-            <Center key={pokemon.id} flexDir={"column"}>
+            <Center key={`${pokemon.id}-${idx}`} flexDir={"column"}>
               <Image alt={pokemon.name} src={pokemon.image} />
               <Text>{pokemon.name}</Text>
-              <Text>Lvl. {pokemon.level}</Text>
+              <Text>
+                Lvl. {pokemon.level} {pokemon.xp} xp
+              </Text>
             </Center>
           );
         })}
