@@ -1,3 +1,4 @@
+import areas from "../areas";
 import locations from "../locations";
 import pokes from "../pokes";
 
@@ -14,16 +15,37 @@ const axialDistance = (a, b) => {
 
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 
-const getHexDetails = (q, r, s) =>
-  locations.find((hex) => hex.q === q && hex.r === r && hex.s === s);
+const getHexDetails = (q, r, s) => {
+  let spawnablePokemon = new Set();
+  let isTown = false;
+  for (let area of areas) {
+    if (
+      area.hexes.findIndex(
+        (hex) => hex.q === q && hex.r === r && hex.s === s
+      ) !== -1
+    ) {
+      area.pokemon.forEach((p) => spawnablePokemon.add(p));
+      if (area.isTown) {
+        isTown = true;
+      }
+    }
+  }
+  return {
+    q,
+    r,
+    s,
+    pokemon: [...spawnablePokemon],
+    isTown: isTown,
+  };
+};
 
 const getWildPokemon = (hex) => {
   const potentialPokemon = hex.pokemon;
-  const randomPokemonId = potentialPokemon[random(0, potentialPokemon.length)];
+  const randomPokemonId = determineSpawn(potentialPokemon);
   const baseLevel = axialDistance(homeHex, hex);
   const randomLevel = random(
-    Math.max(1, Math.ceil(baseLevel * 0.9)),
-    Math.min(100, Math.floor(baseLevel * 1.1))
+    Math.max(1, Math.ceil(baseLevel * 0.9 - 2)),
+    Math.min(100, Math.floor(baseLevel * 1.1 + 2))
   );
   const randomPokemon = createPokemon(randomPokemonId, randomLevel);
   return randomPokemon;
@@ -153,6 +175,27 @@ const experienceGain = (base, levelEnemy, levelTrainer) => {
   return xp;
 };
 
+function getTotalRarity(pokemonList) {
+  return pokemonList.reduce(
+    (total, pokemon) => total + pokes.find((p) => p.id === pokemon).rarity,
+    0
+  );
+}
+
+function determineSpawn(pokemonList) {
+  const totalRarity = getTotalRarity(pokemonList);
+  let randomNum = Math.floor(Math.random() * totalRarity) + 1;
+
+  for (let i = 0; i < pokemonList.length; i++) {
+    const pokemon = pokemonList[i];
+    randomNum -= pokes.find((p) => p.id === pokemon).rarity;
+
+    if (randomNum <= 0) {
+      return pokemon;
+    }
+  }
+}
+
 export {
   axialDistance,
   calcDamage,
@@ -171,4 +214,5 @@ export {
   mediumFastGrowth,
   mediumSlowGrowth,
   fluctuatingGrowth,
+  determineSpawn,
 };

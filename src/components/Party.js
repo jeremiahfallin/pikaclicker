@@ -1,8 +1,6 @@
 import { Center, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import pokes from "../pokes";
 
-const findIndex = (id) => pokes.findIndex((val) => val.id === id);
-
 export default function Party({ party }) {
   return (
     <div>
@@ -15,8 +13,9 @@ export default function Party({ party }) {
               <Image alt={pokemon.name} src={pokemon.image} />
               <Text>{pokemon.name}</Text>
               <Text>
-                Lvl. {pokemon.level} {pokemon.xp} xp
+                Lvl. {pokemon.level} {Math.floor(pokemon.xp)} xp
               </Text>
+              <Text>HP: {Math.floor(pokemon.currentHP)}</Text>
             </Center>
           );
         })}

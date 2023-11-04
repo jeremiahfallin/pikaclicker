@@ -38,7 +38,7 @@ const initialState = {
       seen: new Set(),
       caught: new Set(),
     },
-    unlockedAreas: ["Area 1"],
+    unlockedAreas: ["Home", "Area 1"],
     isInTown: true,
     items: [
       {
@@ -305,18 +305,25 @@ export const useGameSession = () => {
       const nextLevelExperience = levelFormulas[poke.growthRate](
         poke.level + 1
       );
-      const newLevel = poke.level;
+      let newLevel = poke.level;
       if (newExperience >= nextLevelExperience) {
         newLevel = poke.level + 1;
       }
 
       if (newLevel > poke.level) {
-        const newMaxHP = calcMaxHP(poke.baseHP, newLevel);
-        const newAttack = calcStat(poke.baseAttack, newLevel);
-        const newDefense = calcStat(poke.baseDefense, newLevel);
-        const newSpecialAttack = calcStat(poke.baseSpecialAttack, newLevel);
-        const newSpecialDefense = calcStat(poke.baseSpecialDefense, newLevel);
-        const newSpeed = calcStat(poke.baseSpeed, newLevel);
+        const basePokemon = pokes.find((p) => p.id === poke.id);
+        const newMaxHP = calcMaxHP(basePokemon.stats[0].base_stat, newLevel);
+        const newAttack = calcStat(basePokemon.stats[1].base_stat, newLevel);
+        const newDefense = calcStat(basePokemon.stats[2].base_stat, newLevel);
+        const newSpecialAttack = calcStat(
+          basePokemon.stats[3].base_stat,
+          newLevel
+        );
+        const newSpecialDefense = calcStat(
+          basePokemon.stats[4].base_stat,
+          newLevel
+        );
+        const newSpeed = calcStat(basePokemon.stats[5].base_stat, newLevel);
         return {
           ...poke,
           level: newLevel,
