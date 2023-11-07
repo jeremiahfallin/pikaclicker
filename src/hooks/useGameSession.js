@@ -38,7 +38,7 @@ const initialState = {
       seen: new Set(),
       caught: new Set(),
     },
-    unlockedAreas: ["Home", "Area 1"],
+    unlockedAreas: new Set(["home"]),
     isInTown: true,
     items: [
       {
@@ -121,7 +121,18 @@ const gameReducer = (state, action) => {
         ...state,
         player: {
           ...state.player,
-          unlockedAreas: [...state.player.unlockedAreas, action.payload.area],
+          unlockedAreas: new Set([
+            ...state.player.unlockedAreas,
+            action.payload.area,
+          ]),
+        },
+      };
+    case "UPDATE_COINS":
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          coins: action.payload.coins,
         },
       };
     case "UPDATE_ITEMS":
@@ -260,7 +271,13 @@ export const useGameSession = () => {
         })),
       });
     } else {
-      updateBattle({ pokemon: getWildPokemon(hex) });
+      const areaIndex = areas.findIndex(
+        (area) =>
+          area.hexes.findIndex(
+            (h) => h.q === newHex.q && h.r === newHex.r && h.s === newHex.s
+          ) !== -1
+      );
+      updateBattle({ pokemon: getWildPokemon(hex, areaIndex) });
     }
     dispatch({ type: "UPDATE_CURRENT_HEX", payload: { newHex } });
   };
@@ -271,6 +288,10 @@ export const useGameSession = () => {
 
   const updateBank = (newBank) => {
     dispatch({ type: "UPDATE_BANK", payload: { newBank } });
+  };
+
+  const updateCoins = (newCoins) => {
+    dispatch({ type: "UPDATE_COINS", payload: { coins: newCoins } });
   };
 
   const updateItems = (newItems) => {
@@ -297,6 +318,53 @@ export const useGameSession = () => {
     dispatch({ type: "UPDATE_PLAYER", payload });
   };
 
+  const swapPokemon = (idx1, place1, idx2, place2) => {
+    // swaps pokemon, may swap between just party, just bank, or party and bank
+    const { player } = state;
+    const { party, bank } = player;
+    if (player.isInTown) {
+      if (place1 === "party" && place2 === "party") {
+        const newParty = [...party];
+        const temp = newParty[idx1];
+        newParty[idx1] = newParty[idx2];
+        newParty[idx2] = temp;
+        updateParty(newParty);
+      } else if (place1 === "bank" && place2 === "bank") {
+        const newBank = [...bank];
+        const temp = newBank[idx1];
+        newBank[idx1] = newBank[idx2];
+        newBank[idx2] = temp;
+        updateBank(newBank);
+      } else if (place1 === "party" && place2 === "bank") {
+        const newParty = [...party];
+        const newBank = [...bank];
+        const temp = newParty[idx1];
+        newParty[idx1] = newBank[idx2];
+        newBank[idx2] = temp;
+        updateParty(newParty);
+        updateBank(newBank);
+      } else if (place1 === "bank" && place2 === "party") {
+        const newParty = [...party];
+        const newBank = [...bank];
+        const temp = newBank[idx1];
+        newBank[idx1] = newParty[idx2];
+        newParty[idx2] = temp;
+        updateParty(newParty);
+        updateBank(newBank);
+      }
+    }
+  };
+
+  const releasePokemon = (idx) => {
+    const { player } = state;
+    const { bank } = player;
+    const newBank = [...bank];
+    const releasedPokemon = newBank[idx];
+    newBank.splice(idx, 1);
+    updateBank(newBank);
+    updateExperience(releasedPokemon);
+  };
+
   const updateExperience = (pokemon) => {
     const newParty = state.player.party.map((poke) => {
       const newExperience =
@@ -308,6 +376,9 @@ export const useGameSession = () => {
       let newLevel = poke.level;
       if (newExperience >= nextLevelExperience) {
         newLevel = poke.level + 1;
+      }
+      if (newLevel > 16) {
+        unlockArea("Area 2");
       }
 
       if (newLevel > poke.level) {
@@ -371,6 +442,7 @@ export const useGameSession = () => {
       return;
     }
     if (pokemon.currentHP === 0) {
+      updateCoins(player.coins + pokemon.level * 10);
       updateExperience(pokemon);
       if (player.catchingStatus === "ALL") {
         attemptCatch(pokemon);
@@ -383,6 +455,7 @@ export const useGameSession = () => {
     const enemyPokemon = pokemon;
     const dmgTaken = calcDamage(playerPokemon.level, 1, 1, 1, 1, 1);
     const damageDealt = calcDamage(enemyPokemon.level, 1, 1, 1, 1, 1);
+    const newPlayerHP = Math.max(playerPokemon.currentHP - dmgTaken, 0);
     updateBattle({
       turn: state.battle.turn + 1,
       pokemon: {
@@ -394,7 +467,7 @@ export const useGameSession = () => {
       party: [
         {
           ...playerPokemon,
-          currentHP: Math.max(playerPokemon.currentHP - damageDealt, 0),
+          currentHP: newPlayerHP > 0 ? newPlayerHP : 0,
         },
         ...party.slice(1),
       ],
@@ -416,5 +489,9 @@ export const useGameSession = () => {
     unlockArea,
     updateEvent,
     updateBattle,
+    updateItems,
+    updateCoins,
+    swapPokemon,
+    releasePokemon,
   };
 };

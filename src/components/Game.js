@@ -1,9 +1,11 @@
+import { useState } from "react";
 import Head from "next/head";
 import { createPokemon, random } from "../utils";
-import AddPokemonToMap from "./AddPokemonToMap";
+import Bank from "./Bank";
 import Party from "./Party";
 import Battle from "./Battle";
 import Items from "./Items";
+import Shop from "./Shop";
 
 import pokes from "../pokes";
 import {
@@ -27,12 +29,13 @@ const starters = [
   fireStarters[random(0, fireStarters.length)],
 ];
 
-const PickPokemon = ({ starter, updateParty }) => {
+const PickPokemon = ({ starter, updateParty, unlockArea }) => {
   const starterIndex = pokes.findIndex((val) => val.name === starter);
   const starterDetails = createPokemon(pokes[starterIndex].id, 5);
   return (
     <div
       onClick={() => {
+        unlockArea("Area 1");
         updateParty([
           {
             ...starterDetails,
@@ -47,13 +50,20 @@ const PickPokemon = ({ starter, updateParty }) => {
 };
 
 export default function Game() {
+  const [selectedPokemon, setSelectedPokemon] = useState({
+    idx: null,
+    place: null,
+  });
   const {
     game,
-    startBattle,
     player,
     updateCurrentHex,
     updateParty,
-    updateBank,
+    updateItems,
+    updateCoins,
+    swapPokemon,
+    releasePokemon,
+    unlockArea,
   } = useGameSession();
 
   return (
@@ -77,6 +87,7 @@ export default function Game() {
                         <PickPokemon
                           starter={starter}
                           updateParty={updateParty}
+                          unlockArea={unlockArea}
                         />
                       </div>
                     );
@@ -85,7 +96,12 @@ export default function Game() {
               </Flex>
             )}
           </Center>
-          {JSON.stringify(player.partyPokemon, null, 2)}
+          <Shop
+            playerItems={player.items}
+            updateItems={updateItems}
+            coins={player.coins}
+            updateCoins={updateCoins}
+          />
         </Box>
         <Box>
           <Battle
@@ -93,11 +109,27 @@ export default function Game() {
             enemyPokemon={game.battle.pokemon}
             background={"forest"}
           />
-          <Map player={player} updateCurrentHex={updateCurrentHex} />
+          <Map
+            unlockedAreas={player.unlockedAreas}
+            currentHex={player.currentHex}
+            updateCurrentHex={updateCurrentHex}
+          />
         </Box>
         <Box>
-          <Party party={player.party} />
+          <Party
+            party={player.party}
+            selectedPokemon={selectedPokemon}
+            setSelectedPokemon={setSelectedPokemon}
+            swapPokemon={swapPokemon}
+          />
           <Items items={player.items} />
+          <Bank
+            bank={player.bank}
+            selectedPokemon={selectedPokemon}
+            setSelectedPokemon={setSelectedPokemon}
+            swapPokemon={swapPokemon}
+            releasePokemon={releasePokemon}
+          />
         </Box>
       </SimpleGrid>
     </>

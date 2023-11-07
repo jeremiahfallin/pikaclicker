@@ -1,6 +1,6 @@
 [
   {
-    "name": "Hometown",
+    "name": "Home",
     "biome": "town",
     "pokemon": [],
     "hexes": [{ "q": 13, "r": 2, "s": 11 }],

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useCallback } from "react";
 import { HexGrid, Layout, Hexagon, Pattern } from "react-hexgrid";
 
 import areas from "../areas";
@@ -11,8 +11,26 @@ hex.tiles.forEach((tile) => {
   tileImages[tile.id] = tile.image;
 });
 
-export default function Map({ player, updateCurrentHex }) {
-  const [areaHexes, setAreaHexes] = useState([]);
+const HexagonMemo = memo(Hexagon);
+
+export default function Map({ unlockedAreas, currentHex, updateCurrentHex }) {
+  const onHexClick = useCallback(
+    (hex) => {
+      console.log(hex);
+      let hexArea =
+        areas.find((area) =>
+          area.hexes.some(
+            (h) => h.q === hex.q && h.r === hex.r && h.s === hex.s
+          )
+        )?.name || "";
+      if (unlockedAreas.has(hexArea)) {
+        const hexDetails = getHexDetails(hex.q, hex.r, hex.s);
+        updateCurrentHex({ ...hex, isTown: hexDetails.isTown });
+      }
+    },
+    [unlockedAreas, updateCurrentHex]
+  );
+
   return (
     <HexGrid
       width={"100%"}
@@ -37,11 +55,7 @@ export default function Map({ player, updateCurrentHex }) {
           const r = hex.r;
           const s = hex.q - hex.r;
 
-          if (
-            player.currentHex.q === q &&
-            player.currentHex.r === r &&
-            player.currentHex.s === s
-          ) {
+          if (currentHex.q === q && currentHex.r === r && currentHex.s === s) {
             cellStyle = {
               ...cellStyle,
               stroke: "red",
@@ -52,40 +66,15 @@ export default function Map({ player, updateCurrentHex }) {
           }
 
           return (
-            <Hexagon
+            <HexagonMemo
               key={idx}
               q={hex.q}
               r={hex.r}
               s={hex.q - hex.r}
               fill={fill}
               cellStyle={cellStyle}
-              onClick={() => {
-                setAreaHexes((prev) => {
-                  if (
-                    prev.find(
-                      (val) => val.q === q && val.r === r && val.s === s
-                    ) !== undefined
-                  ) {
-                    return prev;
-                  }
-
-                  return [...prev, { q, r, s }];
-                });
-                let hexArea = "";
-                for (let area of areas) {
-                  const areaIndex = area.hexes.findIndex(
-                    (h) => h.q === q && h.r === r && h.s === s
-                  );
-                  if (areaIndex >= 0) {
-                    hexArea = area.name;
-                  }
-                }
-                if (player.unlockedAreas.includes(hexArea)) {
-                  const hexDetails = getHexDetails(q, r, s);
-                  const isTown = hexDetails.isTown;
-                  updateCurrentHex({ q, r, s, isTown });
-                }
-              }}
+              value={hex}
+              onClick={onHexClick}
             />
           );
         })}

@@ -39,10 +39,10 @@ const getHexDetails = (q, r, s) => {
   };
 };
 
-const getWildPokemon = (hex) => {
+const getWildPokemon = (hex, areaIndex) => {
   const potentialPokemon = hex.pokemon;
   const randomPokemonId = determineSpawn(potentialPokemon);
-  const baseLevel = axialDistance(homeHex, hex);
+  const baseLevel = axialDistance(homeHex, hex) + areaIndex * 10;
   const randomLevel = random(
     Math.max(1, Math.ceil(baseLevel * 0.9 - 2)),
     Math.min(100, Math.floor(baseLevel * 1.1 + 2))

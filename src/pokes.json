@@ -36576,6 +36576,7 @@
     "isLegendary": false,
     "isMythical": false,
     "name": "shroomish",
+    "rarity": 60,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/285.png",
       "back_female": null,
@@ -37038,6 +37039,7 @@
     "isLegendary": false,
     "isMythical": false,
     "name": "sableye",
+    "rarity": 10,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/302.png",
       "back_female": null,
@@ -43506,6 +43508,7 @@
     "isLegendary": false,
     "isMythical": false,
     "name": "relicanth",
+    "rarity": 5,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/369.png",
       "back_female": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/female/369.png",
@@ -43737,6 +43740,7 @@
     "isLegendary": false,
     "isMythical": false,
     "name": "luvdisc",
+    "rarity": 40,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/370.png",
       "back_female": null,
@@ -45354,6 +45358,7 @@
     "isLegendary": true,
     "isMythical": false,
     "name": "groudon",
+    "rarity": 1,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/383.png",
       "back_female": null,
@@ -45816,6 +45821,7 @@
     "isLegendary": false,
     "isMythical": true,
     "name": "jirachi",
+    "rarity": 1,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/385.png",
       "back_female": null,
@@ -48998,6 +49004,7 @@
     "isLegendary": false,
     "isMythical": false,
     "name": "rhyhorn",
+    "rarity": 80,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/111.png",
       "back_female": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/female/111.png",
@@ -63975,6 +63982,7 @@
     "isLegendary": false,
     "isMythical": false,
     "name": "jangmo-o",
+    "rarity": 5,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/782.png",
       "back_female": null,
@@ -68431,6 +68439,7 @@
     "isLegendary": false,
     "isMythical": false,
     "name": "sizzlipede",
+    "rarity": 40,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/850.png",
       "back_female": null,
@@ -73741,6 +73750,7 @@
     "isLegendary": false,
     "isMythical": false,
     "name": "charcadet",
+    "rarity": 10,
     "sprites": {
       "back_default": null,
       "back_female": null,
@@ -77063,6 +77073,7 @@
     "isLegendary": false,
     "isMythical": false,
     "name": "pawniard",
+    "rarity": 20,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/624.png",
       "back_female": null,
