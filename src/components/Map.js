@@ -1,10 +1,8 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useMemo, useEffect } from "react";
 import { HexGrid, Layout, Hexagon, Pattern } from "react-hexgrid";
 
-import areas from "../areas";
 import axial from "../map_axial";
 import hex from "../hex";
-import { getHexDetails } from "@/utils";
 
 const tileImages = {};
 hex.tiles.forEach((tile) => {
@@ -13,24 +11,43 @@ hex.tiles.forEach((tile) => {
 
 const HexagonMemo = memo(Hexagon);
 
-export default function Map({ unlockedAreas, currentHex, updateCurrentHex }) {
-  const onHexClick = useCallback(
-    (hex) => {
-      console.log(hex);
-      let hexArea =
-        areas.find((area) =>
-          area.hexes.some(
-            (h) => h.q === hex.q && h.r === hex.r && h.s === hex.s
-          )
-        )?.name || "";
-      if (unlockedAreas.has(hexArea)) {
-        const hexDetails = getHexDetails(hex.q, hex.r, hex.s);
-        updateCurrentHex({ ...hex, isTown: hexDetails.isTown });
-      }
-    },
-    [unlockedAreas, updateCurrentHex]
-  );
+const HexagonContainer = ({ q, r, s, fill, isSelected, updateCurrentHex }) => {
+  const onClick = useCallback(() => {
+    updateCurrentHex({ q, r, s });
+  }, [q, r, s, updateCurrentHex]);
 
+  const cellStyle = useMemo(() => {
+    let style = {};
+    if (fill < -1) {
+      style = { transform: "scaleX(-1)" };
+    }
+    if (isSelected) {
+      style = {
+        ...style,
+        stroke: "red",
+        strokeWidth: ".25px",
+        strokeDasharray: "2,2",
+        strokeLinejoin: "round",
+      };
+    }
+    return style;
+  }, [fill, isSelected]);
+
+  return (
+    <HexagonMemo
+      q={q}
+      r={r}
+      s={s}
+      fill={fill}
+      cellStyle={cellStyle}
+      onClick={onClick}
+    />
+  );
+};
+
+const HexagonContainerMemo = memo(HexagonContainer);
+
+function Map({ currentHex, updateCurrentHex }) {
   return (
     <HexGrid
       width={"100%"}
@@ -43,38 +60,24 @@ export default function Map({ unlockedAreas, currentHex, updateCurrentHex }) {
           if (hex.id === 0 || hex.id === -1) {
             return null;
           }
-          let cellStyle = {};
-          let fill = hex.id;
-
-          if (hex.id < -1) {
-            fill = parseInt(hex.id) + 2147483648;
-            cellStyle = { transform: "scaleX(-1)" };
-          }
+          let fill = hex.id < -1 ? parseInt(hex.id) + 2147483648 : hex.id;
 
           const q = hex.q;
           const r = hex.r;
           const s = hex.q - hex.r;
 
-          if (currentHex.q === q && currentHex.r === r && currentHex.s === s) {
-            cellStyle = {
-              ...cellStyle,
-              stroke: "red",
-              strokeWidth: ".25px",
-              strokeDasharray: "2,2",
-              strokeLinejoin: "round",
-            };
-          }
+          const isSelected =
+            currentHex.q === q && currentHex.r === r && currentHex.s === s;
 
           return (
-            <HexagonMemo
+            <HexagonContainerMemo
               key={idx}
               q={hex.q}
               r={hex.r}
               s={hex.q - hex.r}
               fill={fill}
-              cellStyle={cellStyle}
-              value={hex}
-              onClick={onHexClick}
+              isSelected={isSelected}
+              updateCurrentHex={updateCurrentHex}
             />
           );
         })}
@@ -92,3 +95,5 @@ export default function Map({ unlockedAreas, currentHex, updateCurrentHex }) {
     </HexGrid>
   );
 }
+
+export default memo(Map);

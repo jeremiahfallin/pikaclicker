@@ -260,7 +260,16 @@ export const useGameSession = () => {
   };
 
   const updateCurrentHex = (newHex) => {
+    const { player } = state;
     const hex = getHexDetails(newHex.q, newHex.r, newHex.s);
+    let hexArea =
+      areas.find((area) =>
+        area.hexes.some((h) => h.q === hex.q && h.r === hex.r && h.s === hex.s)
+      )?.name || "";
+
+    if (!player.unlockedAreas.includes(hexArea)) {
+      return;
+    }
 
     if (hex.isTown) {
       updateBattle({ pokemon: null });
