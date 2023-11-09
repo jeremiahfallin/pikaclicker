@@ -15,9 +15,10 @@ import {
   Heading,
   Image,
   SimpleGrid,
+  useInterval,
 } from "@chakra-ui/react";
 import Map from "./Map";
-import { useGameSession } from "@/hooks/useGameSession";
+import useGameStore, { unlockArea } from "@/hooks/useGameStore";
 
 const waterStarters = ["squirtle", "totodile", "mudkip", "piplup"];
 const grassStarters = ["bulbasaur", "chikorita", "treecko", "sprigatito"];
@@ -29,7 +30,8 @@ const starters = [
   fireStarters[random(0, fireStarters.length)],
 ];
 
-const PickPokemon = ({ starter, updateParty, unlockArea }) => {
+const PickPokemon = ({ starter }) => {
+  const updateParty = useGameStore((state) => state.updateParty);
   const starterIndex = pokes.findIndex((val) => val.name === starter);
   const starterDetails = createPokemon(pokes[starterIndex].id, 5);
   return (
@@ -54,17 +56,27 @@ export default function Game() {
     idx: null,
     place: null,
   });
-  const {
-    game,
-    player,
-    updateCurrentHex,
-    updateParty,
-    updateItems,
-    updateCoins,
-    swapPokemon,
-    releasePokemon,
-    unlockArea,
-  } = useGameSession();
+  const battle = useGameStore((state) => state.battle);
+  const handleTurn = useGameStore((state) => state.handleTurn);
+  const player = useGameStore((state) => state.player);
+  const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
+  const updateParty = useGameStore((state) => state.updateParty);
+  const updateItems = useGameStore((state) => state.updateItems);
+  const updateCoins = useGameStore((state) => state.updateCoins);
+  const releasePokemon = useGameStore((state) => state.releasePokemon);
+  const unlockArea = useGameStore((state) => state.unlockArea);
+  const party = useGameStore((state) => state.player.party);
+
+  const averageSpeed =
+    party.reduce((acc, curr) => {
+      return acc + curr.speed;
+    }, 0) / party.length;
+
+  console.log(averageSpeed);
+
+  useInterval(() => {
+    handleTurn();
+  }, 1000 * (100 / averageSpeed));
 
   return (
     <>
@@ -106,7 +118,7 @@ export default function Game() {
         <Box>
           <Battle
             playerPokemon={player.party[0]}
-            enemyPokemon={game.battle.pokemon}
+            enemyPokemon={battle.pokemon}
             background={"forest"}
           />
           <Map
@@ -120,14 +132,12 @@ export default function Game() {
             party={player.party}
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
-            swapPokemon={swapPokemon}
           />
           <Items items={player.items} />
           <Bank
             bank={player.bank}
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
-            swapPokemon={swapPokemon}
             releasePokemon={releasePokemon}
           />
         </Box>

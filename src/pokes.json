@@ -3,6 +3,37 @@
     "baseExperience": 64,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 16,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "ivysaur"
+        }
+      }
+    ],
     "genderRate": 1,
     "growthRate": "medium-slow",
     "habitat": "grassland",
@@ -235,6 +266,37 @@
     "baseExperience": 142,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 32,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "venasaur"
+        }
+      }
+    ],
     "genderRate": 1,
     "growthRate": "medium-slow",
     "habitat": "grassland",
@@ -467,6 +529,7 @@
     "baseExperience": 263,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": null,
     "genderRate": 1,
     "growthRate": "medium-slow",
     "habitat": "grassland",
@@ -699,6 +762,37 @@
     "baseExperience": 62,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 16,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "charmeleon"
+        }
+      }
+    ],
     "genderRate": 1,
     "growthRate": "medium-slow",
     "habitat": "mountain",
@@ -931,6 +1025,37 @@
     "baseExperience": 142,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 36,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "charizard"
+        }
+      }
+    ],
     "genderRate": 1,
     "growthRate": "medium-slow",
     "habitat": "mountain",
@@ -1163,6 +1288,7 @@
     "baseExperience": 267,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": null,
     "genderRate": 1,
     "growthRate": "medium-slow",
     "habitat": "mountain",
@@ -1395,6 +1521,37 @@
     "baseExperience": 63,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 16,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "wartortle"
+        }
+      }
+    ],
     "genderRate": 1,
     "growthRate": "medium-slow",
     "habitat": "waters-edge",
@@ -1627,6 +1784,37 @@
     "baseExperience": 142,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 36,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "blastoise"
+        }
+      }
+    ],
     "genderRate": 1,
     "growthRate": "medium-slow",
     "habitat": "waters-edge",
@@ -1859,6 +2047,7 @@
     "baseExperience": 265,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": null,
     "genderRate": 1,
     "growthRate": "medium-slow",
     "habitat": "waters-edge",
@@ -2091,6 +2280,37 @@
     "baseExperience": 39,
     "baseHappiness": 70,
     "captureRate": 255,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 7,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "kakuna"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "forest",
@@ -2323,6 +2543,37 @@
     "baseExperience": 72,
     "baseHappiness": 70,
     "captureRate": 120,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 10,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "beedrill"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "forest",
@@ -2555,6 +2806,7 @@
     "baseExperience": 178,
     "baseHappiness": 70,
     "captureRate": 45,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "forest",
@@ -2787,6 +3039,37 @@
     "baseExperience": 58,
     "baseHappiness": 70,
     "captureRate": 255,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 22,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "arbok"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "grassland",
@@ -3019,6 +3302,7 @@
     "baseExperience": 157,
     "baseHappiness": 70,
     "captureRate": 90,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "grassland",
@@ -3251,6 +3535,37 @@
     "baseExperience": 41,
     "baseHappiness": 50,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": 220,
+            "min_level": null,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "pikachu"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "forest",
@@ -3483,6 +3798,37 @@
     "baseExperience": 112,
     "baseHappiness": 50,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "thunder-stone",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": null,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "use-item"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "raichu"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "forest",
@@ -3715,6 +4061,7 @@
     "baseExperience": 243,
     "baseHappiness": 50,
     "captureRate": 75,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "forest",
@@ -3947,6 +4294,37 @@
     "baseExperience": 55,
     "baseHappiness": 50,
     "captureRate": 235,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 16,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "nidorina"
+        }
+      }
+    ],
     "genderRate": 8,
     "growthRate": "medium-slow",
     "habitat": "grassland",
@@ -4179,6 +4557,37 @@
     "baseExperience": 128,
     "baseHappiness": 50,
     "captureRate": 120,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "moon-stone",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": null,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "use-item"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "nidoqueen"
+        }
+      }
+    ],
     "genderRate": 8,
     "growthRate": "medium-slow",
     "habitat": "grassland",
@@ -4411,6 +4820,7 @@
     "baseExperience": 253,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": null,
     "genderRate": 8,
     "growthRate": "medium-slow",
     "habitat": "grassland",
@@ -4643,6 +5053,37 @@
     "baseExperience": 55,
     "baseHappiness": 50,
     "captureRate": 235,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 16,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "nidorino"
+        }
+      }
+    ],
     "genderRate": 0,
     "growthRate": "medium-slow",
     "habitat": "grassland",
@@ -4875,6 +5316,37 @@
     "baseExperience": 128,
     "baseHappiness": 50,
     "captureRate": 120,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "moon-stone",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": null,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "use-item"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "nidoking"
+        }
+      }
+    ],
     "genderRate": 0,
     "growthRate": "medium-slow",
     "habitat": "grassland",
@@ -5107,6 +5579,7 @@
     "baseExperience": 253,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": null,
     "genderRate": 0,
     "growthRate": "medium-slow",
     "habitat": "grassland",
@@ -5339,6 +5812,37 @@
     "baseExperience": 60,
     "baseHappiness": 50,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "fire-stone",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": null,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "use-item"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "ninetales"
+        }
+      }
+    ],
     "genderRate": 6,
     "growthRate": "medium",
     "habitat": "grassland",
@@ -5571,6 +6075,7 @@
     "baseExperience": 177,
     "baseHappiness": 50,
     "captureRate": 75,
+    "evolvesTo": null,
     "genderRate": 6,
     "growthRate": "medium",
     "habitat": "grassland",
@@ -5803,6 +6308,37 @@
     "baseExperience": 57,
     "baseHappiness": 70,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 24,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "parasect"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "forest",
@@ -6035,6 +6571,7 @@
     "baseExperience": 142,
     "baseHappiness": 70,
     "captureRate": 75,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "forest",
@@ -6267,6 +6804,37 @@
     "baseExperience": 58,
     "baseHappiness": 50,
     "captureRate": 255,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 28,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "persian"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "urban",
@@ -6499,6 +7067,7 @@
     "baseExperience": 154,
     "baseHappiness": 50,
     "captureRate": 90,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "urban",
@@ -6731,6 +7300,37 @@
     "baseExperience": 64,
     "baseHappiness": 50,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 33,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "golduck"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "waters-edge",
@@ -6963,6 +7563,7 @@
     "baseExperience": 175,
     "baseHappiness": 50,
     "captureRate": 75,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "waters-edge",
@@ -7195,6 +7796,37 @@
     "baseExperience": 70,
     "baseHappiness": 50,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "fire-stone",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": null,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "use-item"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "arcanine"
+        }
+      }
+    ],
     "genderRate": 2,
     "growthRate": "slow",
     "habitat": "grassland",
@@ -7427,6 +8059,7 @@
     "baseExperience": 194,
     "baseHappiness": 50,
     "captureRate": 75,
+    "evolvesTo": null,
     "genderRate": 2,
     "growthRate": "slow",
     "habitat": "grassland",
@@ -7659,6 +8292,37 @@
     "baseExperience": 70,
     "baseHappiness": 50,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "fire-stone",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 16,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "use-item"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "arcanine-hisui"
+        }
+      }
+    ],
     "genderRate": 2,
     "growthRate": "slow",
     "habitat": "grassland",
@@ -7667,7 +8331,7 @@
     "isBaby": false,
     "isLegendary": false,
     "isMythical": false,
-    "name": "growlithe",
+    "name": "growlithe-hisui",
     "rarity": 20,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/58.png",
@@ -7899,7 +8563,7 @@
     "isBaby": false,
     "isLegendary": false,
     "isMythical": false,
-    "name": "arcanine",
+    "name": "arcanine-hisui",
     "rarity": 0,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/59.png",
@@ -8123,6 +8787,37 @@
     "baseExperience": 60,
     "baseHappiness": 50,
     "captureRate": 255,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 25,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "poliwhirl"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium-slow",
     "habitat": "waters-edge",
@@ -8355,6 +9050,67 @@
     "baseExperience": 135,
     "baseHappiness": 50,
     "captureRate": 120,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "water-stone",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": null,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "use-item"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "poliwrath"
+        }
+      },
+
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "kings-rock",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 16,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "use-item"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "politoed"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium-slow",
     "habitat": "waters-edge",
@@ -8587,6 +9343,7 @@
     "baseExperience": 255,
     "baseHappiness": 50,
     "captureRate": 45,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium-slow",
     "habitat": "waters-edge",
@@ -8819,6 +9576,37 @@
     "baseExperience": 62,
     "baseHappiness": 50,
     "captureRate": 200,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 16,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "kadabra"
+        }
+      }
+    ],
     "genderRate": 2,
     "growthRate": "medium-slow",
     "habitat": "urban",
@@ -9051,6 +9839,37 @@
     "baseExperience": 140,
     "baseHappiness": 50,
     "captureRate": 100,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "psychic-stone",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": null,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "alakazam"
+        }
+      }
+    ],
     "genderRate": 2,
     "growthRate": "medium-slow",
     "habitat": "urban",
@@ -9283,6 +10102,7 @@
     "baseExperience": 250,
     "baseHappiness": 50,
     "captureRate": 50,
+    "evolvesTo": null,
     "genderRate": 2,
     "growthRate": "medium-slow",
     "habitat": "urban",
@@ -9515,6 +10335,37 @@
     "baseExperience": 82,
     "baseHappiness": 50,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 40,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "rapidash"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "grassland",
@@ -9747,6 +10598,7 @@
     "baseExperience": 175,
     "baseHappiness": 50,
     "captureRate": 60,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "grassland",
@@ -9979,6 +10831,67 @@
     "baseExperience": 63,
     "baseHappiness": 50,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 37,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "slowbro"
+        }
+      },
+
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "kings-rock",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 16,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "use-item"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "slowking"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "waters-edge",
@@ -10211,6 +11124,7 @@
     "baseExperience": 172,
     "baseHappiness": 50,
     "captureRate": 75,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "waters-edge",
@@ -10443,6 +11357,66 @@
     "baseExperience": 63,
     "baseHappiness": 50,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "galarica-cuff",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": null,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "use-item"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "slowbro-galar"
+        }
+      },
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": "galarica-wreath",
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": null,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "slowking-galar"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "waters-edge",
@@ -10451,7 +11425,7 @@
     "isBaby": false,
     "isLegendary": false,
     "isMythical": false,
-    "name": "slowpoke",
+    "name": "slowpoke-galar",
     "rarity": 10,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/79.png",
@@ -10675,6 +11649,7 @@
     "baseExperience": 172,
     "baseHappiness": 50,
     "captureRate": 75,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "waters-edge",
@@ -10683,7 +11658,7 @@
     "isBaby": false,
     "isLegendary": false,
     "isMythical": false,
-    "name": "slowbro",
+    "name": "slowbro-galar",
     "rarity": 0,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/80.png",
@@ -10907,6 +11882,37 @@
     "baseExperience": 62,
     "baseHappiness": 70,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 31,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "dodrio"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "grassland",
@@ -11139,6 +12145,7 @@
     "baseExperience": 165,
     "baseHappiness": 70,
     "captureRate": 45,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "grassland",
@@ -11371,6 +12378,37 @@
     "baseExperience": 65,
     "baseHappiness": 70,
     "captureRate": 190,
+    "evolvesTo": [
+      {
+        "evolutionDetails": [
+          {
+            "gender": null,
+            "held_item": null,
+            "item": null,
+            "known_move": null,
+            "known_move_type": null,
+            "location": null,
+            "min_affection": null,
+            "min_beauty": null,
+            "min_happiness": null,
+            "min_level": 38,
+            "needs_overworld_rain": false,
+            "party_species": null,
+            "party_type": null,
+            "relative_physical_stats": null,
+            "time_of_day": "",
+            "trade_species": null,
+            "trigger": {
+              "name": "level-up"
+            },
+            "turn_upside_down": false
+          }
+        ],
+        "species": {
+          "name": "muk-alola"
+        }
+      }
+    ],
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "urban",
@@ -11379,7 +12417,7 @@
     "isBaby": false,
     "isLegendary": false,
     "isMythical": false,
-    "name": "grimer",
+    "name": "grimer-alola",
     "rarity": 40,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/88.png",
@@ -11603,6 +12641,7 @@
     "baseExperience": 175,
     "baseHappiness": 70,
     "captureRate": 75,
+    "evolvesTo": null,
     "genderRate": 4,
     "growthRate": "medium",
     "habitat": "urban",
@@ -11611,7 +12650,7 @@
     "isBaby": false,
     "isLegendary": false,
     "isMythical": false,
-    "name": "muk",
+    "name": "muk-alola",
     "rarity": 20,
     "sprites": {
       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/89.png",

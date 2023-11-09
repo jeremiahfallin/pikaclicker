@@ -1,12 +1,9 @@
 import { Center, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import useGameStore from "@/hooks/useGameStore";
 import pokes from "../pokes";
 
-export default function Party({
-  party,
-  selectedPokemon,
-  setSelectedPokemon,
-  swapPokemon,
-}) {
+export default function Party({ party, selectedPokemon, setSelectedPokemon }) {
+  const swapPokemon = useGameStore((state) => state.swapPokemon);
   const setPokemon = (idx) => {
     setSelectedPokemon((prev) => {
       if (prev.idx === null) {
@@ -39,6 +36,12 @@ export default function Party({
             <Center
               key={`${pokemon.id}-${idx}`}
               flexDir={"column"}
+              background={
+                selectedPokemon.idx === idx && selectedPokemon.place === "party"
+                  ? "green.200"
+                  : null
+              }
+              borderRadius={"md"}
               onClick={() => setPokemon(idx)}
             >
               <Image alt={pokemon.name} src={pokemon.image} />

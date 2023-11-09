@@ -1,5 +1,7 @@
 import { memo, useCallback, useMemo, useEffect } from "react";
 import { HexGrid, Layout, Hexagon, Pattern } from "react-hexgrid";
+import useGameStore from "@/hooks/useGameStore";
+import { useShallow } from "zustand/react/shallow";
 
 import axial from "../map_axial";
 import hex from "../hex";
@@ -11,14 +13,15 @@ hex.tiles.forEach((tile) => {
 
 const HexagonMemo = memo(Hexagon);
 
-const HexagonContainer = ({ q, r, s, fill, isSelected, updateCurrentHex }) => {
+const HexagonContainer = ({ q, r, s, hexId, fill, isSelected }) => {
+  const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
   const onClick = useCallback(() => {
     updateCurrentHex({ q, r, s });
   }, [q, r, s, updateCurrentHex]);
 
   const cellStyle = useMemo(() => {
     let style = {};
-    if (fill < -1) {
+    if (hexId < -1) {
       style = { transform: "scaleX(-1)" };
     }
     if (isSelected) {
@@ -31,7 +34,7 @@ const HexagonContainer = ({ q, r, s, fill, isSelected, updateCurrentHex }) => {
       };
     }
     return style;
-  }, [fill, isSelected]);
+  }, [hexId, isSelected]);
 
   return (
     <HexagonMemo
@@ -47,7 +50,11 @@ const HexagonContainer = ({ q, r, s, fill, isSelected, updateCurrentHex }) => {
 
 const HexagonContainerMemo = memo(HexagonContainer);
 
-function Map({ currentHex, updateCurrentHex }) {
+function Map() {
+  const currentHex = useGameStore(
+    useShallow((state) => state.player.currentHex)
+  );
+
   return (
     <HexGrid
       width={"100%"}
@@ -76,8 +83,8 @@ function Map({ currentHex, updateCurrentHex }) {
               r={hex.r}
               s={hex.q - hex.r}
               fill={fill}
+              hexId={hex.id}
               isSelected={isSelected}
-              updateCurrentHex={updateCurrentHex}
             />
           );
         })}
