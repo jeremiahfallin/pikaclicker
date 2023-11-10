@@ -7,6 +7,7 @@ import {
   calcMaxHP,
   calcStat,
   catchChance,
+  createPokemon,
   experienceGain,
   getHexDetails,
   getWildPokemon,
@@ -356,7 +357,21 @@ const useGameStore = create(
           }
 
           if (newLevel > poke.level) {
-            const basePokemon = pokes.find((p) => p.id === poke.id);
+            let basePokemon = pokes.find((p) => p.id === poke.id);
+            const evolutionInfo = basePokemon.evolvesTo;
+            if (
+              evolutionInfo?.[0]?.evolution_conditions?.[0]?.level <= newLevel
+            ) {
+              const evolution = pokes.find(
+                (p) => p.name === evolutionInfo[0].pokemon_name
+              );
+              basePokemon = evolution;
+              const newPokemon = createPokemon(evolution.id, newLevel);
+              return {
+                ...poke,
+                ...newPokemon,
+              };
+            }
             const newMaxHP = calcMaxHP(
               basePokemon.stats[0].base_stat,
               newLevel
@@ -387,7 +402,6 @@ const useGameStore = create(
               defense: newDefense,
               specialAttack: newSpecialAttack,
               specialDefense: newSpecialDefense,
-
               speed: newSpeed,
             };
           } else {

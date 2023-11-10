@@ -72,11 +72,9 @@ export default function Game() {
       return acc + curr.speed;
     }, 0) / party.length;
 
-  console.log(averageSpeed);
-
   useInterval(() => {
     handleTurn();
-  }, 1000 * (100 / averageSpeed));
+  }, 1000);
 
   return (
     <>
