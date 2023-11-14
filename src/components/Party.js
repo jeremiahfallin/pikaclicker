@@ -1,9 +1,35 @@
-import { Center, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Image,
+  Progress,
+  SimpleGrid,
+  Text,
+} from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
-import pokes from "../pokes";
+import {
+  fastGrowth,
+  slowGrowth,
+  erraticGrowth,
+  mediumFastGrowth,
+  mediumSlowGrowth,
+  fluctuatingGrowth,
+} from "@/utils";
 
-export default function Party({ party, selectedPokemon, setSelectedPokemon }) {
+const levelFormulas = {
+  erratic: erraticGrowth,
+  fast: fastGrowth,
+  "medium-fast": mediumFastGrowth,
+  medium: mediumFastGrowth,
+  "medium-slow": mediumSlowGrowth,
+  slow: slowGrowth,
+  fluctuating: fluctuatingGrowth,
+  "fast-then-very-slow": fluctuatingGrowth,
+};
+
+export default function Party({ selectedPokemon, setSelectedPokemon }) {
   const swapPokemon = useGameStore((state) => state.swapPokemon);
+  const party = useGameStore((state) => state.player.party);
   const setPokemon = (idx) => {
     setSelectedPokemon((prev) => {
       if (prev.idx === null) {
@@ -30,8 +56,14 @@ export default function Party({ party, selectedPokemon, setSelectedPokemon }) {
     <div>
       <div>Party</div>
 
-      <SimpleGrid columns={3} spacing={10}>
+      <SimpleGrid columns={2} spacing={1}>
         {party.map((pokemon, idx) => {
+          const currentLevelXp = levelFormulas[pokemon.growthRate](
+            pokemon.level
+          );
+          const nextLevelXp = levelFormulas[pokemon.growthRate](
+            pokemon.level + 1
+          );
           return (
             <Center
               key={`${pokemon.id}-${idx}`}
@@ -46,10 +78,24 @@ export default function Party({ party, selectedPokemon, setSelectedPokemon }) {
             >
               <Image alt={pokemon.name} src={pokemon.image} />
               <Text>{pokemon.name}</Text>
-              <Text>
-                Lvl. {pokemon.level} {Math.floor(pokemon.xp)} xp
-              </Text>
-              <Text>HP: {Math.floor(pokemon.currentHP)}</Text>
+              <Text>Lvl. {pokemon.level}</Text>
+              <Box w="100%">
+                <Progress
+                  size={"xs"}
+                  colorScheme="green"
+                  value={(100 * pokemon.currentHP) / pokemon.maxHP}
+                />
+              </Box>
+              <Box w="100%">
+                <Progress
+                  size={"xs"}
+                  colorScheme="pink"
+                  value={
+                    (100 * (pokemon.xp - currentLevelXp)) /
+                    (nextLevelXp - currentLevelXp)
+                  }
+                />
+              </Box>
             </Center>
           );
         })}

@@ -1,5 +1,6 @@
-import pokes from "../pokes";
-import { Box, Image, Progress } from "@chakra-ui/react";
+import { Box, Image, Progress, useInterval } from "@chakra-ui/react";
+import useGameStore from "@/hooks/useGameStore";
+
 // battle parts:
 /*
 Your Pokemon
@@ -32,7 +33,15 @@ function Pokemon({ details, top, left, bottom, right }) {
   );
 }
 
-export default function Battle({ playerPokemon, enemyPokemon, background }) {
+export default function Battle() {
+  const handleTurn = useGameStore((state) => state.handleTurn);
+  const playerPokemon = useGameStore((state) => state.player.party[0]);
+  const enemyPokemon = useGameStore((state) => state.battle.pokemon);
+  const background = "forest";
+
+  useInterval(() => {
+    handleTurn();
+  }, 1000);
   return (
     <Box
       background={`url(backgrounds/${background}.png)`}

@@ -3,7 +3,7 @@ import Head from "next/head";
 import { createPokemon, random } from "../utils";
 import Bank from "./Bank";
 import Party from "./Party";
-import Battle from "./Battle";
+import Scene from "./Scene";
 import Items from "./Items";
 import Shop from "./Shop";
 
@@ -15,10 +15,11 @@ import {
   Heading,
   Image,
   SimpleGrid,
-  useInterval,
 } from "@chakra-ui/react";
 import Map from "./Map";
 import useGameStore, { unlockArea } from "@/hooks/useGameStore";
+import Pokedex from "./Pokedex";
+import Settings from "./Settings";
 
 const waterStarters = ["squirtle", "totodile", "mudkip", "piplup"];
 const grassStarters = ["bulbasaur", "chikorita", "treecko", "sprigatito"];
@@ -56,25 +57,8 @@ export default function Game() {
     idx: null,
     place: null,
   });
-  const battle = useGameStore((state) => state.battle);
-  const handleTurn = useGameStore((state) => state.handleTurn);
-  const player = useGameStore((state) => state.player);
-  const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
-  const updateParty = useGameStore((state) => state.updateParty);
-  const updateItems = useGameStore((state) => state.updateItems);
-  const updateCoins = useGameStore((state) => state.updateCoins);
-  const releasePokemon = useGameStore((state) => state.releasePokemon);
-  const unlockArea = useGameStore((state) => state.unlockArea);
+
   const party = useGameStore((state) => state.player.party);
-
-  const averageSpeed =
-    party.reduce((acc, curr) => {
-      return acc + curr.speed;
-    }, 0) / party.length;
-
-  useInterval(() => {
-    handleTurn();
-  }, 1000);
 
   return (
     <>
@@ -84,21 +68,17 @@ export default function Game() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <SimpleGrid columns={3}>
+      <SimpleGrid templateColumns="2fr 3fr 2fr" gap={2} p={2}>
         <Box>
           <Center>
-            {player.party.length === 0 && (
+            {party.length === 0 && (
               <Flex direction={"column"}>
                 <Heading as="h2">Choose a starter</Heading>
                 <Flex>
                   {starters.map((starter) => {
                     return (
                       <div key={starter}>
-                        <PickPokemon
-                          starter={starter}
-                          updateParty={updateParty}
-                          unlockArea={unlockArea}
-                        />
+                        <PickPokemon starter={starter} />
                       </div>
                     );
                   })}
@@ -106,37 +86,22 @@ export default function Game() {
               </Flex>
             )}
           </Center>
-          <Shop
-            playerItems={player.items}
-            updateItems={updateItems}
-            coins={player.coins}
-            updateCoins={updateCoins}
-          />
+          <Pokedex />
+          <Settings />
         </Box>
         <Box>
-          <Battle
-            playerPokemon={player.party[0]}
-            enemyPokemon={battle.pokemon}
-            background={"forest"}
-          />
-          <Map
-            unlockedAreas={player.unlockedAreas}
-            currentHex={player.currentHex}
-            updateCurrentHex={updateCurrentHex}
-          />
+          <Scene />
+          <Map />
         </Box>
         <Box>
           <Party
-            party={player.party}
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
           />
-          <Items items={player.items} />
+          <Items selectedPokemon={selectedPokemon} />
           <Bank
-            bank={player.bank}
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
-            releasePokemon={releasePokemon}
           />
         </Box>
       </SimpleGrid>

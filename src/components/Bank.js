@@ -6,22 +6,20 @@ import {
   Image,
   RadioGroup,
   Radio,
-  Select,
   SimpleGrid,
   Text,
   Stack,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 
-export default function Bank({
-  bank,
-  selectedPokemon,
-  setSelectedPokemon,
-  releasePokemon,
-}) {
-  const [sortBy, setSortBy] = useState("id"); // ["id", "level", "name"
+// TODO: Replace XP with XP bar similar to party pokemon
+
+export default function Bank({ selectedPokemon, setSelectedPokemon }) {
+  const [sortBy, setSortBy] = useState("id");
   const [release, setRelease] = useState(null);
   const swapPokemon = useGameStore((state) => state.swapPokemon);
+  const bank = useGameStore((state) => state.player.bank);
+  const releasePokemon = useGameStore((state) => state.releasePokemon);
   const setPokemon = (idx) => {
     setSelectedPokemon((prev) => {
       if (prev.idx === null) {
@@ -55,8 +53,8 @@ export default function Bank({
         </Stack>
       </RadioGroup>
       <SimpleGrid
-        columns={3}
-        spacing={10}
+        columns={2}
+        spacing={1}
         maxH="300px"
         overflowY={"scroll"}
         scrollBehavior={"smooth"}

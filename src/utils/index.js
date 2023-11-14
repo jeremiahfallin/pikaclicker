@@ -1,5 +1,4 @@
 import areas from "../areas";
-import locations from "../locations";
 import pokes from "../pokes";
 
 const homeHex = { q: 13, r: 2, s: 11 };
@@ -77,8 +76,19 @@ const catchChance = (captureRate, hp, maxHP, status, ball, level) => {
   return chance >= 100 ? 100 : chance;
 };
 
+// Right now every pokemon of a species that is the same level has the same stats, potential
+// TODO: implement IVs and maybe EVs
+// Also shiny check will run even when pokemon evolves
 const createPokemon = (id, level) => {
   const pokemon = pokes.find((poke) => poke.id === id);
+  let image = pokemon.sprites.front_default;
+  let isShiny = false;
+  if (pokemon.sprites?.front_shiny) {
+    isShiny = Math.random() < 1 / 4096 ? true : false;
+    image = isShiny
+      ? pokemon.sprites.front_shiny
+      : pokemon.sprites.front_default;
+  }
   const growthRate = pokemon.growthRate;
   const hp = calcMaxHP(pokemon.stats[0].base_stat, level);
   const attack = calcStat(pokemon.stats[1].base_stat, level);
@@ -114,7 +124,8 @@ const createPokemon = (id, level) => {
   return {
     id,
     name: pokemon.name,
-    image: pokemon.sprites.front_default,
+    image: image,
+    isShiny,
     level,
     xp,
     maxHP: hp,
@@ -128,6 +139,8 @@ const createPokemon = (id, level) => {
     captureRate: pokemon.captureRate,
     baseExperience: pokemon.baseExperience,
     growthRate: pokemon.growthRate,
+    happiness: 0,
+    affection: 0,
   };
 };
 
@@ -176,10 +189,14 @@ const experienceGain = (base, levelEnemy, levelTrainer) => {
 };
 
 function getTotalRarity(pokemonList) {
-  return pokemonList.reduce(
-    (total, pokemon) => total + pokes.find((p) => p.id === pokemon).rarity,
-    0
-  );
+  return pokemonList.reduce((total, pokemon) => {
+    const poke = pokes.find((p) => p.id === pokemon);
+    if (!poke) {
+      console.log(pokemon);
+      return total;
+    }
+    return total + poke.rarity;
+  }, 0);
 }
 
 function determineSpawn(pokemonList) {
@@ -187,6 +204,9 @@ function determineSpawn(pokemonList) {
   let randomNum = Math.floor(Math.random() * totalRarity) + 1;
 
   for (let i = 0; i < pokemonList.length; i++) {
+    if (!pokes.find((p) => p.id === pokemonList[i])) {
+      console.log(pokemonList[i]);
+    }
     const pokemon = pokemonList[i];
     randomNum -= pokes.find((p) => p.id === pokemon).rarity;
 
@@ -196,7 +216,35 @@ function determineSpawn(pokemonList) {
   }
 }
 
+const affectionLevels = [0, 1, 50, 100, 150, 255];
+function checkEvolve(pokemon, level = 1, area = null, item = null) {
+  const evolutions = pokes.find((p) => p.id === pokemon.id).evolvesTo;
+  if (!evolutions) {
+    return false;
+  }
+  for (let evolution of evolutions) {
+    for (let condition of evolution.evolution_conditions) {
+      if (condition.trigger === "level-up") {
+        if (
+          level >= condition.level &&
+          !(pokemon.happiness < affectionLevels[condition.min_affection]) &&
+          !(pokemon.happiness < condition.min_happiness)
+        ) {
+          return evolution.pokemon_name;
+        }
+      }
+      if (condition.trigger === "use-item") {
+        if (condition.item === item) {
+          return evolution.pokemon_name;
+        }
+      }
+    }
+  }
+  return false;
+}
+
 export {
+  checkEvolve,
   axialDistance,
   calcDamage,
   calcMaxHP,

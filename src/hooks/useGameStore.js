@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import superjson from "superjson";
 import {
   axialDistance,
+  checkEvolve,
   calcDamage,
   calcMaxHP,
   calcStat,
@@ -22,9 +23,8 @@ import {
 } from "@/utils";
 import pokes from "../pokes";
 import areas from "../areas";
-import locations from "../locations";
 
-const pokeballChances = {
+const ballChances = {
   Pokeball: 1,
   Greatball: 1.5,
   Ultraball: 2,
@@ -77,6 +77,7 @@ const useGameStore = create(
           {
             name: "Pokeball",
             quantity: 10,
+            type: "ball",
           },
         ],
         catchingStatus: "ALL",
@@ -85,6 +86,7 @@ const useGameStore = create(
         pickStarter: 0,
       },
       settings: {
+        ball: "Pokeball",
         newPokemon: true,
         repeatPokemon: true,
         shinyPokemon: true,
@@ -94,18 +96,18 @@ const useGameStore = create(
         const player = get().player;
         const party = get().player.party;
         const items = get().player.items;
-        const pokeball = items.find((item) => item.name === "Pokeball");
-        if (pokeball.quantity <= 0) {
+        const ball = items.find((item) => item.name === get().settings.ball);
+        if (ball.quantity <= 0) {
           return;
         }
-        const pokeballChance = pokeballChances[pokeball.name];
+        const ballChance = ballChances[ball.name];
         const captureRate = pokemon.captureRate;
         const chance = catchChance(
           captureRate,
           pokemon.currentHP,
           pokemon.maxHP,
           1,
-          pokeballChance,
+          ballChance,
           pokemon.level
         );
         const randomNum = random(0, 100);
@@ -121,7 +123,11 @@ const useGameStore = create(
               },
             }));
           } else {
-            const newBank = [...player.bank, pokemon];
+            const newPokemon = {
+              ...pokemon,
+              currentHP: pokemon.maxHP,
+            };
+            const newBank = [...player.bank, newPokemon];
             set((state) => ({
               ...state,
               player: {
@@ -153,7 +159,7 @@ const useGameStore = create(
           }));
         }
         const newItems = items.map((item) => {
-          if (item.name === "Pokeball") {
+          if (item.name === get().settings.ball) {
             return {
               ...item,
               quantity: item.quantity - 1,
@@ -358,14 +364,18 @@ const useGameStore = create(
 
           if (newLevel > poke.level) {
             let basePokemon = pokes.find((p) => p.id === poke.id);
-            const evolutionInfo = basePokemon.evolvesTo;
-            if (
-              evolutionInfo?.[0]?.evolution_conditions?.[0]?.level <= newLevel
-            ) {
-              const evolution = pokes.find(
-                (p) => p.name === evolutionInfo[0].pokemon_name
-              );
+
+            const evolutionName = checkEvolve(
+              basePokemon,
+              newLevel,
+              null,
+              null
+            );
+
+            if (!!evolutionName) {
+              const evolution = pokes.find((p) => p.name === evolutionName);
               basePokemon = evolution;
+              updatePokedex(evolution.id, true);
               const newPokemon = createPokemon(evolution.id, newLevel);
               return {
                 ...poke,
@@ -403,6 +413,7 @@ const useGameStore = create(
               specialAttack: newSpecialAttack,
               specialDefense: newSpecialDefense,
               speed: newSpeed,
+              xp: newExperience,
             };
           } else {
             return {
@@ -412,6 +423,42 @@ const useGameStore = create(
           }
         });
         get().updateParty(newParty);
+      },
+      updateHappiness: () => {
+        const newParty = get().player.party.map((poke) => {
+          const newHappiness = Math.min(255, poke.happiness + 1);
+          return {
+            ...poke,
+            happiness: newHappiness,
+          };
+        });
+        get().updateParty(newParty);
+      },
+      applyItemOnPokemon: (item, idx, place) => {
+        const pokemon = get().player[place][idx];
+        const newPlace = [...get().player[place]];
+        const newItems = [...get().player.items];
+        const itemIndex = newItems.findIndex((i) => i.name === item.name);
+        if (item.type === "evolution-item") {
+          const basePokemon = pokes.find((p) => p.id === pokemon.id);
+          const evolutionName = checkEvolve(basePokemon, null, null, item.slug);
+          if (!!evolutionName) {
+            const evolution = pokes.find((p) => p.name === evolutionName);
+            const newPokemon = createPokemon(evolution.id, pokemon.level);
+            newPlace[idx] = {
+              ...pokemon,
+              ...newPokemon,
+            };
+            newItems[itemIndex].quantity -= 1;
+            if (place === "party") {
+              get().updateParty(newPlace);
+            } else {
+              get().updateBank(newPlace);
+            }
+            get().updateItems(newItems);
+            updatePokedex(evolution.id, true);
+          }
+        }
       },
       handleTurn: () => {
         const { battle, player } = get();
