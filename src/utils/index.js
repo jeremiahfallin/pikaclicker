@@ -192,7 +192,6 @@ function getTotalRarity(pokemonList) {
   return pokemonList.reduce((total, pokemon) => {
     const poke = pokes.find((p) => p.id === pokemon);
     if (!poke) {
-      console.log(pokemon);
       return total;
     }
     return total + poke.rarity;
@@ -204,9 +203,6 @@ function determineSpawn(pokemonList) {
   let randomNum = Math.floor(Math.random() * totalRarity) + 1;
 
   for (let i = 0; i < pokemonList.length; i++) {
-    if (!pokes.find((p) => p.id === pokemonList[i])) {
-      console.log(pokemonList[i]);
-    }
     const pokemon = pokemonList[i];
     randomNum -= pokes.find((p) => p.id === pokemon).rarity;
 

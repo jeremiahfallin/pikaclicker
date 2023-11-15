@@ -31,25 +31,26 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
   const swapPokemon = useGameStore((state) => state.swapPokemon);
   const party = useGameStore((state) => state.player.party);
   const setPokemon = (idx) => {
-    setSelectedPokemon((prev) => {
-      if (prev.idx === null) {
-        return {
-          idx: idx,
-          place: "party",
-        };
-      } else if (prev.idx === idx && prev.place === "party") {
-        return {
-          idx: null,
-          place: null,
-        };
-      } else {
-        swapPokemon(idx, "party", selectedPokemon.idx, selectedPokemon.place);
-        return {
-          idx: null,
-          place: null,
-        };
-      }
-    });
+    if (selectedPokemon.idx === null) {
+      setSelectedPokemon({
+        idx: idx,
+        place: "party",
+      });
+    } else if (
+      selectedPokemon.idx === idx &&
+      selectedPokemon.place === "party"
+    ) {
+      setSelectedPokemon({
+        idx: null,
+        place: null,
+      });
+    } else {
+      swapPokemon(idx, "party", selectedPokemon.idx, selectedPokemon.place);
+      setSelectedPokemon({
+        idx: null,
+        place: null,
+      });
+    }
   };
 
   return (

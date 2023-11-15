@@ -5,11 +5,21 @@ import { useShallow } from "zustand/react/shallow";
 
 import axial from "../map_axial";
 import hex from "../hex";
-import { Box } from "@chakra-ui/react";
+
+const hexIds = new Set();
+axial.forEach((hex) => {
+  const fill =
+    parseInt(hex.id) < -1 ? parseInt(hex.id) + 2147483648 : parseInt(hex.id);
+  hexIds.add(fill);
+});
 
 const tileImages = {};
 hex.tiles.forEach((tile) => {
-  tileImages[tile.id] = tile.image;
+  const fill =
+    parseInt(tile.id) < -1 ? parseInt(tile.id) + 2147483648 : parseInt(tile.id);
+  if (hexIds.has(fill)) {
+    tileImages[tile.id] = tile.image;
+  }
 });
 
 const HexagonMemo = memo(Hexagon);

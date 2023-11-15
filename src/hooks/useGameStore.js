@@ -365,12 +365,7 @@ const useGameStore = create(
           if (newLevel > poke.level) {
             let basePokemon = pokes.find((p) => p.id === poke.id);
 
-            const evolutionName = checkEvolve(
-              basePokemon,
-              newLevel,
-              null,
-              null
-            );
+            const evolutionName = checkEvolve(poke, newLevel, null, null);
 
             if (!!evolutionName) {
               const evolution = pokes.find((p) => p.name === evolutionName);
@@ -487,6 +482,7 @@ const useGameStore = create(
         if (pokemon.currentHP === 0) {
           get().updateCoins(player.coins + pokemon.level * 10);
           get().updateExperience(pokemon);
+          get().updateHappiness();
           if (player.catchingStatus === "ALL") {
             get().attemptCatch(pokemon);
             get().updateCurrentHex(player.currentHex);
