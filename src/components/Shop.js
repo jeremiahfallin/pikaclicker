@@ -78,6 +78,18 @@ const shopItems = [
     price: 10000,
     type: "evolution-item",
   },
+  {
+    name: "Auspicious Armor",
+    slug: "auspicious-armor",
+    price: 10000,
+    type: "evolution-item",
+  },
+  {
+    name: "Malicious Armor",
+    slug: "malicious-armor",
+    price: 10000,
+    type: "evolution-item",
+  },
 ];
 
 // TODO: Move items and sell different items in different towns

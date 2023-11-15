@@ -15,6 +15,7 @@ import {
   Heading,
   Image,
   SimpleGrid,
+  VStack,
 } from "@chakra-ui/react";
 import Map from "./Map";
 import useGameStore, { unlockArea } from "@/hooks/useGameStore";
@@ -89,11 +90,26 @@ export default function Game() {
           <Pokedex />
           <Settings />
         </Box>
-        <Box>
-          <Scene />
-          <Map />
+        <Box
+          maxH="100vh"
+          overflowY="auto"
+          scrollBehavior={"smooth"}
+          sx={{
+            "&::-webkit-scrollbar": { width: "9px" },
+            "&::-webkit-scrollbar-track": { background: "transparent" },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "gray.400",
+              borderRadius: "24px",
+              border: "2px solid transparent",
+            },
+          }}
+        >
+          <VStack spacing={2} align="stretch">
+            <Scene />
+            <Map />
+          </VStack>
         </Box>
-        <Box>
+        <Box maxW="100%" w="100%" minW="0">
           <Party
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}

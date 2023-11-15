@@ -45,7 +45,9 @@ export default function Battle() {
   return (
     <Box
       background={`url(backgrounds/${background}.png)`}
-      backgroundSize={"100% 100%"}
+      backgroundSize={"cover"}
+      backgroundRepeat={"no-repeat"}
+      backgroundPosition={"center"}
       position={"relative"}
       h={200}
     >

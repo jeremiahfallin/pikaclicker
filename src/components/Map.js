@@ -5,6 +5,7 @@ import { useShallow } from "zustand/react/shallow";
 
 import axial from "../map_axial";
 import hex from "../hex";
+import { Box } from "@chakra-ui/react";
 
 const tileImages = {};
 hex.tiles.forEach((tile) => {
@@ -59,7 +60,7 @@ function Map() {
     <HexGrid
       width={"100%"}
       height={"auto"}
-      viewBox="-5 20 160 240"
+      viewBox="-5 -5 160 190"
       preserveAspectRatio="xMidYMid meet"
     >
       <Layout size={{ x: 4, y: 4 }} flat={true} spacing={0.85}>

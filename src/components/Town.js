@@ -10,7 +10,9 @@ export default function Town() {
       <Shop isOpen={isOpen} onClose={onClose} />
       <Box
         background={`url(backgrounds/${background}.png)`}
-        backgroundSize={"100% 100%"}
+        backgroundSize={"cover"}
+        backgroundRepeat={"no-repeat"}
+        backgroundPosition={"center"}
         position={"relative"}
         h={200}
       >
