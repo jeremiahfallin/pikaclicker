@@ -184,6 +184,13 @@
     ]
   },
   {
+    "name": "Desert Town",
+    "biome": "town",
+    "pokemon": [],
+    "hexes": [{ "q": 18, "r": 3, "s": 15 }],
+    "isTown": true
+  },
+  {
     "name": "Area 2",
     "biome": "wasteland",
     "pokemon": [

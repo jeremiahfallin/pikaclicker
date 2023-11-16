@@ -17,6 +17,7 @@ const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 const getHexDetails = (q, r, s) => {
   let spawnablePokemon = new Set();
   let isTown = false;
+  let name = "";
   for (let area of areas) {
     if (
       area.hexes.findIndex(
@@ -27,6 +28,7 @@ const getHexDetails = (q, r, s) => {
       if (area.isTown) {
         isTown = true;
       }
+      name = area.name;
     }
   }
   return {
@@ -35,6 +37,7 @@ const getHexDetails = (q, r, s) => {
     s,
     pokemon: [...spawnablePokemon],
     isTown: isTown,
+    name,
   };
 };
 
@@ -46,6 +49,7 @@ const getWildPokemon = (hex, areaIndex) => {
     Math.max(1, Math.ceil(baseLevel * 0.9 - 2)),
     Math.min(100, Math.floor(baseLevel * 1.1 + 2))
   );
+  console.log(randomLevel);
   const randomPokemon = createPokemon(randomPokemonId, randomLevel);
   return randomPokemon;
 };

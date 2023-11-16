@@ -21,6 +21,7 @@ import Map from "./Map";
 import useGameStore, { unlockArea } from "@/hooks/useGameStore";
 import Pokedex from "./Pokedex";
 import Settings from "./Settings";
+import Badges from "./Badges";
 
 const waterStarters = ["squirtle", "totodile", "mudkip", "piplup"];
 const grassStarters = ["bulbasaur", "chikorita", "treecko", "sprigatito"];
@@ -60,6 +61,8 @@ export default function Game() {
   });
 
   const party = useGameStore((state) => state.player.party);
+  // const updateBattle = useGameStore((state) => state.updateBattle);
+  // updateBattle({ pokemon: null, isTrainer: false });
 
   return (
     <>
@@ -88,6 +91,7 @@ export default function Game() {
             )}
           </Center>
           <Pokedex />
+          <Badges />
           <Settings />
         </Box>
         <Box

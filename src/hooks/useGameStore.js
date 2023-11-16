@@ -61,6 +61,7 @@ const useGameStore = create(
         pokemon: null,
         isTrainer: false,
         turn: 0,
+        isComplete: false,
       },
       player: {
         currentHex: { q: 13, r: 2, s: 11 },
@@ -72,6 +73,7 @@ const useGameStore = create(
           caught: new Set(),
         },
         unlockedAreas: new Set(["Home"]),
+        badges: new Set(),
         isInTown: true,
         items: [
           {
@@ -358,9 +360,6 @@ const useGameStore = create(
           if (newExperience >= nextLevelExperience) {
             newLevel = poke.level + 1;
           }
-          if (newLevel > 16) {
-            unlockArea("Area 2");
-          }
 
           if (newLevel > poke.level) {
             let basePokemon = pokes.find((p) => p.id === poke.id);
@@ -457,11 +456,14 @@ const useGameStore = create(
       },
       handleTurn: () => {
         const { battle, player } = get();
-        const { pokemon } = battle;
+        let { pokemon } = battle;
         const { party } = player;
 
         if (!pokemon) {
           return;
+        }
+        if (battle.isTrainer) {
+          pokemon = pokemon[0];
         }
         if (party[0].currentHP === 0) {
           const newLeadPokemon = party.findIndex((poke) => {
@@ -483,7 +485,33 @@ const useGameStore = create(
           get().updateCoins(player.coins + pokemon.level * 10);
           get().updateExperience(pokemon);
           get().updateHappiness();
-          if (player.catchingStatus === "ALL") {
+
+          if (battle.isTrainer) {
+            const battlePokemon = get().battle.pokemon;
+            const newTrainerPokemon = battlePokemon.findIndex((poke) => {
+              return poke.currentHP > 0;
+            });
+            if (newTrainerPokemon === -1) {
+              get().updateBattle({
+                pokemon: null,
+                isTrainer: false,
+                turn: 0,
+                isComplete: true,
+              });
+              return;
+            } else {
+              get().updateBattle({
+                pokemon: [
+                  battlePokemon[newTrainerPokemon],
+                  ...battlePokemon.slice(0, newTrainerPokemon),
+                  ...battlePokemon.slice(newTrainerPokemon + 1),
+                ],
+              });
+            }
+            return;
+          }
+
+          if (!battle.isTrainer && player.catchingStatus === "ALL") {
             get().attemptCatch(pokemon);
             get().updateCurrentHex(player.currentHex);
             return;
@@ -495,13 +523,26 @@ const useGameStore = create(
         const dmgTaken = calcDamage(enemyPokemon.level, 1, 1, 1, 1, 1);
         const dmgDealt = calcDamage(playerPokemon.level, 1, 1, 1, 1, 1);
         const newPlayerHP = Math.max(playerPokemon.currentHP - dmgTaken, 0);
-        get().updateBattle({
-          turn: get().battle.turn + 1,
-          pokemon: {
-            ...pokemon,
-            currentHP: Math.max(pokemon.currentHP - dmgDealt, 0),
-          },
-        });
+        if (battle.isTrainer) {
+          get().updateBattle({
+            turn: get().battle.turn + 1,
+            pokemon: [
+              {
+                ...pokemon,
+                currentHP: Math.max(pokemon.currentHP - dmgDealt, 0),
+              },
+              ...get().battle.pokemon.slice(1),
+            ],
+          });
+        } else {
+          get().updateBattle({
+            turn: get().battle.turn + 1,
+            pokemon: {
+              ...pokemon,
+              currentHP: Math.max(pokemon.currentHP - dmgDealt, 0),
+            },
+          });
+        }
         get().updatePlayer({
           party: [
             {
@@ -548,5 +589,21 @@ function unlockArea(area) {
     },
   }));
 }
-export { unlockArea, updatePokedex };
+
+function updateBadges(badge) {
+  if (badge === "Grass") {
+    unlockArea("Area 2");
+    unlockArea("Desert Town");
+  }
+
+  useGameStore.setState((state) => ({
+    ...state,
+    player: {
+      ...state.player,
+      badges: new Set([...state.player.badges, badge]),
+    },
+  }));
+}
+
+export { unlockArea, updatePokedex, updateBadges };
 export default useGameStore;

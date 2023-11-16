@@ -28,6 +28,7 @@ const HexagonContainer = ({ q, r, s, hexId, fill, isSelected }) => {
   const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
   const onClick = useCallback(() => {
     updateCurrentHex({ q, r, s });
+    console.log({ q, r, s });
   }, [q, r, s, updateCurrentHex]);
 
   const cellStyle = useMemo(() => {

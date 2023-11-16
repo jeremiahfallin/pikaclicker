@@ -33,15 +33,15 @@ function Pokemon({ details, top, left, bottom, right }) {
   );
 }
 
-export default function Battle() {
+export default function Battle({ background = "forest" }) {
   const handleTurn = useGameStore((state) => state.handleTurn);
   const playerPokemon = useGameStore((state) => state.player.party[0]);
   const enemyPokemon = useGameStore((state) => state.battle.pokemon);
-  const background = "forest";
 
   useInterval(() => {
     handleTurn();
   }, 1000);
+
   return (
     <Box
       background={`url(backgrounds/${background}.png)`}
