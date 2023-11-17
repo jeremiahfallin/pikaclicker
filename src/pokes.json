@@ -9365,7 +9365,7 @@
           {
             "trigger": "trade",
             "level": null,
-            "item": null,
+            "item": "kings-rock",
             "held_item": "kings-rock",
             "time_of_day": "",
             "gender": null,
@@ -11440,7 +11440,7 @@
           {
             "trigger": "trade",
             "level": null,
-            "item": null,
+            "item": "kings-rock",
             "held_item": "kings-rock",
             "time_of_day": "",
             "gender": null,
@@ -31394,7 +31394,7 @@
           {
             "trigger": "use-item",
             "level": null,
-            "item": null,
+            "item": "metal-coat",
             "held_item": "metal-coat",
             "time_of_day": "",
             "gender": null,
@@ -33710,7 +33710,7 @@
           {
             "trigger": "use-item",
             "level": null,
-            "item": null,
+            "item": "dragon-scale",
             "held_item": "dragon-scale",
             "time_of_day": "",
             "gender": null,
@@ -34222,7 +34222,7 @@
           {
             "trigger": "level-up",
             "level": null,
-            "item": null,
+            "item": "oval-stone",
             "held_item": "oval-stone",
             "time_of_day": "day",
             "gender": null,
@@ -47256,7 +47256,7 @@
           {
             "trigger": "trade",
             "level": null,
-            "item": null,
+            "item": "prism-scale",
             "held_item": "prism-scale",
             "time_of_day": "",
             "gender": null,
@@ -56908,7 +56908,7 @@
           {
             "trigger": "use-item",
             "level": null,
-            "item": null,
+            "item": "protector",
             "held_item": "protector",
             "time_of_day": "",
             "gender": null,
@@ -57419,7 +57419,7 @@
           {
             "trigger": "use-item",
             "level": null,
-            "item": null,
+            "item": "up-grade",
             "held_item": "up-grade",
             "time_of_day": "",
             "gender": null,
@@ -57689,7 +57689,7 @@
           {
             "trigger": "use-item",
             "level": null,
-            "item": null,
+            "item": "dubious-disc",
             "held_item": "dubious-disc",
             "time_of_day": "",
             "gender": null,
@@ -58470,7 +58470,7 @@
           {
             "trigger": "use-item",
             "level": null,
-            "item": null,
+            "item": "reaper-cloth",
             "held_item": "reaper-cloth",
             "time_of_day": "",
             "gender": null,
