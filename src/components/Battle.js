@@ -40,46 +40,42 @@ function Pokemon({ details, top, left, bottom, right }) {
  * @returns A visual representation of the turn order.
  */
 const InitiativeSlider = () => {
+  const [lastTurn, setLastTurn] = useState(new Date().getTime());
   // Hook to handle game turns.
   const handleTurn = useGameStore((state) => state.handleTurn);
   // Retrieving the player's first Pokémon in the party.
   const playerPokemon = useGameStore((state) => state.player.party[0]);
+  const playerSpeed = playerPokemon.speed;
   // Retrieving the enemy Pokémon.
   const enemyPokemon = useGameStore((state) => state.battle.pokemon);
+  const enemySpeed = enemyPokemon.speed;
   // State to track each Pokémon's position on the slider
   const [playerPosition, setPlayerPosition] = useState(0);
   const [enemyPosition, setEnemyPosition] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (playerPosition >= 1000) {
+      const playerMovement = playerSpeed / 2;
+      const enemyMovement = enemySpeed / 2;
+      if (playerPosition + playerMovement >= 1000) {
+        console.log("player turn");
+        console.log((new Date().getTime() - lastTurn) / 1000);
+        setLastTurn(new Date().getTime());
         handleTurn("player");
       }
-      if (enemyPosition >= 1000) {
+      if (enemyPosition + enemyMovement >= 1000) {
         handleTurn();
       }
       setPlayerPosition((playerPosition) => {
-        if (playerPosition >= 1000) {
-          setPlayerPosition(0);
-        }
-        return playerPosition + playerPokemon.speed;
+        return (playerPosition + playerMovement) % 1000;
       });
       setEnemyPosition((enemyPosition) => {
-        if (enemyPosition >= 1000) {
-          setEnemyPosition(0);
-        }
-        return enemyPosition + enemyPokemon.speed;
+        return (enemyPosition + enemyMovement) % 1000;
       });
-    }, 500);
+    }, 50);
 
     return () => clearInterval(interval);
-  }, [
-    playerPokemon.speed,
-    enemyPokemon.speed,
-    handleTurn,
-    enemyPosition,
-    playerPosition,
-  ]);
+  }, [playerSpeed, enemySpeed, handleTurn, enemyPosition, playerPosition]);
 
   return (
     <Flex position="relative" h="50px" align="center">
@@ -89,7 +85,7 @@ const InitiativeSlider = () => {
         boxSize="40px"
         position="absolute"
         left={`${playerPosition / 10}%`}
-        transition="left 1s"
+        transition="left .5s"
       />
       <Image
         src={enemyPokemon.image}
@@ -97,7 +93,7 @@ const InitiativeSlider = () => {
         boxSize="40px"
         position="absolute"
         left={`${enemyPosition / 10}%`}
-        transition="left 1s"
+        transition="left .5s"
       />
     </Flex>
   );
