@@ -3,17 +3,42 @@ import pokes from "../pokes";
 
 const homeHex = { q: 13, r: 2, s: 11 };
 
+/**
+ * Subtracts one axial coordinate from another.
+ * @param {Object} a - The first axial coordinate.
+ * @param {Object} b - The second axial coordinate.
+ * @returns {Object} The result of the subtraction.
+ */
 const axialSubtract = (a, b) => {
   return { q: a.q - b.q, r: a.r - b.r };
 };
 
+/**
+ * Calculates the axial distance between two hexes.
+ * @param {Object} a - The first hex coordinate.
+ * @param {Object} b - The second hex coordinate.
+ * @returns {number} The axial distance between the two hexes.
+ */
 const axialDistance = (a, b) => {
   const vec = axialSubtract(a, b);
   return (Math.abs(vec.q) + Math.abs(vec.q + vec.r) + Math.abs(vec.r)) / 2;
 };
 
+/**
+ * Generates a random integer within a specified range.
+ * @param {number} min - The minimum value (inclusive).
+ * @param {number} max - The maximum value (exclusive).
+ * @returns {number} A random integer between min and max.
+ */
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 
+/**
+ * Retrieves details of a hex based on its coordinates.
+ * @param {number} q - The q coordinate of the hex.
+ * @param {number} r - The r coordinate of the hex.
+ * @param {number} s - The s coordinate of the hex.
+ * @returns {Object} An object containing details about the hex.
+ */
 const getHexDetails = (q, r, s) => {
   let spawnablePokemon = new Set();
   let isTown = false;
@@ -41,6 +66,12 @@ const getHexDetails = (q, r, s) => {
   };
 };
 
+/**
+ * Creates a new wild Pokémon based on the current hex and area index.
+ * @param {Object} hex - The current hex of the player.
+ * @param {number} areaIndex - The index of the area.
+ * @returns {Object} A new wild Pokémon object.
+ */
 const getWildPokemon = (hex, areaIndex) => {
   const potentialPokemon = hex.pokemon;
   const randomPokemonId = determineSpawn(potentialPokemon);
@@ -49,11 +80,20 @@ const getWildPokemon = (hex, areaIndex) => {
     Math.max(1, Math.ceil(baseLevel * 0.9 - 2)),
     Math.min(100, Math.floor(baseLevel * 1.1 + 2))
   );
-  console.log(randomLevel);
   const randomPokemon = createPokemon(randomPokemonId, randomLevel);
   return randomPokemon;
 };
 
+/**
+ * Calculates the damage dealt in a battle encounter.
+ * @param {number} lvl - The level of the attacking Pokémon.
+ * @param {number} cbtPow - Attack or special attack of the attacking pokemon, whichever is higher.
+ * @param {number} atkPow - The power of the move used.
+ * @param {number} cbtDef - The corresponding defense stat of the defending pokemon.
+ * @param {number} stab - The Same Type Attack Bonus.
+ * @param {number} y - Additional multipliers (e.g., weather, critical, random).
+ * @returns {number} The calculated damage.
+ */
 const calcDamage = (lvl, cbtPow, atkPow, cbtDef, stab, y) => {
   return (
     ((((2 * lvl) / 5 + 2) * atkPow * (cbtPow / cbtDef)) / 50 + 2) *
@@ -63,10 +103,32 @@ const calcDamage = (lvl, cbtPow, atkPow, cbtDef, stab, y) => {
   );
 };
 
+/**
+ * Calculates the maximum HP of a Pokémon based on its base HP and level.
+ * @param {number} baseHP - The base HP of the Pokémon.
+ * @param {number} level - The level of the Pokémon.
+ * @returns {number} The maximum HP of the Pokémon.
+ */
 const calcMaxHP = (baseHP, level) => (level / 50) * baseHP + level + 10;
 
+/**
+ * Calculates a Pokémon's stat based on its base stat and level.
+ * @param {number} baseStat - The base stat of the Pokémon.
+ * @param {number} level - The level of the Pokémon.
+ * @returns {number} The calculated stat.
+ */
 const calcStat = (baseStat, level) => (level / 50) * baseStat + 5;
 
+/**
+ * Determines the catch rate of a Pokémon.
+ * @param {number} captureRate - The base capture rate of the Pokémon.
+ * @param {number} hp - The current HP of the Pokémon.
+ * @param {number} maxHP - The maximum HP of the Pokémon.
+ * @param {number} status - The status effect multiplier.
+ * @param {number} ball - The effectiveness of the Pokéball used.
+ * @param {number} level - The level of the Pokémon.
+ * @returns {number} The catch rate.
+ */
 const catchRate = (captureRate, hp, maxHP, status, ball, level) => {
   const a = (captureRate * (3 * maxHP - 2 * hp)) / (3 * maxHP);
   const b = a * ball * status;
@@ -74,6 +136,16 @@ const catchRate = (captureRate, hp, maxHP, status, ball, level) => {
   return c >= 255 ? 255 : c;
 };
 
+/**
+ * Calculates the chance of catching a Pokémon.
+ * @param {number} captureRate - The base capture rate of the Pokémon.
+ * @param {number} hp - The current HP of the Pokémon.
+ * @param {number} maxHP - The maximum HP of the Pokémon.
+ * @param {number} status - The status effect on the Pokémon.
+ * @param {number} ball - The effectiveness of the Pokéball used.
+ * @param {number} level - The level of the Pokémon.
+ * @returns {number} The percentage chance of catching the Pokémon.
+ */
 const catchChance = (captureRate, hp, maxHP, status, ball, level) => {
   const rate = catchRate(captureRate, hp, maxHP, status, ball, level);
   const chance = (rate / 255) * 100;
@@ -83,7 +155,14 @@ const catchChance = (captureRate, hp, maxHP, status, ball, level) => {
 // Right now every pokemon of a species that is the same level has the same stats, potential
 // TODO: implement IVs and maybe EVs
 // Also shiny check will run even when pokemon evolves
+/**
+ * Creates a new Pokémon object.
+ * @param {number} id - The ID of the Pokémon.
+ * @param {number} level - The level of the Pokémon.
+ * @returns {Object} A new Pokémon object.
+ */
 const createPokemon = (id, level) => {
+  level = Math.min(Math.max(1, level), 100);
   const pokemon = pokes.find((poke) => poke.id === id);
   let image = pokemon.sprites.front_default;
   let isShiny = false;
@@ -148,6 +227,11 @@ const createPokemon = (id, level) => {
   };
 };
 
+/**
+ * Determines the amount of experience needed to reach the provided level.
+ * @param {number} level - The level we want to calculate the experience for.
+ * @returns {number} The amount of experience of the level.
+ */
 const erraticGrowth = (level) => {
   if (level <= 50) {
     return (level ** 3 * (100 - level)) / 50;
@@ -160,22 +244,47 @@ const erraticGrowth = (level) => {
   }
 };
 
+/**
+ * Determines the amount of experience needed to reach the provided level.
+ * @param {number} level - The level we want to calculate the experience for.
+ * @returns {number} The amount of experience of the level.
+ */
 const fastGrowth = (level) => {
   return (level ** 3 * 4) / 5;
 };
 
+/**
+ * Determines the amount of experience needed to reach the provided level.
+ * @param {number} level - The level we want to calculate the experience for.
+ * @returns {number} The amount of experience of the level.
+ */
 const mediumFastGrowth = (level) => {
   return level ** 3;
 };
 
+/**
+ * Determines the amount of experience needed to reach the provided level.
+ * @param {number} level - The level we want to calculate the experience for.
+ * @returns {number} The amount of experience of the level.
+ */
 const mediumSlowGrowth = (level) => {
   return (6 / 5) * level ** 3 - 15 * level ** 2 + 100 * level - 140;
 };
 
+/**
+ * Determines the amount of experience needed to reach the provided level.
+ * @param {number} level - The level we want to calculate the experience for.
+ * @returns {number} The amount of experience of the level.
+ */
 const slowGrowth = (level) => {
   return (5 / 4) * level ** 3;
 };
 
+/**
+ * Determines the amount of experience needed to reach the provided level.
+ * @param {number} level - The level we want to calculate the experience for.
+ * @returns {number} The amount of experience of the level.
+ */
 const fluctuatingGrowth = (level) => {
   if (level <= 15) {
     return level ** 3 * ((level + 1) / 3 + 24 / 50);
@@ -186,29 +295,48 @@ const fluctuatingGrowth = (level) => {
   }
 };
 
+/**
+ * Calculates the amount of experience gained from defeating a Pokémon.
+ * @param {number} base - The base experience of the Pokémon.
+ * @param {number} levelEnemy - The level of the defeated Pokémon.
+ * @param {number} levelTrainer - The level of the trainer's Pokémon.
+ */
 const experienceGain = (base, levelEnemy, levelTrainer) => {
   let xp = (base * levelEnemy) / 5;
   xp *= ((levelEnemy * 2 + 10) / (levelEnemy + levelTrainer + 10)) ** 2.5;
   return xp;
 };
 
+/**
+ * Calculates the total rarity of a list of Pokémon.
+ * @param {Array} pokemonList - The list of Pokémon.
+ * @returns {Array} The total rarity and a dictionary of the rarity of each Pokémon.
+ */
 function getTotalRarity(pokemonList) {
-  return pokemonList.reduce((total, pokemon) => {
+  const pokemonRarity = {};
+  const totalRarity = pokemonList.reduce((total, pokemon) => {
     const poke = pokes.find((p) => p.id === pokemon);
+    pokemonRarity[pokemon] = poke.rarity;
     if (!poke) {
       return total;
     }
     return total + poke.rarity;
   }, 0);
+  return [totalRarity, pokemonRarity];
 }
 
+/**
+ * Determines which Pokémon will spawn in a given area.
+ * @param {Array} pokemonList - The list of Pokémon that can spawn in the area.
+ * @returns {number} The ID of the Pokémon that will spawn.
+ */
 function determineSpawn(pokemonList) {
-  const totalRarity = getTotalRarity(pokemonList);
+  const [totalRarity, pokemonRarity] = getTotalRarity(pokemonList);
   let randomNum = Math.floor(Math.random() * totalRarity) + 1;
 
   for (let i = 0; i < pokemonList.length; i++) {
     const pokemon = pokemonList[i];
-    randomNum -= pokes.find((p) => p.id === pokemon).rarity;
+    randomNum -= pokemonRarity[pokemon];
 
     if (randomNum <= 0) {
       return pokemon;
@@ -217,6 +345,14 @@ function determineSpawn(pokemonList) {
 }
 
 const affectionLevels = [0, 1, 50, 100, 150, 255];
+/**
+ * Checks if a Pokémon can evolve.
+ * @param {object} pokemon - The Pokémon to check.
+ * @param {number} level The level of the Pokémon.
+ * @param {string} area The area the Pokémon is in.
+ * @param {string} item The item used on the Pokémon.
+ * @returns {(string|boolean)} The name of the Pokémon it evolves into, or false if it doesn't evolve.
+ */
 function checkEvolve(pokemon, level = 1, area = null, item = null) {
   const evolutions = pokes.find((p) => p.id === pokemon.id).evolvesTo;
   if (!evolutions) {

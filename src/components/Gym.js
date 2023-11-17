@@ -9,10 +9,12 @@ import {
 } from "@chakra-ui/react";
 import useGameStore, { updateBadges } from "@/hooks/useGameStore";
 
+// The Pokemon component displays an individual Pokémon with its sprite and health bar.
 function Pokemon({ details, top, left, bottom, right }) {
-  if (!details) return null;
+  if (!details) return null; // Return null if no details are provided to prevent rendering errors.
   let sprite = details?.image;
 
+  // Render a box with the Pokémon sprite and a progress bar indicating its current health.
   return (
     <Box
       position="absolute"
@@ -30,15 +32,18 @@ function Pokemon({ details, top, left, bottom, right }) {
   );
 }
 
+// The Battle component represents the battle scene between the player's and enemy's Pokémon.
 function Battle({ background }) {
   const handleTurn = useGameStore((state) => state.handleTurn);
   const playerPokemon = useGameStore((state) => state.player.party[0]);
   const enemyPokemon = useGameStore((state) => state.battle.pokemon[0]);
 
+  // Automatically advance the game every second.
   useInterval(() => {
     handleTurn();
   }, 1000);
 
+  // Render the battle scene with the player's and enemy's Pokémon.
   return (
     <Box
       background={`url(backgrounds/${background}.png)`}
@@ -64,12 +69,14 @@ function Battle({ background }) {
   );
 }
 
+// Gym component manages the gym interactions, including battles and challenges.
 export default function Gym({ gym, setInGym }) {
-  const [inBattle, setInBattle] = useState(false);
+  const [inBattle, setInBattle] = useState(false); // State to track if a battle is ongoing.
   const updateBattle = useGameStore((state) => state.updateBattle);
   const isComplete = useGameStore((state) => state.battle.isComplete);
   const background = inBattle ? `${gym.type}-gym-battle` : `${gym.type}-gym`;
 
+  // Check if the battle is complete to update the badges and reset battle state.
   useEffect(() => {
     if (isComplete) {
       updateBadges(gym.badge);
@@ -77,12 +84,14 @@ export default function Gym({ gym, setInGym }) {
     }
   }, [isComplete, gym.badge]);
 
+  // If in battle and not complete, render the Battle component.
   if (inBattle && !isComplete) {
     return (
       <Battle gym={gym} setInBattle={setInBattle} background={background} />
     );
   }
 
+  // Render the gym interface with challenge and leave buttons.
   return (
     <Box
       background={`url(backgrounds/${background}.png)`}

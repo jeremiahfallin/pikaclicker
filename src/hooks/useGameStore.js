@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import superjson from "superjson";
 import {
-  axialDistance,
   checkEvolve,
   calcDamage,
   calcMaxHP,
@@ -454,7 +453,8 @@ const useGameStore = create(
           }
         }
       },
-      handleTurn: () => {
+      handleTurn: (initiative) => {
+        const isPlayerTurn = initiative === "player";
         const { battle, player } = get();
         let { pokemon } = battle;
         const { party } = player;
@@ -523,38 +523,41 @@ const useGameStore = create(
         const dmgTaken = calcDamage(enemyPokemon.level, 1, 1, 1, 1, 1);
         const dmgDealt = calcDamage(playerPokemon.level, 1, 1, 1, 1, 1);
         const newPlayerHP = Math.max(playerPokemon.currentHP - dmgTaken, 0);
-        if (battle.isTrainer) {
-          get().updateBattle({
-            turn: get().battle.turn + 1,
-            pokemon: [
-              {
+        if (isPlayerTurn) {
+          if (battle.isTrainer) {
+            get().updateBattle({
+              turn: get().battle.turn + 1,
+              pokemon: [
+                {
+                  ...pokemon,
+                  currentHP: Math.max(pokemon.currentHP - dmgDealt, 0),
+                },
+                ...get().battle.pokemon.slice(1),
+              ],
+            });
+          } else {
+            get().updateBattle({
+              turn: get().battle.turn + 1,
+              pokemon: {
                 ...pokemon,
                 currentHP: Math.max(pokemon.currentHP - dmgDealt, 0),
               },
-              ...get().battle.pokemon.slice(1),
+            });
+          }
+        } else {
+          get().updatePlayer({
+            party: [
+              {
+                ...playerPokemon,
+                currentHP:
+                  newPlayerHP > 0
+                    ? Math.min(playerPokemon.maxHP, newPlayerHP)
+                    : 0,
+              },
+              ...party.slice(1),
             ],
           });
-        } else {
-          get().updateBattle({
-            turn: get().battle.turn + 1,
-            pokemon: {
-              ...pokemon,
-              currentHP: Math.max(pokemon.currentHP - dmgDealt, 0),
-            },
-          });
         }
-        get().updatePlayer({
-          party: [
-            {
-              ...playerPokemon,
-              currentHP:
-                newPlayerHP > 0
-                  ? Math.min(playerPokemon.maxHP, newPlayerHP)
-                  : 0,
-            },
-            ...party.slice(1),
-          ],
-        });
       },
     }),
     {
@@ -564,6 +567,7 @@ const useGameStore = create(
   )
 );
 
+// Function to update the Pokédex
 function updatePokedex(id, isCaught) {
   useGameStore.setState((state) => ({
     ...state,
@@ -580,6 +584,7 @@ function updatePokedex(id, isCaught) {
   }));
 }
 
+// Function to unlock new game areas
 function unlockArea(area) {
   useGameStore.setState((state) => ({
     ...state,
@@ -590,6 +595,7 @@ function unlockArea(area) {
   }));
 }
 
+// Function to update player badges
 function updateBadges(badge) {
   if (badge === "Grass") {
     unlockArea("Area 2");

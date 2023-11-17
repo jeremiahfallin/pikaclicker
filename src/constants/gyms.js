@@ -1,5 +1,6 @@
 import { createPokemon } from "@/utils";
 
+// TODO: Add other gyms
 const gyms = [
   {
     name: "Grass",
