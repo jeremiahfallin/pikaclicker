@@ -161,13 +161,14 @@ const catchChance = (captureRate, hp, maxHP, status, ball, level) => {
  * @param {number} level - The level of the Pokémon.
  * @returns {Object} A new Pokémon object.
  */
-const createPokemon = (id, level) => {
+const createPokemon = (id, level, isShiny = null) => {
   level = Math.min(Math.max(1, level), 100);
   const pokemon = pokes.find((poke) => poke.id === id);
   let image = pokemon.sprites.front_default;
-  let isShiny = false;
-  if (pokemon.sprites?.front_shiny) {
+  if (pokemon.sprites?.front_shiny && typeof isShiny === null) {
     isShiny = Math.random() < 1 / 4096 ? true : false;
+  }
+  if (isShiny) {
     image = isShiny
       ? pokemon.sprites.front_shiny
       : pokemon.sprites.front_default;

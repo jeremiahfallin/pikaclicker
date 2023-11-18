@@ -4,6 +4,7 @@ import {
   Button,
   Center,
   Image,
+  Progress,
   RadioGroup,
   Radio,
   SimpleGrid,
@@ -11,8 +12,25 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
+import {
+  fastGrowth,
+  slowGrowth,
+  erraticGrowth,
+  mediumFastGrowth,
+  mediumSlowGrowth,
+  fluctuatingGrowth,
+} from "@/utils";
 
-// TODO: Replace XP with XP bar similar to party pokemon
+const levelFormulas = {
+  erratic: erraticGrowth,
+  fast: fastGrowth,
+  "medium-fast": mediumFastGrowth,
+  medium: mediumFastGrowth,
+  "medium-slow": mediumSlowGrowth,
+  slow: slowGrowth,
+  fluctuating: fluctuatingGrowth,
+  "fast-then-very-slow": fluctuatingGrowth,
+};
 
 export default function Bank({ selectedPokemon, setSelectedPokemon }) {
   const [sortBy, setSortBy] = useState("id");
@@ -82,6 +100,12 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
             }
           })
           .map((pokemon, idx) => {
+            const currentLevelXp = levelFormulas[pokemon.growthRate](
+              pokemon.level
+            );
+            const nextLevelXp = levelFormulas[pokemon.growthRate](
+              pokemon.level + 1
+            );
             return (
               <Center key={`${pokemon.id}-${idx}`} flexDir={"column"}>
                 <Box
@@ -95,9 +119,8 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                   borderRadius={"md"}
                 >
                   <Image alt={pokemon.name} src={pokemon.image} />
-                  <Text>{pokemon.name}</Text>
                   <Text>
-                    Lvl. {pokemon.level} {Math.floor(pokemon.xp)} xp
+                    {pokemon.name} Lvl. {pokemon.level}
                   </Text>
                 </Box>
                 <Button
@@ -117,6 +140,16 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                 >
                   Release
                 </Button>
+                <Box w="100%">
+                  <Progress
+                    size={"xs"}
+                    colorScheme="pink"
+                    value={
+                      (100 * (pokemon.xp - currentLevelXp)) /
+                      (nextLevelXp - currentLevelXp)
+                    }
+                  />
+                </Box>
               </Center>
             );
           })}

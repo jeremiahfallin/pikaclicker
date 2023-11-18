@@ -369,7 +369,11 @@ const useGameStore = create(
               const evolution = pokes.find((p) => p.name === evolutionName);
               basePokemon = evolution;
               updatePokedex(evolution.id, true);
-              const newPokemon = createPokemon(evolution.id, newLevel);
+              const newPokemon = createPokemon(
+                evolution.id,
+                newLevel,
+                poke.isShiny
+              );
               return {
                 ...poke,
                 ...newPokemon,

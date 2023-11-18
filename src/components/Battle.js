@@ -58,8 +58,6 @@ const InitiativeSlider = () => {
       const playerMovement = playerSpeed / 2;
       const enemyMovement = enemySpeed / 2;
       if (playerPosition + playerMovement >= 1000) {
-        console.log("player turn");
-        console.log((new Date().getTime() - lastTurn) / 1000);
         setLastTurn(new Date().getTime());
         handleTurn("player");
       }
@@ -109,6 +107,11 @@ export default function Battle({ background = "forest" }) {
   const playerPokemon = useGameStore((state) => state.player.party[0]);
   // Retrieving the enemy Pokémon.
   const enemyPokemon = useGameStore((state) => state.battle.pokemon);
+  // Hook to handle game turns.
+  const handleTurn = useGameStore((state) => state.handleTurn);
+  const handleClick = () => {
+    handleTurn("player");
+  };
 
   // Render the battle scene with the player's and enemy's Pokémon.
   return (
@@ -120,6 +123,7 @@ export default function Battle({ background = "forest" }) {
       position={"relative"}
       h={200}
       userSelect={"none"}
+      onClick={handleClick}
     >
       <InitiativeSlider {...{ playerPokemon, enemyPokemon }} />
       {!!playerPokemon && (

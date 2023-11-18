@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Center,
@@ -5,28 +6,65 @@ import {
   Image,
   SimpleGrid,
   Text,
+  RadioGroup,
+  Radio,
+  Stack,
+  Checkbox,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import pokes from "../pokes.json";
+import areas from "../areas.json";
 
-// TODO: Sort by ID or Name
 // TODO: Add more info to the pokedex (e.g. id#, types, etc.)
 // TODO: Add filter for seen/caught
 // TODO: Maybe add filter for the area you're in?
 
 export default function Pokedex() {
+  const [sortBy, setSortBy] = useState("id");
+  const [inArea, setInArea] = useState(false);
   const seen = useGameStore((state) => state.player.pokedex.seen);
   const caught = useGameStore((state) => state.player.pokedex.caught);
+
+  // 1. Find hex you're on
+  const currentHex = useGameStore((state) => state.player.currentHex);
+  // 2. Find out which area it is in
+  const areaIndex = areas.findIndex(
+    (area) =>
+      area.hexes.findIndex(
+        (h) =>
+          h.q === currentHex.q && h.r === currentHex.r && h.s === currentHex.s
+      ) !== -1
+  );
+  // 3. Find out which pokemon are in that area
+  const pokemonInArea = areas[areaIndex].pokemon;
+  // 4. Filter pokedex by those pokemon
+  // Below in map
 
   const pokedex = [...new Set([...seen, ...caught])].map((poke) => {
     return pokes.find((p) => p.id === poke);
   });
+
+  const handleAreaCheckbox = (e) => {
+    setInArea(e.target.checked);
+  };
 
   return (
     <Box>
       <Heading as="h3" size="md">
         Pokedex
       </Heading>
+
+      <Stack direction="row" gap={8} align="center">
+        <RadioGroup value={sortBy} onChange={setSortBy}>
+          <Stack direction="row" gap={8} align="center">
+            <Radio value="id">id</Radio>
+            <Radio value="name">name</Radio>
+          </Stack>
+        </RadioGroup>
+        <Checkbox onChange={handleAreaCheckbox}>Current Area</Checkbox>
+      </Stack>
+
+      <Stack direction="row" gap={8} align="center"></Stack>
       <SimpleGrid
         columns={3}
         spacing={1}
@@ -43,26 +81,43 @@ export default function Pokedex() {
           },
         }}
       >
-        {pokedex.map((poke) => {
-          if (caught.has(poke.id)) {
+        {pokedex
+          .sort((a, b) => {
+            switch (sortBy) {
+              case "id":
+                return a.id - b.id;
+              case "name":
+                return a.name.localeCompare(b.name);
+              default:
+                return a.id - b.id;
+            }
+          })
+          .filter((poke) => {
+            if (pokemonInArea.includes(poke.id)) {
+              return true;
+            }
+            return false;
+          })
+          .map((poke) => {
+            if (caught.has(poke.id)) {
+              return (
+                <Center key={poke.id} flexDirection={"column"}>
+                  <Text fontSize="sm">{poke.name}</Text>
+                  <Image alt={poke.name} src={poke.sprites.front_default} />
+                </Center>
+              );
+            }
             return (
               <Center key={poke.id} flexDirection={"column"}>
                 <Text fontSize="sm">{poke.name}</Text>
-                <Image alt={poke.name} src={poke.sprites.front_default} />
+                <Image
+                  alt={poke.name}
+                  src={poke.sprites.front_default}
+                  filter={"grayscale(1)"}
+                />
               </Center>
             );
-          }
-          return (
-            <Center key={poke.id} flexDirection={"column"}>
-              <Text fontSize="sm">{poke.name}</Text>
-              <Image
-                alt={poke.name}
-                src={poke.sprites.front_default}
-                filter={"grayscale(1)"}
-              />
-            </Center>
-          );
-        })}
+          })}
       </SimpleGrid>
     </Box>
   );
