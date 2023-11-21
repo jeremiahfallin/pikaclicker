@@ -93,6 +93,9 @@ export default function Pokedex() {
             }
           })
           .filter((poke) => {
+            if (!inArea) {
+              return true;
+            }
             if (pokemonInArea.includes(poke.id)) {
               return true;
             }

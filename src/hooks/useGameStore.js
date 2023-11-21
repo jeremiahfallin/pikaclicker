@@ -219,7 +219,7 @@ const useGameStore = create(
             ...state,
             battle: {
               ...state.battle,
-              pokemon: getWildPokemon(hex, areaIndex - 1),
+              pokemon: [getWildPokemon(hex, areaIndex - 1)],
             },
             player: {
               ...state.player,
@@ -466,9 +466,8 @@ const useGameStore = create(
         if (!pokemon) {
           return;
         }
-        if (battle.isTrainer) {
-          pokemon = pokemon[0];
-        }
+        pokemon = pokemon[0];
+
         if (party[0].currentHP === 0) {
           const newLeadPokemon = party.findIndex((poke) => {
             return poke.currentHP > 0;
@@ -528,26 +527,16 @@ const useGameStore = create(
         const dmgDealt = calcDamage(playerPokemon.level, 1, 1, 1, 1, 1);
         const newPlayerHP = Math.max(playerPokemon.currentHP - dmgTaken, 0);
         if (isPlayerTurn) {
-          if (battle.isTrainer) {
-            get().updateBattle({
-              turn: get().battle.turn + 1,
-              pokemon: [
-                {
-                  ...pokemon,
-                  currentHP: Math.max(pokemon.currentHP - dmgDealt, 0),
-                },
-                ...get().battle.pokemon.slice(1),
-              ],
-            });
-          } else {
-            get().updateBattle({
-              turn: get().battle.turn + 1,
-              pokemon: {
+          get().updateBattle({
+            turn: get().battle.turn + 1,
+            pokemon: [
+              {
                 ...pokemon,
                 currentHP: Math.max(pokemon.currentHP - dmgDealt, 0),
               },
-            });
-          }
+              ...get().battle.pokemon.slice(1),
+            ],
+          });
         } else {
           get().updatePlayer({
             party: [

@@ -47,7 +47,7 @@ const InitiativeSlider = () => {
   const playerPokemon = useGameStore((state) => state.player.party[0]);
   const playerSpeed = playerPokemon.speed;
   // Retrieving the enemy Pokémon.
-  const enemyPokemon = useGameStore((state) => state.battle.pokemon);
+  const enemyPokemon = useGameStore((state) => state.battle.pokemon[0]);
   const enemySpeed = enemyPokemon.speed;
   // State to track each Pokémon's position on the slider
   const [playerPosition, setPlayerPosition] = useState(0);
@@ -76,7 +76,7 @@ const InitiativeSlider = () => {
   }, [playerSpeed, enemySpeed, handleTurn, enemyPosition, playerPosition]);
 
   return (
-    <Flex position="relative" h="50px" align="center">
+    <Flex position="relative" h="50px" align="center" overflow="hidden">
       <Image
         src={playerPokemon.image}
         alt={playerPokemon.name}
@@ -106,7 +106,7 @@ export default function Battle({ background = "forest" }) {
   // Retrieving the player's first Pokémon in the party.
   const playerPokemon = useGameStore((state) => state.player.party[0]);
   // Retrieving the enemy Pokémon.
-  const enemyPokemon = useGameStore((state) => state.battle.pokemon);
+  const enemyPokemon = useGameStore((state) => state.battle.pokemon[0]);
   // Hook to handle game turns.
   const handleTurn = useGameStore((state) => state.handleTurn);
   const handleClick = () => {

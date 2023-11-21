@@ -1,4 +1,4 @@
-import useGameStore, { updateBadges } from "@/hooks/useGameStore";
+import useGameStore from "@/hooks/useGameStore";
 import { Box, Heading, Text } from "@chakra-ui/react";
 
 export default function Badges() {
