@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Flex, Image, Progress, useInterval } from "@chakra-ui/react";
+import { Box, Flex, Image, Progress, keyframes } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 
 /**
@@ -24,6 +24,7 @@ function Pokemon({ details, top, left, bottom, right }) {
       right={right}
       left={left}
       bottom={bottom}
+      overflow="hidden"
     >
       <Image src={sprite} alt={details?.name} />
       <Progress
@@ -34,13 +35,22 @@ function Pokemon({ details, top, left, bottom, right }) {
   );
 }
 
+// Animation for the initiative slider.
+const slide = keyframes`
+  0% {
+    left: -40px;
+  }
+  100% {
+    left: 100%;
+  }
+`;
+
 /**
  * InitiativeSlider component to show turn order based on Pokémon speed stats.
  * @param {Array} pokemons - Array of Pokémon objects participating in the battle.
  * @returns A visual representation of the turn order.
  */
 const InitiativeSlider = () => {
-  const [lastTurn, setLastTurn] = useState(new Date().getTime());
   // Hook to handle game turns.
   const handleTurn = useGameStore((state) => state.handleTurn);
   // Retrieving the player's first Pokémon in the party.
@@ -49,32 +59,17 @@ const InitiativeSlider = () => {
   // Retrieving the enemy Pokémon.
   const enemyPokemon = useGameStore((state) => state.battle.pokemon[0]);
   const enemySpeed = enemyPokemon.speed;
-  // State to track each Pokémon's position on the slider
-  const [playerPosition, setPlayerPosition] = useState(0);
-  const [enemyPosition, setEnemyPosition] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const playerMovement = playerSpeed / 2;
-      const enemyMovement = enemySpeed / 2;
-      if (playerPosition + playerMovement >= 1000) {
-        setLastTurn(new Date().getTime());
-        handleTurn("player");
-      }
-      if (enemyPosition + enemyMovement >= 1000) {
-        handleTurn();
-      }
-      setPlayerPosition((playerPosition) => {
-        return (playerPosition + playerMovement) % 1000;
-      });
-      setEnemyPosition((enemyPosition) => {
-        return (enemyPosition + enemyMovement) % 1000;
-      });
-    }, 50);
+  // Function to handle the end of the animation.
+  const handleAnimationIteration = (e) => {
+    if (e.target.alt === playerPokemon.name) {
+      handleTurn("player");
+    } else {
+      handleTurn();
+    }
+  };
 
-    return () => clearInterval(interval);
-  }, [playerSpeed, enemySpeed, handleTurn, enemyPosition, playerPosition]);
-
+  const speedNumerator = 100;
   return (
     <Flex position="relative" h="50px" align="center" overflow="hidden">
       <Image
@@ -82,16 +77,16 @@ const InitiativeSlider = () => {
         alt={playerPokemon.name}
         boxSize="40px"
         position="absolute"
-        left={`${playerPosition / 10}%`}
-        transition="left .5s"
+        animation={`${slide} ${speedNumerator / playerSpeed}s linear infinite`}
+        onAnimationIteration={handleAnimationIteration}
       />
       <Image
         src={enemyPokemon.image}
         alt={enemyPokemon.name}
         boxSize="40px"
         position="absolute"
-        left={`${enemyPosition / 10}%`}
-        transition="left .5s"
+        animation={`${slide} ${speedNumerator / enemySpeed}s linear infinite`}
+        onAnimationIteration={handleAnimationIteration}
       />
     </Flex>
   );
@@ -124,6 +119,7 @@ export default function Battle({ background = "forest" }) {
       h={200}
       userSelect={"none"}
       onClick={handleClick}
+      overflow="hidden"
     >
       <InitiativeSlider {...{ playerPokemon, enemyPokemon }} />
       {!!playerPokemon && (
