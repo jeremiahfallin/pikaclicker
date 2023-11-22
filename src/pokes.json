@@ -13482,7 +13482,7 @@
     "captureRate": 190,
     "evolvesTo": [
       {
-        "pokemon_name": "muk",
+        "pokemon_name": "muk-alola",
         "evolution_conditions": [
           {
             "trigger": "level-up",

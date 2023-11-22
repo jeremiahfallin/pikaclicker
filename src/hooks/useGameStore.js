@@ -523,8 +523,26 @@ const useGameStore = create(
         const playerPokemon = party[0];
 
         const enemyPokemon = pokemon;
-        const dmgTaken = calcDamage(enemyPokemon.level, 1, 1, 1, 1, 1);
-        const dmgDealt = calcDamage(playerPokemon.level, 1, 1, 1, 1, 1);
+        const dmgTaken = calcDamage(
+          enemyPokemon.level,
+          Math.max(enemyPokemon.attack, enemyPokemon.spAttack),
+          20,
+          enemyPokemon.attack > enemyPokemon.spAttack
+            ? playerPokemon.defense
+            : playerPokemon.spDefense,
+          1,
+          1
+        );
+        const dmgDealt = calcDamage(
+          playerPokemon.level,
+          Math.max(playerPokemon.attack, playerPokemon.spAttack),
+          20,
+          playerPokemon.attack > playerPokemon.spAttack
+            ? enemyPokemon.defense
+            : enemyPokemon.spDefense,
+          1,
+          1
+        );
         const newPlayerHP = Math.max(playerPokemon.currentHP - dmgTaken, 0);
         if (isPlayerTurn) {
           get().updateBattle({
