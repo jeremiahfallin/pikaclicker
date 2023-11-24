@@ -25,8 +25,8 @@ import areas from "../areas";
 
 const ballChances = {
   Pokeball: 1,
-  Greatball: 1.5,
-  Ultraball: 2,
+  "Great Ball": 1.5,
+  "Ultra Ball": 2,
   Masterball: 255,
   Diveball: 3.5,
 };

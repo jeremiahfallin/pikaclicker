@@ -9363,7 +9363,7 @@
         "pokemon_name": "politoed",
         "evolution_conditions": [
           {
-            "trigger": "trade",
+            "trigger": "use-item",
             "level": null,
             "item": "kings-rock",
             "held_item": "kings-rock",
@@ -10387,9 +10387,9 @@
         "pokemon_name": "alakazam",
         "evolution_conditions": [
           {
-            "trigger": "trade",
+            "trigger": "use-item",
             "level": null,
-            "item": null,
+            "item": "link-cable",
             "held_item": null,
             "time_of_day": "",
             "gender": null,
@@ -11438,7 +11438,7 @@
         "pokemon_name": "slowking",
         "evolution_conditions": [
           {
-            "trigger": "trade",
+            "trigger": "use-item",
             "level": null,
             "item": "kings-rock",
             "held_item": "kings-rock",
@@ -14267,9 +14267,9 @@
         "pokemon_name": "gengar",
         "evolution_conditions": [
           {
-            "trigger": "trade",
+            "trigger": "use-item",
             "level": null,
-            "item": null,
+            "item": "link-cable",
             "held_item": null,
             "time_of_day": "",
             "gender": null,
@@ -47254,7 +47254,7 @@
             "downpour_weather": null
           },
           {
-            "trigger": "trade",
+            "trigger": "use-item",
             "level": null,
             "item": "prism-scale",
             "held_item": "prism-scale",

@@ -14,6 +14,7 @@ import {
 import useGameStore from "@/hooks/useGameStore";
 import pokes from "../pokes.json";
 import areas from "../areas.json";
+import { getHexDetails } from "@/utils";
 
 // TODO: Add more info to the pokedex (e.g. id#, types, etc.)
 // TODO: Add filter for seen/caught
@@ -26,19 +27,10 @@ export default function Pokedex() {
   const caught = useGameStore((state) => state.player.pokedex.caught);
 
   // 1. Find hex you're on
-  const currentHex = useGameStore((state) => state.player.currentHex);
-  // 2. Find out which area it is in
-  const areaIndex = areas.findIndex(
-    (area) =>
-      area.hexes.findIndex(
-        (h) =>
-          h.q === currentHex.q && h.r === currentHex.r && h.s === currentHex.s
-      ) !== -1
-  );
-  // 3. Find out which pokemon are in that area
-  const pokemonInArea = areas[areaIndex].pokemon;
-  // 4. Filter pokedex by those pokemon
-  // Below in map
+  const { q, r, s } = useGameStore((state) => state.player.currentHex);
+  // 2. Find out which pokemon are on that hex
+  const pokemonInArea = getHexDetails(q, r, s);
+  // 3. Filter pokedex by those pokemon (below)
 
   const pokedex = [...new Set([...seen, ...caught])].map((poke) => {
     return pokes.find((p) => p.id === poke);
@@ -96,7 +88,7 @@ export default function Pokedex() {
             if (!inArea) {
               return true;
             }
-            if (pokemonInArea.includes(poke.id)) {
+            if (pokemonInArea.pokemon.includes(poke.id)) {
               return true;
             }
             return false;
