@@ -90,6 +90,12 @@ const shopItems = [
     price: 10000,
     type: "evolution-item",
   },
+  {
+    name: "Link Cable",
+    slug: "link-cable",
+    price: 10000,
+    type: "evolution-item",
+  },
 ];
 
 // TODO: Move items and sell different items in different towns

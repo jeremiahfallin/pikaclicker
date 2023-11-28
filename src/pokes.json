@@ -8530,6 +8530,11 @@
         "pokemon_name": "politoed",
         "evolution_conditions": [
           {
+            "trigger": "trade",
+            "level": null,
+            "item": "kings-rock",
+            "held_item": "kings-rock",
+            "time_of_day": "",
             "gender": null,
             "held_item": {
               "name": "kings-rock",
@@ -9463,6 +9468,11 @@
         "pokemon_name": "alakazam",
         "evolution_conditions": [
           {
+            "trigger": "trade",
+            "level": null,
+            "item": null,
+            "held_item": null,
+            "time_of_day": "",
             "gender": null,
             "held_item": null,
             "item": null,
@@ -10447,6 +10457,11 @@
         "pokemon_name": "slowking",
         "evolution_conditions": [
           {
+            "trigger": "trade",
+            "level": null,
+            "item": "kings-rock",
+            "held_item": "kings-rock",
+            "time_of_day": "",
             "gender": null,
             "held_item": {
               "name": "kings-rock",
@@ -12961,6 +12976,11 @@
         "pokemon_name": "gengar",
         "evolution_conditions": [
           {
+            "trigger": "trade",
+            "level": null,
+            "item": null,
+            "held_item": null,
+            "time_of_day": "",
             "gender": null,
             "held_item": null,
             "item": null,
@@ -43118,15 +43138,15 @@
             "party_species": null,
             "party_type": null,
             "relative_physical_stats": null,
-            "time_of_day": "",
-            "trade_species": null,
-            "trigger": {
-              "name": "level-up",
-              "url": "https://pokeapi.co/api/v2/evolution-trigger/1/"
-            },
-            "turn_upside_down": false
+            "upsurge_weather": null,
+            "downpour_weather": null
           },
           {
+            "trigger": "trade",
+            "level": null,
+            "item": "prism-scale",
+            "held_item": "prism-scale",
+            "time_of_day": "",
             "gender": null,
             "held_item": {
               "name": "prism-scale",
