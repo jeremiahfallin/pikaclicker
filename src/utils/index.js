@@ -361,18 +361,22 @@ function checkEvolve(pokemon, level = 1, area = null, item = null) {
   }
   for (let evolution of evolutions) {
     for (let condition of evolution.evolution_conditions) {
-      if (condition.trigger === "level-up") {
-        if (
-          level >= condition.level &&
-          !(pokemon.happiness < affectionLevels[condition.min_affection]) &&
-          !(pokemon.happiness < condition.min_happiness)
-        ) {
-          return evolution.pokemon_name;
+      console.log(!item);
+      if (!!item) {
+        if (condition.trigger === "use-item") {
+          if (condition.item === item) {
+            return evolution.pokemon_name;
+          }
         }
-      }
-      if (condition.trigger === "use-item") {
-        if (condition.item === item) {
-          return evolution.pokemon_name;
+      } else {
+        if (condition.trigger === "level-up") {
+          if (
+            level >= condition.level &&
+            !(pokemon.happiness < affectionLevels[condition.min_affection]) &&
+            !(pokemon.happiness < condition.min_happiness)
+          ) {
+            return evolution.pokemon_name;
+          }
         }
       }
     }
