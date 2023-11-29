@@ -40,7 +40,7 @@ const elite4 = [
       createPokemon(10172, 100), // Slowking-Galar
       createPokemon(956, 100), // Espathra
       createPokemon(65, 100), // Alakazam
-      //   createPokemon(), // Togekiss
+      createPokemon(468, 100), // Togekiss
     ],
   },
   {

@@ -21,7 +21,7 @@ const gyms = [
     type: "fire",
     badge: "Fire",
     leader: "Richter",
-    town: "Desert Town",
+    town: "Volcano Town",
     pokemon: [
       createPokemon(935, 20), // Charcadet
       createPokemon(78, 20), // Rapidash
@@ -96,6 +96,7 @@ const gyms = [
     type: "flying",
     badge: "Flying",
     leader: "",
+    town: "Flying Town",
     pokemon: [
       createPokemon(130, 72), // Gyarados
       createPokemon(142, 72), // Aerodactyl
@@ -111,7 +112,7 @@ const gyms = [
     badge: "Ice",
     leader: "",
     pokemon: [
-      // createPokemon(), // Sandslash-alola
+      createPokemon(10102, 80), // Sandslash-alola
       createPokemon(10104, 80), // Ninetales-alola
       createPokemon(873, 82), //Frosmoth
       createPokemon(471, 86), //Glaceon
@@ -128,9 +129,9 @@ const gyms = [
       createPokemon(139, 90), // Omastar
       createPokemon(141, 92), // Kabutops
       createPokemon(348, 94), // Armaldo
-      // createPokemon(565, 96), // Archeops
-      // createPokemon(10105, 98), // Aurorus
-      // createPokemon(10106, 100), // Cranidos
+      createPokemon(567, 96), // Archeops
+      createPokemon(699, 98), // Aurorus
+      createPokemon(409, 100), // Rampardos
     ],
   },
 ];

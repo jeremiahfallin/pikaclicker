@@ -180,6 +180,7 @@ const useGameStore = create(
         const unlockedAreas = get().player.unlockedAreas;
 
         const hex = getHexDetails(newHex.q, newHex.r, newHex.s);
+
         let hexArea =
           areas.find((area) =>
             area.hexes.some(
@@ -201,7 +202,7 @@ const useGameStore = create(
             player: {
               ...state.player,
               isInTown: true,
-              currentHex: homeHex,
+              currentHex: { q: hex.q, r: hex.r, s: hex.s },
               party: state.player.party.map((poke) => ({
                 ...poke,
                 currentHP: poke.maxHP,
@@ -609,8 +610,45 @@ function unlockArea(area) {
 // Function to update player badges
 function updateBadges(badge) {
   if (badge === "Grass") {
+    console.log("?");
     unlockArea("Area 2");
+    unlockArea("Volcano Town");
+  }
+  if (badge === "Fire") {
+    unlockArea("Area 3");
+    unlockArea("Area 6");
+    unlockArea("Swamp Town");
+  }
+  if (badge === "Swamp") {
+    unlockArea("Area 4");
+    unlockArea("Rock Town");
+  }
+  if (badge === "Rock") {
+    unlockArea("Area 5");
+    unlockArea("Electric Town");
+  }
+  if (badge === "Electric") {
+    unlockArea("Area 10");
+    unlockArea("Area 11");
     unlockArea("Desert Town");
+  }
+  if (badge === "Desert") {
+    unlockArea("Area 7");
+    unlockArea("Flying Town");
+  }
+  if (badge === "Flying") {
+    unlockArea("Area 8");
+    unlockArea("Area 9");
+    unlockArea("Ice Town");
+  }
+  if (badge === "Ice") {
+    unlockArea("Area 12");
+    unlockArea("Area 13");
+    unlockArea("Fossil Town");
+  }
+  if (badge === "Fossil") {
+    unlockArea("Area 14");
+    unlockArea("Area 15");
   }
 
   useGameStore.setState((state) => ({

@@ -184,7 +184,7 @@
     ]
   },
   {
-    "name": "Desert Town",
+    "name": "Volcano Town",
     "biome": "town",
     "pokemon": [],
     "hexes": [{ "q": 18, "r": 3, "s": 15 }],
@@ -596,7 +596,14 @@
     ]
   },
   {
-    "name": "Area 3",
+    "name": "Electric Town",
+    "biome": "town",
+    "pokemon": [],
+    "hexes": [{ "q": 21, "r": 4, "s": 17 }],
+    "isTown": true
+  },
+  {
+    "name": "Area 5",
     "biome": "electric",
     "pokemon": [
       41, 42, 63, 98, 111, 129, 137, 228, 243, 285, 369, 370, 403, 595, 624
@@ -815,6 +822,13 @@
     ]
   },
   {
+    "name": "Rock Town",
+    "biome": "town",
+    "pokemon": [],
+    "hexes": [{ "q": 17, "r": 9, "s": 8 }],
+    "isTown": true
+  },
+  {
     "name": "Area 4",
     "biome": "badlands-gray",
     "pokemon": [63, 92, 111, 304, 371, 374, 403, 557, 595, 624],
@@ -977,7 +991,14 @@
     ]
   },
   {
-    "name": "Area 5",
+    "name": "Swamp Town",
+    "biome": "town",
+    "pokemon": [],
+    "hexes": [{ "q": 8, "r": 14, "s": -6 }],
+    "isTown": true
+  },
+  {
+    "name": "Area 3",
     "biome": "swamplands",
     "pokemon": [
       41, 63, 10112, 92, 93, 98, 111, 194, 228, 355, 361, 557, 607, 679
@@ -1351,6 +1372,13 @@
     ]
   },
   {
+    "name": "Desert Town",
+    "biome": "town",
+    "pokemon": [],
+    "hexes": [{ "q": 23, "r": 10, "s": 13 }],
+    "isTown": true
+  },
+  {
     "name": "Area 6",
     "biome": "swamp",
     "pokemon": [88, 194],
@@ -1431,6 +1459,13 @@
         "s": -4
       }
     ]
+  },
+  {
+    "name": "Flying Town",
+    "biome": "town",
+    "pokemon": [],
+    "hexes": [{ "q": 14, "r": 16, "s": -2 }],
+    "isTown": true
   },
   {
     "name": "Area 7",
@@ -1583,6 +1618,13 @@
         "s": 2
       }
     ]
+  },
+  {
+    "name": "Ice Town",
+    "biome": "town",
+    "pokemon": [],
+    "hexes": [{ "q": 7, "r": 21, "s": -14 }],
+    "isTown": true
   },
   {
     "name": "Area 8",
@@ -2136,6 +2178,13 @@
         "s": 18
       }
     ]
+  },
+  {
+    "name": "Fossil Town",
+    "biome": "town",
+    "pokemon": [],
+    "hexes": [{ "q": 19, "r": 15, "s": 4 }],
+    "isTown": true
   },
   {
     "name": "Area 12",
