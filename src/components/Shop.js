@@ -96,6 +96,12 @@ const shopItems = [
     price: 10000,
     type: "evolution-item",
   },
+  {
+    name: "Shiny Stone",
+    slug: "shiny-stone",
+    price: 50000,
+    type: "evolution-item",
+  },
 ];
 
 // TODO: Move items and sell different items in different towns
