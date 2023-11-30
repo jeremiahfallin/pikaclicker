@@ -8,7 +8,7 @@ export default function Gym({ gym, setInGym }) {
   const [inBattle, setInBattle] = useState(false); // State to track if a battle is ongoing.
   const updateBattle = useGameStore((state) => state.updateBattle);
   const isComplete = useGameStore((state) => state.battle.isComplete);
-  const background = inBattle ? `${gym.type}-gym-battle` : `${gym.type}-gym`;
+  const background = inBattle ? `${gym?.type}-gym-battle` : `${gym?.type}-gym`;
 
   // Check if the battle is complete to update the badges and reset battle state.
   useEffect(() => {
