@@ -2,8 +2,10 @@ A Pokemon Clicker game made at BGCUV.
 
 # TODO
 
+- BUGFIX: Max level 100
+- Add way to save/export
+
 - Indicate that a player can't go somewhere
-- Add Bagon
 - Make it so that the settings work
 - Add gyms
 - Add badges
@@ -19,7 +21,6 @@ A Pokemon Clicker game made at BGCUV.
 - Add more details to party
 - Give pokemon appropriate IDs
 - Add fishing rod
-- Add way to save/export
 - Look into how items get used on Pokemon
 - Add different Unown forms
 - Add Toxtricity forms (How do we decide what form it evolves into?)
@@ -27,6 +28,9 @@ A Pokemon Clicker game made at BGCUV.
 - Different Lycanroc forms?
 - Name everything (Towns, region, gym leaders, etc.)
 - Slow down progression
+- Add tutorial
+- Add way to get espeon/umbreon (day/night?)
+- Add mega?
 
 # Stretch Goals
 

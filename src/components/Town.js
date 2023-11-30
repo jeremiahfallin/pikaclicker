@@ -22,7 +22,6 @@ export default function Town() {
 
   // Get details of the current town based on the player's hex location.
   const currentTown = getHexDetails(currentHex.q, currentHex.r, currentHex.s);
-  console.log(currentTown);
 
   // Find the gym associated with the current town.
   const gym = gyms.find((g) => g.town === currentTown.name);

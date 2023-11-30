@@ -162,7 +162,7 @@ const catchChance = (captureRate, hp, maxHP, status, ball, level) => {
  * @returns {Object} A new Pokémon object.
  */
 const createPokemon = (id, level, isShiny = null) => {
-  level = Math.min(Math.max(1, level), 100);
+  const newLevel = Math.min(Math.max(1, level), 100);
   const pokemon = pokes.find((poke) => poke.id === id);
   let image = pokemon.sprites.front_default;
   if (pokemon.sprites?.front_shiny && typeof isShiny === null) {
@@ -174,35 +174,35 @@ const createPokemon = (id, level, isShiny = null) => {
       : pokemon.sprites.front_default;
   }
   const growthRate = pokemon.growthRate;
-  const hp = calcMaxHP(pokemon.stats[0].base_stat, level);
-  const attack = calcStat(pokemon.stats[1].base_stat, level);
-  const defense = calcStat(pokemon.stats[2].base_stat, level);
-  const spAttack = calcStat(pokemon.stats[3].base_stat, level);
-  const spDefense = calcStat(pokemon.stats[4].base_stat, level);
-  const speed = calcStat(pokemon.stats[5].base_stat, level);
+  const hp = calcMaxHP(pokemon.stats[0].base_stat, newLevel);
+  const attack = calcStat(pokemon.stats[1].base_stat, newLevel);
+  const defense = calcStat(pokemon.stats[2].base_stat, newLevel);
+  const spAttack = calcStat(pokemon.stats[3].base_stat, newLevel);
+  const spDefense = calcStat(pokemon.stats[4].base_stat, newLevel);
+  const speed = calcStat(pokemon.stats[5].base_stat, newLevel);
   const gender = Math.random() > pokemon.genderRate / 8 ? "male" : "female";
   let xp;
   switch (growthRate) {
     case "fast":
-      xp = fastGrowth(level);
+      xp = fastGrowth(newLevel);
       break;
     case "medium-fast":
-      xp = mediumFastGrowth(level);
+      xp = mediumFastGrowth(newLevel);
       break;
     case "medium-slow":
-      xp = mediumSlowGrowth(level);
+      xp = mediumSlowGrowth(newLevel);
       break;
     case "slow":
-      xp = slowGrowth(level);
+      xp = slowGrowth(newLevel);
       break;
     case "fluctuating":
-      xp = fluctuatingGrowth(level);
+      xp = fluctuatingGrowth(newLevel);
       break;
     case "erratic":
-      xp = erraticGrowth(level);
+      xp = erraticGrowth(newLevel);
       break;
     default:
-      xp = mediumFastGrowth(level);
+      xp = mediumFastGrowth(newLevel);
   }
 
   return {
@@ -210,7 +210,7 @@ const createPokemon = (id, level, isShiny = null) => {
     name: pokemon.name,
     image: image,
     isShiny,
-    level,
+    level: newLevel,
     xp,
     maxHP: hp,
     currentHP: hp,
@@ -361,7 +361,6 @@ function checkEvolve(pokemon, level = 1, area = null, item = null) {
   }
   for (let evolution of evolutions) {
     for (let condition of evolution.evolution_conditions) {
-      console.log(!item);
       if (!!item) {
         if (condition.trigger === "use-item") {
           if (condition.item === item) {

@@ -95,6 +95,8 @@ const useGameStore = create(
       },
       attemptCatch: (pokemon) => {
         const player = get().player;
+        const settings = get().settings;
+        const pokedex = get().player.pokedex;
         const party = get().player.party;
         const items = get().player.items;
         const ball = items.find((item) => item.name === get().settings.ball);
@@ -112,6 +114,9 @@ const useGameStore = create(
           pokemon.level
         );
         const randomNum = random(0, 100);
+        const { newPokemon, repeatPokemon, shinyPokemon } = settings;
+        const hasCaught = pokedex.caught.has(pokemon.name);
+        console.log(hasCaught);
 
         if (randomNum <= chance) {
           if (party.length < 6) {
@@ -486,7 +491,7 @@ const useGameStore = create(
           return;
         }
         if (pokemon.currentHP === 0) {
-          get().updateCoins(player.coins + pokemon.level * 10);
+          get().updateCoins(player.coins + Math.floor(pokemon.level * 5));
           get().updateExperience(pokemon);
           get().updateHappiness();
 
@@ -610,7 +615,6 @@ function unlockArea(area) {
 // Function to update player badges
 function updateBadges(badge) {
   if (badge === "Grass") {
-    console.log("?");
     unlockArea("Area 2");
     unlockArea("Volcano Town");
   }
