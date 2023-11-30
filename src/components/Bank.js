@@ -4,6 +4,7 @@ import {
   Button,
   Center,
   Image,
+  Input,
   Progress,
   RadioGroup,
   Radio,
@@ -34,6 +35,7 @@ const levelFormulas = {
 
 export default function Bank({ selectedPokemon, setSelectedPokemon }) {
   const [sortBy, setSortBy] = useState("id");
+  const [searchTerm, setSearchTerm] = useState("");
   const [release, setRelease] = useState(null);
   const swapPokemon = useGameStore((state) => state.swapPokemon);
   const bank = useGameStore((state) => state.player.bank);
@@ -60,6 +62,10 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
     });
   };
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <Box>
       <div>Bank</div>
@@ -70,6 +76,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
           <Radio value={"name"}>Name</Radio>
         </Stack>
       </RadioGroup>
+      <Input value={searchTerm} onChange={handleSearch} size="xs" />
       <SimpleGrid
         columns={2}
         spacing={1}
@@ -99,6 +106,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                 return a.id - b.id;
             }
           })
+          .filter((poke) => poke.name.includes(searchTerm))
           .map((pokemon, idx) => {
             const currentLevelXp = levelFormulas[pokemon.growthRate](
               pokemon.level

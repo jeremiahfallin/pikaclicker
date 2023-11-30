@@ -115,71 +115,77 @@ const useGameStore = create(
         );
         const randomNum = random(0, 100);
         const { newPokemon, repeatPokemon, shinyPokemon } = settings;
-        const hasCaught = pokedex.caught.has(pokemon.name);
-        console.log(hasCaught);
+        const isCaught = pokedex.caught.has(pokemon.id);
+        const isShiny = pokemon.isShiny;
 
-        if (randomNum <= chance) {
-          if (party.length < 6) {
-            const newParty = [...party, pokemon];
+        if (
+          (isShiny && shinyPokemon) ||
+          (isCaught && repeatPokemon) ||
+          (newPokemon && !isCaught)
+        ) {
+          if (randomNum <= chance) {
+            if (party.length < 6) {
+              const newParty = [...party, pokemon];
+              set((state) => ({
+                ...state,
+                player: {
+                  ...state.player,
+                  party: newParty,
+                },
+              }));
+            } else {
+              const newPokemon = {
+                ...pokemon,
+                currentHP: pokemon.maxHP,
+              };
+              const newBank = [...player.bank, newPokemon];
+              set((state) => ({
+                ...state,
+                player: {
+                  ...state.player,
+                  bank: newBank,
+                },
+              }));
+            }
             set((state) => ({
               ...state,
               player: {
                 ...state.player,
-                party: newParty,
+                pokedex: {
+                  seen: new Set([...state.player.pokedex.seen, pokemon.id]),
+                  caught: new Set([...state.player.pokedex.caught, pokemon.id]),
+                },
               },
             }));
           } else {
-            const newPokemon = {
-              ...pokemon,
-              currentHP: pokemon.maxHP,
-            };
-            const newBank = [...player.bank, newPokemon];
             set((state) => ({
               ...state,
               player: {
                 ...state.player,
-                bank: newBank,
+                pokedex: {
+                  seen: new Set([...state.player.pokedex.seen, pokemon.id]),
+                  caught: state.player.pokedex.caught,
+                },
               },
             }));
           }
+          const newItems = items.map((item) => {
+            if (item.name === get().settings.ball) {
+              return {
+                ...item,
+                quantity: item.quantity - 1,
+              };
+            }
+            return item;
+          });
           set((state) => ({
             ...state,
             player: {
               ...state.player,
-              pokedex: {
-                seen: new Set([...state.player.pokedex.seen, pokemon.id]),
-                caught: new Set([...state.player.pokedex.caught, pokemon.id]),
-              },
-            },
-          }));
-        } else {
-          set((state) => ({
-            ...state,
-            player: {
-              ...state.player,
-              pokedex: {
-                seen: new Set([...state.player.pokedex.seen, pokemon.id]),
-                caught: state.player.pokedex.caught,
-              },
+              items: newItems,
             },
           }));
         }
-        const newItems = items.map((item) => {
-          if (item.name === get().settings.ball) {
-            return {
-              ...item,
-              quantity: item.quantity - 1,
-            };
-          }
-          return item;
-        });
-        set((state) => ({
-          ...state,
-          player: {
-            ...state.player,
-            items: newItems,
-          },
-        }));
       },
       updateCurrentHex: (newHex) => {
         const unlockedAreas = get().player.unlockedAreas;
