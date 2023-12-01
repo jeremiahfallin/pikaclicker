@@ -9,6 +9,8 @@
   {
     "name": "Area 1",
     "biome": "forest",
+    "minLevel": 1,
+    "maxLevel": 10,
     "pokemon": [1, 13, 25, 29, 32, 52, 98, 104, 129, 133, 228, 263],
     "hexes": [
       {
@@ -193,6 +195,8 @@
   {
     "name": "Area 2",
     "biome": "wasteland",
+    "minLevel": 10,
+    "maxLevel": 20,
     "pokemon": [
       58, 63, 77, 78, 98, 111, 129, 228, 285, 302, 369, 370, 383, 385, 624, 850,
       935, 10229
@@ -605,6 +609,8 @@
   {
     "name": "Area 5",
     "biome": "electric",
+    "minLevel": 40,
+    "maxLevel": 50,
     "pokemon": [
       41, 42, 63, 98, 111, 129, 137, 228, 243, 285, 369, 370, 403, 595, 624
     ],
@@ -826,6 +832,8 @@
   {
     "name": "Area 4",
     "biome": "badlands-gray",
+    "minLevel": 30,
+    "maxLevel": 40,
     "pokemon": [63, 92, 111, 304, 371, 374, 403, 557, 595, 624],
     "hexes": [
       {
@@ -990,6 +998,8 @@
   {
     "name": "Area 3",
     "biome": "swamplands",
+    "minLevel": 20,
+    "maxLevel": 30,
     "pokemon": [
       41, 63, 10112, 92, 93, 98, 111, 194, 228, 355, 361, 557, 607, 679
     ],
@@ -1366,6 +1376,8 @@
   {
     "name": "Area 6",
     "biome": "swamp",
+    "minLevel": 20,
+    "maxLevel": 30,
     "pokemon": [88, 194],
     "hexes": [
       {
@@ -1455,6 +1467,8 @@
   {
     "name": "Area 7",
     "biome": "badlands",
+    "minLevel": 60,
+    "maxLevel": 70,
     "pokemon": [1, 29, 111, 161, 162, 163, 355, 443, 624, 679],
     "hexes": [
       {
@@ -1511,11 +1525,6 @@
         "q": 14,
         "r": 17,
         "s": -3
-      },
-      {
-        "q": 14,
-        "r": 16,
-        "s": -2
       },
       {
         "q": 14,
@@ -1614,6 +1623,8 @@
   {
     "name": "Area 8",
     "biome": "ice",
+    "minLevel": 70,
+    "maxLevel": 80,
     "pokemon": [54, 63, 111, 339, 359, 361, 363, 872, 10103],
     "hexes": [
       {
@@ -1911,6 +1922,8 @@
   {
     "name": "Area 9",
     "biome": "ice-lakes",
+    "minLevel": 70,
+    "maxLevel": 80,
     "pokemon": [54, 339],
     "hexes": [
       {
@@ -1928,6 +1941,8 @@
   {
     "name": "Area 10",
     "biome": "desert",
+    "minLevel": 50,
+    "maxLevel": 60,
     "pokemon": [58, 63, 98, 111, 261, 304, 328, 551, 557],
     "hexes": [
       {
@@ -2145,6 +2160,8 @@
   {
     "name": "Area 11",
     "biome": "desert-caves",
+    "minLevel": 50,
+    "maxLevel": 60,
     "pokemon": [201, 302],
     "hexes": [
       {
@@ -2174,6 +2191,8 @@
   {
     "name": "Area 12",
     "biome": "plains",
+    "minLevel": 80,
+    "maxLevel": 90,
     "pokemon": [
       7, 15, 23, 24, 25, 29, 33, 47, 54, 98, 111, 133, 147, 161, 162, 163, 246,
       261, 333, 422, 704, 859, 872
@@ -2389,6 +2408,8 @@
   {
     "name": "Area 13",
     "biome": "lake",
+    "minLevel": 80,
+    "maxLevel": 90,
     "pokemon": [7, 54],
     "hexes": [
       {
@@ -2416,6 +2437,8 @@
   {
     "name": "Area 14",
     "biome": "islands-and-whirlpools",
+    "minLevel": 80,
+    "maxLevel": 95,
     "pokemon": [144, 145, 230, 245, 249, 363, 370, 380, 384, 386, 491],
     "hexes": [
       {
@@ -2573,6 +2596,8 @@
   {
     "name": "Area 15",
     "biome": "ocean",
+    "minLevel": 80,
+    "maxLevel": 95,
     "pokemon": [129, 226, 318, 370],
     "hexes": [
       {

@@ -99,13 +99,19 @@ const shopItems = [
   {
     name: "Shiny Stone",
     slug: "shiny-stone",
-    price: 50000,
+    price: 10000,
     type: "evolution-item",
   },
   {
     name: "Dawn Stone",
     slug: "dawn-stone",
-    price: 100000,
+    price: 10000,
+    type: "evolution-item",
+  },
+  {
+    name: "Reaper Cloth",
+    slug: "reaper-cloth",
+    price: 10000,
     type: "evolution-item",
   },
 ];

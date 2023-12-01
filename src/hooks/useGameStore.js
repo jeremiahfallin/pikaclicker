@@ -222,17 +222,11 @@ const useGameStore = create(
             },
           }));
         } else {
-          const areaIndex = areas.findIndex(
-            (area) =>
-              area.hexes.findIndex(
-                (h) => h.q === newHex.q && h.r === newHex.r && h.s === newHex.s
-              ) !== -1
-          );
           set((state) => ({
             ...state,
             battle: {
               ...state.battle,
-              pokemon: [getWildPokemon(hex, areaIndex - 1)],
+              pokemon: [getWildPokemon(hex)],
             },
             player: {
               ...state.player,
@@ -314,25 +308,31 @@ const useGameStore = create(
           },
         }));
       },
-      swapPokemon: (idx1, place1, idx2, place2) => {
+      swapPokemon: (uuid1, place1, uuid2, place2) => {
         // swaps pokemon, may swap between just party, just bank, or party and bank
         const isInTown = get().player.isInTown;
         const party = get().player.party;
         const bank = get().player.bank;
         if (isInTown) {
           if (place1 === "party" && place2 === "party") {
+            const idx1 = party.findIndex((poke) => poke.uuid === uuid1);
+            const idx2 = party.findIndex((poke) => poke.uuid === uuid2);
             const newParty = [...party];
             const temp = newParty[idx1];
             newParty[idx1] = newParty[idx2];
             newParty[idx2] = temp;
             get().updateParty(newParty);
           } else if (place1 === "bank" && place2 === "bank") {
+            const idx1 = bank.findIndex((poke) => poke.uuid === uuid1);
+            const idx2 = bank.findIndex((poke) => poke.uuid === uuid2);
             const newBank = [...bank];
             const temp = newBank[idx1];
             newBank[idx1] = newBank[idx2];
             newBank[idx2] = temp;
             get().updateBank(newBank);
           } else if (place1 === "party" && place2 === "bank") {
+            const idx1 = party.findIndex((poke) => poke.uuid === uuid1);
+            const idx2 = bank.findIndex((poke) => poke.uuid === uuid2);
             const newParty = [...party];
             const newBank = [...bank];
             const temp = newParty[idx1];
@@ -341,6 +341,8 @@ const useGameStore = create(
             get().updateParty(newParty);
             get().updateBank(newBank);
           } else if (place1 === "bank" && place2 === "party") {
+            const idx1 = bank.findIndex((poke) => poke.uuid === uuid1);
+            const idx2 = party.findIndex((poke) => poke.uuid === uuid2);
             const newParty = [...party];
             const newBank = [...bank];
             const temp = newBank[idx1];
@@ -351,10 +353,11 @@ const useGameStore = create(
           }
         }
       },
-      releasePokemon: (idx) => {
+      releasePokemon: (uuid) => {
         const player = get().player;
         const bank = player.bank;
         const newBank = [...bank];
+        const idx = newBank.findIndex((poke) => poke.uuid === uuid);
         const releasedPokemon = newBank[idx];
         newBank.splice(idx, 1);
         get().updateBank(newBank);
@@ -445,7 +448,9 @@ const useGameStore = create(
         });
         get().updateParty(newParty);
       },
-      applyItemOnPokemon: (item, idx, place) => {
+      applyItemOnPokemon: (item, uuid, place) => {
+        const idx = get().player[place].findIndex((poke) => poke.uuid === uuid);
+        console.log(idx);
         const pokemon = get().player[place][idx];
         const newPlace = [...get().player[place]];
         const newItems = [...get().player.items];
@@ -504,7 +509,12 @@ const useGameStore = create(
           return;
         }
         if (pokemon.currentHP === 0) {
-          get().updateCoins(player.coins + Math.floor(pokemon.level * 5));
+          get().updateCoins(
+            player.coins +
+              Math.floor(
+                10 + 5 * Math.sqrt(pokemon.level) * Math.log(pokemon.level)
+              )
+          );
           get().updateExperience(pokemon);
           get().updateHappiness();
 

@@ -111,6 +111,7 @@ const gyms = [
     type: "ice",
     badge: "Ice",
     leader: "",
+    town: "Ice Town",
     pokemon: [
       createPokemon(10102, 80), // Sandslash-alola
       createPokemon(10104, 80), // Ninetales-alola
@@ -125,6 +126,7 @@ const gyms = [
     type: "rock",
     badge: "Fossil",
     leader: "",
+    town: "Fossil Town",
     pokemon: [
       createPokemon(139, 90), // Omastar
       createPokemon(141, 92), // Kabutops

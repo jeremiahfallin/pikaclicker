@@ -30,24 +30,24 @@ const levelFormulas = {
 export default function Party({ selectedPokemon, setSelectedPokemon }) {
   const swapPokemon = useGameStore((state) => state.swapPokemon);
   const party = useGameStore((state) => state.player.party);
-  const setPokemon = (idx) => {
-    if (selectedPokemon.idx === null) {
+  const setPokemon = (uuid) => {
+    if (selectedPokemon.uuid === null) {
       setSelectedPokemon({
-        idx: idx,
+        uuid: uuid,
         place: "party",
       });
     } else if (
-      selectedPokemon.idx === idx &&
+      selectedPokemon.uuid === uuid &&
       selectedPokemon.place === "party"
     ) {
       setSelectedPokemon({
-        idx: null,
+        uuid: null,
         place: null,
       });
     } else {
-      swapPokemon(idx, "party", selectedPokemon.idx, selectedPokemon.place);
+      swapPokemon(uuid, "party", selectedPokemon.uuid, selectedPokemon.place);
       setSelectedPokemon({
-        idx: null,
+        uuid: null,
         place: null,
       });
     }
@@ -58,24 +58,24 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
       <div>Party</div>
 
       <SimpleGrid columns={2} spacing={1}>
-        {party.map((pokemon, idx) => {
-          const currentLevelXp = levelFormulas[pokemon.growthRate](
-            pokemon.level
-          );
-          const nextLevelXp = levelFormulas[pokemon.growthRate](
-            pokemon.level + 1
-          );
+        {party.map((pokemon) => {
+          const currentLevelXp =
+            levelFormulas[pokemon.growthRate](pokemon.level) || 0;
+          const nextLevelXp =
+            levelFormulas[pokemon.growthRate](pokemon.level + 1) || 0;
+          const uuid = pokemon.uuid;
           return (
             <Center
-              key={`${pokemon.id}-${idx}`}
+              key={`${pokemon.id}-${uuid}`}
               flexDir={"column"}
               background={
-                selectedPokemon.idx === idx && selectedPokemon.place === "party"
+                selectedPokemon.uuid === uuid &&
+                selectedPokemon.place === "party"
                   ? "green.200"
                   : null
               }
               borderRadius={"md"}
-              onClick={() => setPokemon(idx)}
+              onClick={() => setPokemon(uuid)}
             >
               <Image alt={pokemon.name} src={pokemon.image} />
               <Text>{pokemon.name}</Text>

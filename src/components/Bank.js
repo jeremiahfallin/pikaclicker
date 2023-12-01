@@ -40,12 +40,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
   const swapPokemon = useGameStore((state) => state.swapPokemon);
   const bank = useGameStore((state) => state.player.bank);
   const releasePokemon = useGameStore((state) => state.releasePokemon);
-  const setPokemon = (idx) => {
-    const uuid = bank.find(
-      (p) =>
-        p.uuid ===
-        bank.filter((poke) => poke.name.includes(searchTerm))[idx].uuid
-    ).uuid;
+  const setPokemon = (uuid) => {
     setSelectedPokemon((prev) => {
       if (prev.uuid === null) {
         return {
@@ -58,7 +53,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
           place: null,
         };
       } else {
-        swapPokemon(idx, "bank", selectedPokemon.uuid, selectedPokemon.place);
+        swapPokemon(uuid, "bank", selectedPokemon.uuid, selectedPokemon.place);
         return {
           uuid: null,
           place: null,
@@ -112,22 +107,20 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
             }
           })
           .filter((poke) => poke.name.includes(searchTerm))
-          .map((pokemon, idx) => {
+          .map((pokemon) => {
             const currentLevelXp = levelFormulas[pokemon.growthRate](
               pokemon.level
             );
             const nextLevelXp = levelFormulas[pokemon.growthRate](
               pokemon.level + 1
             );
+            const uuid = pokemon.uuid;
             return (
-              <Center key={`${pokemon.id}-${idx}`} flexDir={"column"}>
+              <Center key={`${pokemon.id}-${uuid}`} flexDir={"column"}>
                 <Box
-                  onClick={() => setPokemon(idx)}
+                  onClick={() => setPokemon(uuid)}
                   background={
-                    selectedPokemon.idx === idx &&
-                    selectedPokemon.place === "bank"
-                      ? "green.200"
-                      : null
+                    selectedPokemon.uuid === pokemon.uuid ? "green.200" : null
                   }
                   borderRadius={"md"}
                 >
@@ -137,16 +130,16 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                   </Text>
                 </Box>
                 <Button
-                  colorScheme={idx === release ? "red" : "gray"}
+                  colorScheme={uuid === release ? "red" : "gray"}
                   onClick={() => {
                     setSelectedPokemon({
-                      idx: null,
+                      uuid: null,
                       place: null,
                     });
-                    if (idx !== release) {
-                      setRelease(idx);
+                    if (uuid !== release) {
+                      setRelease(uuid);
                     } else {
-                      releasePokemon(idx);
+                      releasePokemon(uuid);
                       setRelease(null);
                     }
                   }}

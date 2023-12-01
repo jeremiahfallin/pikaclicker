@@ -14,8 +14,8 @@ export default function Items({ selectedPokemon }) {
   const applyItemOnPokemon = useGameStore((state) => state.applyItemOnPokemon);
 
   const handleClick = (item) => {
-    if (!selectedPokemon.idx) return;
-    applyItemOnPokemon(item, selectedPokemon.idx, selectedPokemon.place);
+    if (!selectedPokemon.uuid) return;
+    applyItemOnPokemon(item, selectedPokemon.uuid, selectedPokemon.place);
   };
 
   return (
