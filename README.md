@@ -6,7 +6,6 @@ A Pokemon Clicker game made at BGCUV.
 - Add way to save/export
 
 - Indicate that a player can't go somewhere
-- Make it so that the settings work
 - Add gyms
 - Add badges
 - Add Elite 4

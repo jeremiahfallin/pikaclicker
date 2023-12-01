@@ -65,6 +65,13 @@ export default function Game() {
   // Retrieve the player's party from the game store.
   const party = useGameStore((state) => state.player.party);
 
+  let growths = new Set();
+
+  for (const pokemon of pokes) {
+    growths.add(pokemon.growthRate);
+  }
+  console.log(growths);
+
   return (
     <>
       {/* Head component for setting the page title and meta tags. */}

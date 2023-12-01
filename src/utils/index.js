@@ -198,6 +198,9 @@ const createPokemon = (id, level, isShiny = null) => {
     case "fluctuating":
       xp = fluctuatingGrowth(newLevel);
       break;
+    case "slow-then-very-fast":
+      xp = fluctuatingGrowth(newLevel);
+      break;
     case "erratic":
       xp = erraticGrowth(newLevel);
       break;
