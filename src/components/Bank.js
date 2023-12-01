@@ -41,21 +41,26 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
   const bank = useGameStore((state) => state.player.bank);
   const releasePokemon = useGameStore((state) => state.releasePokemon);
   const setPokemon = (idx) => {
+    const uuid = bank.find(
+      (p) =>
+        p.uuid ===
+        bank.filter((poke) => poke.name.includes(searchTerm))[idx].uuid
+    ).uuid;
     setSelectedPokemon((prev) => {
-      if (prev.idx === null) {
+      if (prev.uuid === null) {
         return {
-          idx: idx,
+          uuid: uuid,
           place: "bank",
         };
-      } else if (prev.idx === idx && prev.place === "bank") {
+      } else if (prev.uuid === uuid && prev.place === "bank") {
         return {
-          idx: null,
+          uuid: null,
           place: null,
         };
       } else {
-        swapPokemon(idx, "bank", selectedPokemon.idx, selectedPokemon.place);
+        swapPokemon(idx, "bank", selectedPokemon.uuid, selectedPokemon.place);
         return {
-          idx: null,
+          uuid: null,
           place: null,
         };
       }

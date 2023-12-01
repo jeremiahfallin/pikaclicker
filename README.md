@@ -2,9 +2,7 @@ A Pokemon Clicker game made at BGCUV.
 
 # TODO
 
-- BUGFIX: Max level 100
 - Add way to save/export
-
 - Indicate that a player can't go somewhere
 - Add gyms
 - Add badges
@@ -30,6 +28,9 @@ A Pokemon Clicker game made at BGCUV.
 - Add tutorial
 - Add way to get espeon/umbreon (day/night?)
 - Add mega?
+- Fix search bar
+- BUGFIX: Something about pokeballs
+- BUGFIX: Can currently swap pokemon from bank when in gym
 
 # Stretch Goals
 

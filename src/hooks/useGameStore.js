@@ -385,6 +385,7 @@ const useGameStore = create(
               const newPokemon = createPokemon(
                 evolution.id,
                 newLevel,
+                poke.uuid,
                 poke.isShiny
               );
               return {
@@ -454,7 +455,12 @@ const useGameStore = create(
           const evolutionName = checkEvolve(basePokemon, null, null, item.slug);
           if (!!evolutionName) {
             const evolution = pokes.find((p) => p.name === evolutionName);
-            const newPokemon = createPokemon(evolution.id, pokemon.level);
+            const newPokemon = createPokemon(
+              evolution.id,
+              pokemon.level,
+              pokemon.uuid,
+              pokemon.isShiny
+            );
             newPlace[idx] = {
               ...pokemon,
               ...newPokemon,

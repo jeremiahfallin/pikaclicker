@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
 import { Box, Flex, Image, Progress, keyframes } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
+import { homeHex } from "@/utils";
 
 /**
  * The Pokemon component displays an individual Pokémon with its sprite and health bar.
@@ -98,10 +98,14 @@ const InitiativeSlider = () => {
  * @returns A Box component representing the battle scene.
  */
 export default function Battle({ background = "forest" }) {
+  const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
   // Retrieving the player's first Pokémon in the party.
   const playerPokemon = useGameStore((state) => state.player.party[0]);
   // Retrieving the enemy Pokémon.
-  const enemyPokemon = useGameStore((state) => state.battle.pokemon[0]);
+  const enemyPokemon = useGameStore((state) => state.battle?.pokemon?.[0]);
+  if (!enemyPokemon) {
+    updateCurrentHex(homeHex);
+  }
   // Hook to handle game turns.
   const handleTurn = useGameStore((state) => state.handleTurn);
   const handleClick = () => {

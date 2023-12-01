@@ -1,3 +1,4 @@
+import short from "short-uuid";
 import areas from "../areas";
 import pokes from "../pokes";
 
@@ -161,7 +162,7 @@ const catchChance = (captureRate, hp, maxHP, status, ball, level) => {
  * @param {number} level - The level of the Pokémon.
  * @returns {Object} A new Pokémon object.
  */
-const createPokemon = (id, level, isShiny = null) => {
+const createPokemon = (id, level, uuid = short.generate(), isShiny = null) => {
   const newLevel = Math.min(Math.max(1, level), 100);
   const pokemon = pokes.find((poke) => poke.id === id);
   let image = pokemon.sprites.front_default;
@@ -209,6 +210,7 @@ const createPokemon = (id, level, isShiny = null) => {
   }
 
   return {
+    uuid,
     id,
     name: pokemon.name,
     image: image,
