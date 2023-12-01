@@ -24,7 +24,7 @@ const levelFormulas = {
   "medium-slow": mediumSlowGrowth,
   slow: slowGrowth,
   fluctuating: fluctuatingGrowth,
-  "fast-then-very-slow": fluctuatingGrowth,
+  "slow-then-very-fast": fluctuatingGrowth,
 };
 
 export default function Party({ selectedPokemon, setSelectedPokemon }) {
