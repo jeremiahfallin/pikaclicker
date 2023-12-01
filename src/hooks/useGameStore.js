@@ -396,37 +396,11 @@ const useGameStore = create(
                 ...newPokemon,
               };
             }
-            const newMaxHP = calcMaxHP(
-              basePokemon.stats[0].base_stat,
-              newLevel
-            );
-            const newAttack = calcStat(
-              basePokemon.stats[1].base_stat,
-              newLevel
-            );
-            const newDefense = calcStat(
-              basePokemon.stats[2].base_stat,
-              newLevel
-            );
-            const newSpecialAttack = calcStat(
-              basePokemon.stats[3].base_stat,
-              newLevel
-            );
-            const newSpecialDefense = calcStat(
-              basePokemon.stats[4].base_stat,
-              newLevel
-            );
-            const newSpeed = calcStat(basePokemon.stats[5].base_stat, newLevel);
+
             return {
               ...poke,
+              ...createPokemon(poke.id, newLevel, poke.uuid, poke.isShiny),
               level: newLevel,
-              maxHP: newMaxHP,
-              currentHP: newMaxHP,
-              attack: newAttack,
-              defense: newDefense,
-              specialAttack: newSpecialAttack,
-              specialDefense: newSpecialDefense,
-              speed: newSpeed,
               xp: newExperience,
             };
           } else {
