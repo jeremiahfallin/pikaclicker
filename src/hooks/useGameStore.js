@@ -4,8 +4,6 @@ import superjson from "superjson";
 import {
   checkEvolve,
   calcDamage,
-  calcMaxHP,
-  calcStat,
   catchChance,
   createPokemon,
   experienceGain,
@@ -84,6 +82,7 @@ const useGameStore = create(
         ],
         catchingStatus: "ALL",
       },
+      clickMultiplier: 1,
       events: {
         pickStarter: 0,
       },
@@ -222,11 +221,17 @@ const useGameStore = create(
             },
           }));
         } else {
+          const newPokemon = getWildPokemon(hex);
+          const { seen } = get().player.pokedex;
+          if (!seen.has(newPokemon.id) && !newPokemon.id) {
+            updatePokedex(newPokemon.id, false);
+          }
+
           set((state) => ({
             ...state,
             battle: {
               ...state.battle,
-              pokemon: [getWildPokemon(hex)],
+              pokemon: [newPokemon],
             },
             player: {
               ...state.player,
@@ -455,6 +460,91 @@ const useGameStore = create(
           }
         }
       },
+      updateClickMultiplier: (multiplier) => {
+        set((state) => ({
+          ...state,
+          clickMultiplier: multiplier,
+        }));
+      },
+      handleClick: () => {
+        const { battle, player } = get();
+        const { pokemon } = battle;
+        if (!pokemon) {
+          return;
+        }
+
+        const { party } = player;
+        const playerPokemon = party[0];
+        const enemyPokemon = pokemon[0];
+        if (enemyPokemon.currentHP === 0) {
+          get().updateCoins(
+            player.coins +
+              Math.floor(
+                10 +
+                  5 *
+                    Math.sqrt(enemyPokemon.level) *
+                    Math.log(enemyPokemon.level)
+              )
+          );
+          get().updateExperience(enemyPokemon);
+          get().updateHappiness();
+
+          if (battle.isTrainer) {
+            const battlePokemon = get().battle.pokemon;
+            const newTrainerPokemon = battlePokemon.findIndex((poke) => {
+              return poke.currentHP > 0;
+            });
+            if (newTrainerPokemon === -1) {
+              get().updateBattle({
+                pokemon: null,
+                isTrainer: false,
+                turn: 0,
+                isComplete: true,
+              });
+              return;
+            } else {
+              get().updateBattle({
+                pokemon: [
+                  battlePokemon[newTrainerPokemon],
+                  ...battlePokemon.slice(0, newTrainerPokemon),
+                  ...battlePokemon.slice(newTrainerPokemon + 1),
+                ],
+              });
+            }
+            return;
+          }
+
+          if (!battle.isTrainer && player.catchingStatus === "ALL") {
+            get().attemptCatch(pokemon);
+            get().updateCurrentHex(player.currentHex);
+            return;
+          }
+        }
+        if (!get()?.clickMultiplier) {
+          get().updateClickMultiplier(1);
+        }
+        const dmgDealt =
+          (get().clickMultiplier / 10) *
+          calcDamage(
+            playerPokemon.level,
+            Math.max(playerPokemon.attack, playerPokemon.spAttack),
+            20,
+            playerPokemon.attack > playerPokemon.spAttack
+              ? enemyPokemon.defense
+              : enemyPokemon.spDefense,
+            1,
+            1
+          );
+        const newEnemyHP = Math.max(enemyPokemon.currentHP - dmgDealt, 0);
+        const newEnemyPokemon = {
+          ...enemyPokemon,
+          currentHP: newEnemyHP,
+        };
+        const newPokemon = [newEnemyPokemon, ...pokemon.slice(1)];
+        get().updateBattle({
+          pokemon: newPokemon,
+        });
+      },
       handleTurn: (initiative) => {
         const isPlayerTurn = initiative === "player";
         const { battle, player } = get();
@@ -660,6 +750,9 @@ function updateBadges(badge) {
     },
   }));
 }
+
+// Function to handle defeating a pokemon
+function defeatPokemon() {}
 
 export { unlockArea, updatePokedex, updateBadges };
 export default useGameStore;

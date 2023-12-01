@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import pokes from "../pokes.json";
-import areas from "../areas.json";
 import { getHexDetails } from "@/utils";
 
 // TODO: Add more info to the pokedex (e.g. id#, types, etc.)
@@ -32,7 +31,10 @@ export default function Pokedex() {
   const pokemonInArea = getHexDetails(q, r, s);
   // 3. Filter pokedex by those pokemon (below)
 
-  const pokedex = [...new Set([...seen, ...caught])].map((poke) => {
+  const pokedex = [...new Set([...seen, ...caught])].flatMap((poke) => {
+    if (!poke) {
+      return [];
+    }
     return pokes.find((p) => p.id === poke);
   });
 

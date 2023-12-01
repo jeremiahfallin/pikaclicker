@@ -11,6 +11,7 @@ import {
   Box,
   Center,
   Flex,
+  Grid,
   Heading,
   Image,
   SimpleGrid,
@@ -76,7 +77,7 @@ export default function Game() {
       </Head>
 
       {/* Layout of the game using a grid. */}
-      <SimpleGrid templateColumns="2fr 3fr 2fr" gap={2} p={2}>
+      <SimpleGrid templateColumns="2fr 4fr 3fr" gap={2} p={2}>
         {/* Left column: Pokedex, Badges, Settings */}
         <Box>
           <Center>
@@ -100,9 +101,35 @@ export default function Game() {
           <Badges />
           <Settings />
         </Box>
-
         {/* Center column: Scene and Map */}
-        <Box
+        <Grid
+          gridTemplateRows="auto 1fr"
+          maxW="100%"
+          w="100%"
+          minW="0"
+          overflowY="auto"
+          maxH={"100vh"}
+          scrollBehavior={"smooth"}
+          sx={{
+            "&::-webkit-scrollbar": { width: "9px" },
+            "&::-webkit-scrollbar-track": { background: "transparent" },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "gray.700",
+              borderRadius: "24px",
+              border: "2px solid transparent",
+            },
+          }}
+        >
+          <Scene />
+          <Map />
+        </Grid>
+
+        {/* Right column: Party, Items, Bank */}
+        <Grid
+          gridTemplateRows="auto auto 1fr"
+          maxW="100%"
+          w="100%"
+          minW="0"
           maxH="100vh"
           overflowY="auto"
           scrollBehavior={"smooth"}
@@ -110,20 +137,12 @@ export default function Game() {
             "&::-webkit-scrollbar": { width: "9px" },
             "&::-webkit-scrollbar-track": { background: "transparent" },
             "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "gray.400",
+              backgroundColor: "gray.700",
               borderRadius: "24px",
               border: "2px solid transparent",
             },
           }}
         >
-          <VStack spacing={2} align="stretch">
-            <Scene />
-            <Map />
-          </VStack>
-        </Box>
-
-        {/* Right column: Party, Items, Bank */}
-        <Box maxW="100%" w="100%" minW="0">
           <Party
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
@@ -133,7 +152,7 @@ export default function Game() {
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
           />
-        </Box>
+        </Grid>
       </SimpleGrid>
     </>
   );

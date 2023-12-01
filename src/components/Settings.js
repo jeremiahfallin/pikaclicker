@@ -1,10 +1,23 @@
 import useGameStore from "@/hooks/useGameStore";
-import { Box, Flex, Heading, Select, Switch, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Select,
+  Switch,
+  Text,
+  useClipboard,
+} from "@chakra-ui/react";
+import superjson from "superjson";
 
 // TODO: Right now only the ball is implemented, everything else is just visual
 export default function Settings() {
+  const { value, onCopy, setValue, hasCopied } = useClipboard("");
   const settings = useGameStore((state) => state.settings);
   const items = useGameStore((state) => state.player.items);
+  const data = useGameStore();
+
   return (
     <Box>
       <Heading as="h3" size="md">
@@ -71,6 +84,16 @@ export default function Settings() {
             })}
         </Select>
       </Flex>
+      <Button
+        size="xs"
+        onClick={() => {
+          const saveData = superjson.stringify(data);
+          setValue(saveData);
+          onCopy();
+        }}
+      >
+        {hasCopied ? "Copied!" : "Copy"}
+      </Button>
     </Box>
   );
 }

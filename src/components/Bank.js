@@ -78,7 +78,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
       </RadioGroup>
       <Input value={searchTerm} onChange={handleSearch} size="xs" />
       <SimpleGrid
-        columns={2}
+        columns={3}
         spacing={1}
         maxH="300px"
         overflowY={"scroll"}

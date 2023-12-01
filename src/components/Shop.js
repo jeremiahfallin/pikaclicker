@@ -123,6 +123,11 @@ export default function Shop({ isOpen, onClose }) {
   const playerItems = useGameStore((state) => state.player.items);
   const updateItems = useGameStore((state) => state.updateItems);
   const updateCoins = useGameStore((state) => state.updateCoins);
+  const clickMultiplier = useGameStore((state) => state.clickMultiplier);
+  const updateClickMultiplier = useGameStore(
+    (state) => state.updateClickMultiplier
+  );
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -131,6 +136,29 @@ export default function Shop({ isOpen, onClose }) {
         <ModalCloseButton />
         <ModalBody>
           <Flex direction="row" gap={8} wrap="wrap">
+            <Box>
+              <Heading as="h3" size="sm">
+                Click Multiplier
+              </Heading>
+              <Text>Current: {clickMultiplier}</Text>
+              <Text>
+                Cost: {Math.floor(200 * Math.pow(1.5, clickMultiplier))}
+              </Text>
+              <Button
+                onClick={() => {
+                  if (
+                    coins >= Math.floor(200 * Math.pow(1.5, clickMultiplier))
+                  ) {
+                    updateCoins(
+                      coins - Math.floor(200 * Math.pow(1.5, clickMultiplier))
+                    );
+                    updateClickMultiplier(clickMultiplier + 1);
+                  }
+                }}
+              >
+                Buy
+              </Button>
+            </Box>
             {shopItems.map((item, idx) => {
               return (
                 <Box key={`${item.name}-${idx}`}>

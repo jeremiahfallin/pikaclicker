@@ -110,7 +110,7 @@ export default function Battle({ background = "forest" }) {
   }
   const [currentEnemy, setCurrentEnemy] = useState(enemyPokemon.uuid);
   // Hook to handle game turns.
-  const handleTurn = useGameStore((state) => state.handleTurn);
+  const handleTurn = useGameStore((state) => state.handleClick);
   const handleClick = () => {
     handleTurn("player");
   };
