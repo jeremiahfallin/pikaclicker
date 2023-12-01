@@ -429,7 +429,7 @@ const useGameStore = create(
       },
       applyItemOnPokemon: (item, uuid, place) => {
         const idx = get().player[place].findIndex((poke) => poke.uuid === uuid);
-        console.log(idx);
+
         const pokemon = get().player[place][idx];
         const newPlace = [...get().player[place]];
         const newItems = [...get().player.items];
@@ -515,7 +515,7 @@ const useGameStore = create(
           }
 
           if (!battle.isTrainer && player.catchingStatus === "ALL") {
-            get().attemptCatch(pokemon);
+            get().attemptCatch(pokemon[0]);
             get().updateCurrentHex(player.currentHex);
             return;
           }
