@@ -39,6 +39,7 @@ const levelFormulas = {
   "medium-slow": mediumSlowGrowth,
   slow: slowGrowth,
   fluctuating: fluctuatingGrowth,
+  "fast-then-very-slow": fluctuatingGrowth,
 };
 
 const storage = {
