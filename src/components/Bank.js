@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import {
   Box,
   Button,
@@ -11,8 +11,10 @@ import {
   SimpleGrid,
   Text,
   Stack,
+  Flex,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import {
   fastGrowth,
   slowGrowth,
@@ -34,6 +36,7 @@ const levelFormulas = {
 };
 
 export default function Bank({ selectedPokemon, setSelectedPokemon }) {
+  const parentRef = useRef(null);
   const [sortBy, setSortBy] = useState("id");
   const [searchTerm, setSearchTerm] = useState("");
   const [release, setRelease] = useState(null);
@@ -62,6 +65,28 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
     });
   };
 
+  const pokemonBank = bank
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "id":
+          return a.id - b.id;
+        case "level":
+          return b.level - a.level;
+        case "name":
+          return a.name.localeCompare(b.name);
+        default:
+          return a.id - b.id;
+      }
+    })
+    .filter((poke) => poke.name.includes(searchTerm));
+
+  const rowVirtualizer = useVirtualizer({
+    count: pokemonBank.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 120,
+    overscan: 5,
+  });
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -77,12 +102,12 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
         </Stack>
       </RadioGroup>
       <Input value={searchTerm} onChange={handleSearch} size="xs" />
-      <SimpleGrid
-        columns={3}
+      <Flex
         spacing={1}
         maxH="300px"
         overflowY={"scroll"}
         scrollBehavior={"smooth"}
+        ref={parentRef}
         sx={{
           "&::-webkit-scrollbar": { width: "9px" },
           "&::-webkit-scrollbar-track": { background: "transparent" },
@@ -93,21 +118,15 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
           },
         }}
       >
-        {bank
-          .sort((a, b) => {
-            switch (sortBy) {
-              case "id":
-                return a.id - b.id;
-              case "level":
-                return b.level - a.level;
-              case "name":
-                return a.name.localeCompare(b.name);
-              default:
-                return a.id - b.id;
-            }
-          })
-          .filter((poke) => poke.name.includes(searchTerm))
-          .map((pokemon) => {
+        <Box
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+            width: "100%",
+            position: "relative",
+          }}
+        >
+          {rowVirtualizer.getVirtualItems().map((item) => {
+            const pokemon = pokemonBank[item.index];
             const currentLevelXp = levelFormulas[pokemon.growthRate](
               pokemon.level
             );
@@ -116,36 +135,47 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
             );
             const uuid = pokemon.uuid;
             return (
-              <Center key={`${pokemon.id}-${uuid}`} flexDir={"column"}>
-                <Box
-                  onClick={() => setPokemon(uuid)}
-                  background={
-                    selectedPokemon.uuid === pokemon.uuid ? "green.200" : null
-                  }
-                  borderRadius={"md"}
-                >
-                  <Image alt={pokemon.name} src={pokemon.image} />
-                  <Text>
-                    {pokemon.name} Lvl. {pokemon.level}
-                  </Text>
-                </Box>
-                <Button
-                  colorScheme={uuid === release ? "red" : "gray"}
-                  onClick={() => {
-                    setSelectedPokemon({
-                      uuid: null,
-                      place: null,
-                    });
-                    if (uuid !== release) {
-                      setRelease(uuid);
-                    } else {
-                      releasePokemon(uuid);
-                      setRelease(null);
+              <Center
+                key={`${item.key}`}
+                position="absolute"
+                top={0}
+                left={0}
+                width="100%"
+                flexDir={"column"}
+                height={`${item.size}px`}
+                transform={`translateY(${item.start}px)`}
+              >
+                <Center flexDir="row" w="100%">
+                  <Center
+                    onClick={() => setPokemon(uuid)}
+                    background={
+                      selectedPokemon.uuid === pokemon.uuid ? "green.200" : null
                     }
-                  }}
-                >
-                  Release
-                </Button>
+                    borderRadius={"md"}
+                  >
+                    <Image alt={pokemon.name} src={pokemon.image} />
+                    <Text>
+                      {pokemon.name} Lvl. {pokemon.level}
+                    </Text>
+                  </Center>
+                  <Button
+                    colorScheme={uuid === release ? "red" : "gray"}
+                    onClick={() => {
+                      setSelectedPokemon({
+                        uuid: null,
+                        place: null,
+                      });
+                      if (uuid !== release) {
+                        setRelease(uuid);
+                      } else {
+                        releasePokemon(uuid);
+                        setRelease(null);
+                      }
+                    }}
+                  >
+                    Release
+                  </Button>
+                </Center>
                 <Box w="100%">
                   <Progress
                     size={"xs"}
@@ -159,7 +189,8 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
               </Center>
             );
           })}
-      </SimpleGrid>
+        </Box>
+      </Flex>
     </Box>
   );
 }
