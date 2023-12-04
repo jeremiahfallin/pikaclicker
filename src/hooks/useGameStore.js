@@ -191,13 +191,11 @@ const useGameStore = create(
       updateCurrentHex: (newHex) => {
         const unlockedAreas = get().player.unlockedAreas;
 
-        const hex = getHexDetails(newHex.q, newHex.r, newHex.s);
+        const hex = getHexDetails(newHex.q, newHex.r);
 
         let hexArea =
           areas.find((area) =>
-            area.hexes.some(
-              (h) => h.q === hex.q && h.r === hex.r && h.s === hex.s
-            )
+            area.hexes.some((h) => h.q === hex.q && h.r === hex.r)
           )?.name || "";
 
         if (!unlockedAreas.has(hexArea)) {
@@ -214,7 +212,7 @@ const useGameStore = create(
             player: {
               ...state.player,
               isInTown: true,
-              currentHex: { q: hex.q, r: hex.r, s: hex.s },
+              currentHex: { q: hex.q, r: hex.r },
               party: state.player.party.map((poke) => ({
                 ...poke,
                 currentHP: poke.maxHP,

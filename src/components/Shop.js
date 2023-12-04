@@ -26,7 +26,8 @@ export default function Shop({ isOpen, onClose }) {
     (state) => state.updateClickMultiplier
   );
   const currentHex = useGameStore((state) => state.player.currentHex);
-  const currentTown = getHexDetails(currentHex.q, currentHex.r, currentHex.s);
+  const currentTown = getHexDetails(currentHex.q, currentHex.r);
+  console.log(currentTown);
   const shopItems = shops.find((shop) => shop.town === currentTown.name).items;
 
   return (

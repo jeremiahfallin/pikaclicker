@@ -45,18 +45,14 @@ const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
  * @param {number} s - The s coordinate of the hex.
  * @returns {Object} An object containing details about the hex.
  */
-const getHexDetails = (q, r, s) => {
+const getHexDetails = (q, r) => {
   let spawnablePokemon = new Set();
   let isTown = false;
   let name = "";
   let minLevel = 1;
   let maxLevel = 10;
   for (let area of areas) {
-    if (
-      area.hexes.findIndex(
-        (hex) => hex.q === q && hex.r === r && hex.s === s
-      ) !== -1
-    ) {
+    if (area.hexes.findIndex((hex) => hex.q === q && hex.r === r) !== -1) {
       area.pokemon.forEach((p) => spawnablePokemon.add(p));
       if (area.isTown) {
         isTown = true;
@@ -69,7 +65,6 @@ const getHexDetails = (q, r, s) => {
   return {
     q,
     r,
-    s,
     pokemon: [...spawnablePokemon],
     isTown: isTown,
     name,

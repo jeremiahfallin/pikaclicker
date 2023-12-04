@@ -26,9 +26,9 @@ export default function Pokedex() {
   const caught = useGameStore((state) => state.player.pokedex.caught);
 
   // 1. Find hex you're on
-  const { q, r, s } = useGameStore((state) => state.player.currentHex);
+  const { q, r } = useGameStore((state) => state.player.currentHex);
   // 2. Find out which pokemon are on that hex
-  const pokemonInArea = getHexDetails(q, r, s);
+  const pokemonInArea = getHexDetails(q, r);
   // 3. Filter pokedex by those pokemon (below)
 
   const pokedex = [...new Set([...seen, ...caught])].flatMap((poke) => {

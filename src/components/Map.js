@@ -27,7 +27,7 @@ const HexagonMemo = memo(Hexagon);
 const HexagonContainer = ({ q, r, s, hexId, fill, isSelected }) => {
   const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
   const onClick = useCallback(() => {
-    updateCurrentHex({ q, r, s });
+    updateCurrentHex({ q, r });
     console.log({ q, r, s });
   }, [q, r, s, updateCurrentHex]);
 
@@ -83,17 +83,15 @@ function Map() {
 
           const q = hex.q;
           const r = hex.r;
-          const s = hex.q - hex.r;
 
-          const isSelected =
-            currentHex.q === q && currentHex.r === r && currentHex.s === s;
+          const isSelected = currentHex.q === q && currentHex.r === r;
 
           return (
             <HexagonContainerMemo
               key={idx}
               q={hex.q}
               r={hex.r}
-              s={hex.q - hex.r}
+              s={-hex.q - hex.r}
               fill={fill}
               hexId={hex.id}
               isSelected={isSelected}
