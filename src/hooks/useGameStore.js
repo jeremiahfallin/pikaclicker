@@ -11,6 +11,7 @@ import {
   getWildPokemon,
   random,
   homeHex,
+  legendaryIds,
   fastGrowth,
   slowGrowth,
   erraticGrowth,
@@ -221,7 +222,16 @@ const useGameStore = create(
             },
           }));
         } else {
-          const newPokemon = getWildPokemon(hex);
+          const { caught } = get().player.pokedex;
+          let newPokemon = getWildPokemon(hex);
+          // if legendary and already caught, reroll
+          while (
+            legendaryIds.includes(newPokemon.id) &&
+            caught.has(newPokemon.id)
+          ) {
+            newPokemon = getWildPokemon(hex);
+          }
+
           const { seen } = get().player.pokedex;
           if (!seen.has(newPokemon.id) && !newPokemon.id) {
             updatePokedex(newPokemon.id, false);
@@ -389,6 +399,7 @@ const useGameStore = create(
             if (!!evolutionName) {
               const evolution = pokes.find((p) => p.name === evolutionName);
               basePokemon = evolution;
+              console.log(evolution);
               updatePokedex(evolution.id, true);
               const newPokemon = createPokemon(
                 evolution.id,

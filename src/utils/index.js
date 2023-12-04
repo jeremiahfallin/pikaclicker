@@ -3,6 +3,10 @@ import areas from "../areas";
 import pokes from "../pokes";
 
 const homeHex = { q: 13, r: 2, s: 11 };
+const legendaryIds = [
+  144, 10169, 145, 146, 150, 243, 244, 245, 249, 250, 380, 381, 382, 383, 384,
+  716, 717, 773, 790, 791, 792, 888, 889,
+];
 
 /**
  * Subtracts one axial coordinate from another.
@@ -83,7 +87,8 @@ const getWildPokemon = (hex) => {
   const potentialPokemon = hex.pokemon;
   const randomPokemonId = determineSpawn(potentialPokemon);
   const randomLevel = random(hex.minLevel, hex.maxLevel);
-  const randomPokemon = createPokemon(randomPokemonId, randomLevel);
+  let level = legendaryIds.includes(randomPokemonId) ? 70 : randomLevel;
+  const randomPokemon = createPokemon(randomPokemonId, level);
   return randomPokemon;
 };
 
@@ -112,7 +117,8 @@ const calcDamage = (lvl, cbtPow, atkPow, cbtDef, stab, y) => {
  * @param {number} level - The level of the Pokémon.
  * @returns {number} The maximum HP of the Pokémon.
  */
-const calcMaxHP = (baseHP, level) => (level / 50) * baseHP + level + 10;
+const calcMaxHP = (baseHP, level) =>
+  Math.round((level / 50) * baseHP + level + 10);
 
 /**
  * Calculates a Pokémon's stat based on its base stat and level.
@@ -120,7 +126,7 @@ const calcMaxHP = (baseHP, level) => (level / 50) * baseHP + level + 10;
  * @param {number} level - The level of the Pokémon.
  * @returns {number} The calculated stat.
  */
-const calcStat = (baseStat, level) => (level / 50) * baseStat + 5;
+const calcStat = (baseStat, level) => Math.round((level / 50) * baseStat + 5);
 
 /**
  * Determines the catch rate of a Pokémon.
@@ -295,11 +301,11 @@ const slowGrowth = (level) => {
  */
 const fluctuatingGrowth = (level) => {
   if (level <= 15) {
-    return level ** 3 * ((level + 1) / 3 + 24 / 50);
+    return level ** 3 * (((level + 1) / 3 + 24) / 50);
   } else if (level <= 36) {
     return level ** 3 * ((level + 14) / 50);
   } else {
-    return level ** 3 * (level / 2 + 32 / 50);
+    return level ** 3 * ((level / 2 + 32) / 50);
   }
 };
 
@@ -403,6 +409,7 @@ export {
   random,
   getHexDetails,
   homeHex,
+  legendaryIds,
   fastGrowth,
   slowGrowth,
   erraticGrowth,

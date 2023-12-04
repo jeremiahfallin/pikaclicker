@@ -1,3 +1,4 @@
+import useAuth from "@/hooks/useAuth";
 import useGameStore from "@/hooks/useGameStore";
 import {
   Box,
@@ -13,10 +14,11 @@ import superjson from "superjson";
 
 // TODO: Right now only the ball is implemented, everything else is just visual
 export default function Settings() {
-  const { value, onCopy, setValue, hasCopied } = useClipboard("");
+  const { onCopy, setValue, hasCopied } = useClipboard("");
   const settings = useGameStore((state) => state.settings);
   const items = useGameStore((state) => state.player.items);
   const data = useGameStore();
+  const { saveData, loadData } = useAuth();
 
   return (
     <Box>
@@ -64,6 +66,7 @@ export default function Settings() {
         <Select
           width="120px"
           size="xs"
+          value={settings.ball}
           onChange={(e) =>
             useGameStore.setState({
               settings: {
@@ -84,16 +87,24 @@ export default function Settings() {
             })}
         </Select>
       </Flex>
-      <Button
-        size="xs"
-        onClick={() => {
-          const saveData = superjson.stringify(data);
-          setValue(saveData);
-          onCopy();
-        }}
-      >
-        {hasCopied ? "Copied!" : "Copy"}
-      </Button>
+      <Flex direction="row" justify="space-between" p={2}>
+        <Button
+          size="xs"
+          onClick={() => {
+            const saveData = superjson.stringify(data);
+            setValue(saveData);
+            onCopy();
+          }}
+        >
+          {hasCopied ? "Copied!" : "Copy"}
+        </Button>
+        <Button size="xs" onClick={saveData}>
+          Save
+        </Button>
+        <Button size="xs" onClick={loadData}>
+          Load
+        </Button>
+      </Flex>
     </Box>
   );
 }

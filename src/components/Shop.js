@@ -13,110 +13,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
-
-const shopItems = [
-  {
-    name: "Pokeball",
-    price: 100,
-    type: "ball",
-  },
-  {
-    name: "Great Ball",
-    price: 200,
-    type: "ball",
-  },
-  {
-    name: "Ultra Ball",
-    price: 1000,
-    type: "ball",
-  },
-  {
-    name: "Fire Stone",
-    slug: "fire-stone",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Moon Stone",
-    slug: "moon-stone",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Ice Stone",
-    slug: "ice-stone",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Water Stone",
-    slug: "water-stone",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Dusk Stone",
-    slug: "dusk-stone",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Sun Stone",
-    slug: "sun-stone",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Thunder Stone",
-    slug: "thunder-stone",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Protector",
-    slug: "protector",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Auspicious Armor",
-    slug: "auspicious-armor",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Malicious Armor",
-    slug: "malicious-armor",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Link Cable",
-    slug: "link-cable",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Shiny Stone",
-    slug: "shiny-stone",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Dawn Stone",
-    slug: "dawn-stone",
-    price: 10000,
-    type: "evolution-item",
-  },
-  {
-    name: "Reaper Cloth",
-    slug: "reaper-cloth",
-    price: 10000,
-    type: "evolution-item",
-  },
-];
-
-// TODO: Move items and sell different items in different towns
+import { shops } from "@/constants";
+import { getHexDetails } from "@/utils";
 
 export default function Shop({ isOpen, onClose }) {
   const coins = useGameStore((state) => state.player.coins);
@@ -127,6 +25,9 @@ export default function Shop({ isOpen, onClose }) {
   const updateClickMultiplier = useGameStore(
     (state) => state.updateClickMultiplier
   );
+  const currentHex = useGameStore((state) => state.player.currentHex);
+  const currentTown = getHexDetails(currentHex.q, currentHex.r, currentHex.s);
+  const shopItems = shops.find((shop) => shop.town === currentTown.name).items;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -145,6 +46,7 @@ export default function Shop({ isOpen, onClose }) {
                 Cost: {Math.floor(200 * Math.pow(1.5, clickMultiplier))}
               </Text>
               <Button
+                size="sm"
                 onClick={() => {
                   if (
                     coins >= Math.floor(200 * Math.pow(1.5, clickMultiplier))
@@ -168,6 +70,7 @@ export default function Shop({ isOpen, onClose }) {
                   <Text>{item.description}</Text>
                   <Text>Cost: {item.price}</Text>
                   <Button
+                    size="sm"
                     onClick={() => {
                       if (coins >= item.price) {
                         updateCoins(coins - item.price);

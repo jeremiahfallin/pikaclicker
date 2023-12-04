@@ -1,17 +1,16 @@
-import { useCallback, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import {
   Box,
   Button,
   Center,
   Image,
   Input,
-  Progress,
   RadioGroup,
   Radio,
-  SimpleGrid,
   Text,
   Stack,
   Flex,
+  Divider,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -127,12 +126,6 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
         >
           {rowVirtualizer.getVirtualItems().map((item) => {
             const pokemon = pokemonBank[item.index];
-            const currentLevelXp = levelFormulas[pokemon.growthRate](
-              pokemon.level
-            );
-            const nextLevelXp = levelFormulas[pokemon.growthRate](
-              pokemon.level + 1
-            );
             const uuid = pokemon.uuid;
             return (
               <Center
@@ -176,16 +169,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                     Release
                   </Button>
                 </Center>
-                <Box w="100%">
-                  <Progress
-                    size={"xs"}
-                    colorScheme="pink"
-                    value={
-                      (100 * (pokemon.xp - currentLevelXp)) /
-                      (nextLevelXp - currentLevelXp)
-                    }
-                  />
-                </Box>
+                <Divider />
               </Center>
             );
           })}

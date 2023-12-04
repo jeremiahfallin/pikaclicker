@@ -1,13 +1,21 @@
 // pages/_app.js
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import Layout from "@/components/Layout";
 
 // create theme
 const theme = extendTheme({
   styles: {
     global: {
       "html, body": {
-        overflow: "hidden",
         height: "100%",
+        scrollBehavior: "smooth",
+        "&::-webkit-scrollbar": { width: "6px" },
+        "&::-webkit-scrollbar-track": { background: "transparent" },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "gray.700",
+          borderRadius: "24px",
+          border: "2px solid transparent",
+        },
       },
       // next id
       "#__next": {
@@ -21,7 +29,9 @@ const theme = extendTheme({
 function MyApp({ Component, pageProps }) {
   return (
     <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </ChakraProvider>
   );
 }

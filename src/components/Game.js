@@ -15,10 +15,9 @@ import {
   Heading,
   Image,
   SimpleGrid,
-  VStack,
 } from "@chakra-ui/react";
 import Map from "./Map";
-import useGameStore, { unlockArea } from "@/hooks/useGameStore";
+import useGameStore, { unlockArea, updatePokedex } from "@/hooks/useGameStore";
 import Pokedex from "./Pokedex";
 import Settings from "./Settings";
 import Badges from "./Badges";
@@ -47,6 +46,7 @@ const PickPokemon = ({ starter }) => {
       onClick={() => {
         unlockArea("Area 1");
         updateParty([{ ...starterDetails }]);
+        updatePokedex(pokes[starterIndex].id, true);
       }}
     >
       <span>{starter}</span>
@@ -77,7 +77,11 @@ export default function Game() {
       </Head>
 
       {/* Layout of the game using a grid. */}
-      <SimpleGrid templateColumns="2fr 4fr 3fr" gap={2} p={2}>
+      <SimpleGrid
+        templateColumns={{ sm: "1fr", md: "2fr 4fr 3fr" }}
+        gap={2}
+        p={2}
+      >
         {/* Left column: Pokedex, Badges, Settings */}
         <Box>
           <Center>
