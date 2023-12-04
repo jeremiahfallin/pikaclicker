@@ -1,5 +1,5 @@
 import useGameStore from "@/hooks/useGameStore";
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Box, Heading, Text, SimpleGrid } from "@chakra-ui/react";
 
 export default function Badges() {
   const badges = useGameStore((state) => state.player.badges);
@@ -7,11 +7,11 @@ export default function Badges() {
   return (
     <Box>
       <Heading size={"md"}>Badges</Heading>
-      <Box>
+      <SimpleGrid col={3}>
         {[...badges].map((badge) => (
           <Text key={badge}>{badge}</Text>
         ))}
-      </Box>
+      </SimpleGrid>
     </Box>
   );
 }
