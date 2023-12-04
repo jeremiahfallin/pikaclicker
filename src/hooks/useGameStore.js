@@ -457,6 +457,9 @@ const useGameStore = create(
               ...newPokemon,
             };
             newItems[itemIndex].quantity -= 1;
+            if (newItems[itemIndex].quantity <= 0) {
+              newItems.splice(itemIndex, 1);
+            }
             if (place === "party") {
               get().updateParty(newPlace);
             } else {

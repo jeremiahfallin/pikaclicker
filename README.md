@@ -2,10 +2,7 @@ A Pokemon Clicker game made at BGCUV.
 
 # TODO
 
-- Add way to save/export
 - Indicate that a player can't go somewhere
-- Add gyms
-- Add badges
 - Add Elite 4
 - Add Champion
 - Add different Aegislash forms
@@ -18,7 +15,6 @@ A Pokemon Clicker game made at BGCUV.
 - Add more details to party
 - Give pokemon appropriate IDs
 - Add fishing rod
-- Look into how items get used on Pokemon
 - Add different Unown forms
 - Add Toxtricity forms (How do we decide what form it evolves into?)
 - Different Gastrodon forms?
@@ -28,8 +24,7 @@ A Pokemon Clicker game made at BGCUV.
 - Add tutorial
 - Add way to get espeon/umbreon (day/night?)
 - Add mega?
-- Fix search bar
-- BUGFIX: Something about pokeballs
+- Add buying multiple items at once
 - BUGFIX: Can currently swap pokemon from bank when in gym
 
 # Stretch Goals
@@ -39,5 +34,4 @@ A Pokemon Clicker game made at BGCUV.
 # Questions
 
 - Should a new pokemon appear when the previous one hits 0 HP or on the next hit?
-- Should the combat bar be reset when a new pokemon appears? (Both go back to start)
-- What does our bank/pokedex look like with rows instead of tiles?
+- What does our pokedex look like with rows instead of tiles?
