@@ -4,8 +4,7 @@ import { auth } from "@/config";
 import useAuth from "@/hooks/useAuth";
 
 export default function Layout({ children }) {
-  const user = useAuth();
-  console.log(user);
+  const { user } = useAuth();
   const onClick = () => {
     if (user) {
       signOut(auth);
