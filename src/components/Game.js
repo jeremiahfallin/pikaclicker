@@ -7,6 +7,7 @@ import Scene from "./Scene";
 import Items from "./Items";
 
 import pokes from "../pokes";
+import areas from "../areas";
 import {
   Box,
   Center,
@@ -65,6 +66,18 @@ export default function Game() {
 
   // Retrieve the player's party from the game store.
   const party = useGameStore((state) => state.player.party);
+
+  const pokemonInAreas = areas.reduce((acc, area) => {
+    return acc.concat(area.pokemon);
+  }, []);
+
+  const pokemonInGame = pokes
+    .filter((poke) => !pokemonInAreas.includes(poke.id))
+    .filter((poke) => poke.evolvesTo !== null);
+
+  for (const poke of pokemonInGame) {
+    console.log(`${poke.name} ${poke.id}`);
+  }
 
   return (
     <>
