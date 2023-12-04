@@ -1,6 +1,7 @@
 import {
   Box,
   Center,
+  Flex,
   Heading,
   Image,
   Progress,
@@ -55,7 +56,7 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
   };
 
   return (
-    <Box maxH="50%">
+    <Box>
       <Heading size="md">Party</Heading>
 
       <SimpleGrid columns={2} spacing={1}>
@@ -78,9 +79,13 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
               borderRadius={"md"}
               onClick={() => setPokemon(uuid)}
             >
-              <Image alt={pokemon.name} src={pokemon.image} />
-              <Text>{pokemon.name}</Text>
-              <Text>Lvl. {pokemon.level}</Text>
+              <Center gap={2}>
+                <Image alt={pokemon.name} src={pokemon.image} />
+                <Flex direction={"column"} fontSize="sm">
+                  <Text>{pokemon.name}</Text>
+                  <Box>Lvl. {pokemon.level}</Box>
+                </Flex>
+              </Center>
               <Box w="100%">
                 <Progress
                   size={"xs"}
