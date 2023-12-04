@@ -13,6 +13,24 @@ const gyms = [
         price: 10000,
         type: "evolution-item",
       },
+      {
+        name: "Leaf Stone",
+        slug: "leaf-stone",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Metal Coat",
+        slug: "metal-coat",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Dragon Scale",
+        slug: "dragon-scale",
+        price: 10000,
+        type: "evolution-item",
+      },
     ],
   },
   {
@@ -38,6 +56,12 @@ const gyms = [
       {
         name: "Malicious Armor",
         slug: "malicious-armor",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Oval Stone",
+        slug: "oval-stone",
         price: 10000,
         type: "evolution-item",
       },
@@ -68,6 +92,12 @@ const gyms = [
         price: 10000,
         type: "evolution-item",
       },
+      {
+        name: "Prism Scale",
+        slug: "prism-scale",
+        price: 10000,
+        type: "evolution-item",
+      },
     ],
   },
   {
@@ -86,6 +116,12 @@ const gyms = [
       {
         name: "Protector",
         slug: "protector",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Black Augurite",
+        slug: "black-augurite",
         price: 10000,
         type: "evolution-item",
       },
@@ -206,6 +242,12 @@ const gyms = [
         price: 10000,
         type: "evolution-item",
       },
+      {
+        name: "Galarica Cuff",
+        slug: "galarica-cuff",
+        price: 10000,
+        type: "evolution-item",
+      },
     ],
   },
   {
@@ -225,6 +267,30 @@ const gyms = [
       {
         name: "Dawn Stone",
         slug: "dawn-stone",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "King's Rock",
+        slug: "kings-rock",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Galarica Wreath",
+        slug: "galarica-wreath",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Tart Apple",
+        slug: "tart-apple",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Sweet Apple",
+        slug: "sweet-apple",
         price: 10000,
         type: "evolution-item",
       },
