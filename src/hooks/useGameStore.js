@@ -441,7 +441,10 @@ const useGameStore = create(
         const newPlace = [...get().player[place]];
         const newItems = [...get().player.items];
         const itemIndex = newItems.findIndex((i) => i.name === item.name);
-        if (item.type === "evolution-item") {
+        if (
+          item.type === "evolution-item" &&
+          newItems[itemIndex].quantity > 0
+        ) {
           const basePokemon = pokes.find((p) => p.id === pokemon.id);
           const evolutionName = checkEvolve(basePokemon, null, null, item.slug);
           if (!!evolutionName) {
