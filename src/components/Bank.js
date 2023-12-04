@@ -11,6 +11,7 @@ import {
   Stack,
   Flex,
   Divider,
+  Heading,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -92,7 +93,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
 
   return (
     <Box>
-      <div>Bank</div>
+      <Heading size="md">Bank</Heading>
       <RadioGroup value={sortBy} onChange={setSortBy}>
         <Stack direction="row" gap={8} align="center">
           <Radio value={"id"}>ID</Radio>

@@ -1,6 +1,7 @@
 import {
   Box,
   Center,
+  Heading,
   Image,
   Progress,
   SimpleGrid,
@@ -55,7 +56,7 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
 
   return (
     <div>
-      <div>Party</div>
+      <Heading size="md">Party</Heading>
 
       <SimpleGrid columns={2} spacing={1}>
         {party.map((pokemon) => {
