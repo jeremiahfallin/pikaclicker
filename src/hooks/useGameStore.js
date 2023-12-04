@@ -399,7 +399,6 @@ const useGameStore = create(
             if (!!evolutionName) {
               const evolution = pokes.find((p) => p.name === evolutionName);
               basePokemon = evolution;
-              console.log(evolution);
               updatePokedex(evolution.id, true);
               const newPokemon = createPokemon(
                 evolution.id,

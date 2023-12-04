@@ -81,6 +81,7 @@ export default function Game() {
         templateColumns={{ sm: "1fr", md: "2fr 4fr 3fr" }}
         gap={2}
         p={2}
+        pt={0}
       >
         {/* Left column: Pokedex, Badges, Settings */}
         <Box>
