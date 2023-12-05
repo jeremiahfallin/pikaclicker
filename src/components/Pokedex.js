@@ -47,7 +47,7 @@ export default function Pokedex() {
       <Heading as="h3" size="md">
         <Box as="span">Pokedex</Box>{" "}
         <Box as="span">
-          ({pokedex.length}/{pokes.length})
+          ({caught.size}/{pokes.length})
         </Box>
       </Heading>
 
