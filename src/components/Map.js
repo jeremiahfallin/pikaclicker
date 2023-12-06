@@ -32,9 +32,8 @@ const HexagonContainer = ({ q, r, s, hexId, fill, isSelected }) => {
   const unlockedAreas = useGameStore((state) => state.player.unlockedAreas);
   const onClick = useCallback(() => {
     let hexArea =
-      areas.find((area) =>
-        area.hexes.some((h) => h.q === hex.q && h.r === hex.r)
-      )?.name || "";
+      areas.find((area) => area.hexes.some((h) => h.q === q && h.r === r))
+        ?.name || "";
     if (!unlockedAreas.has(hexArea)) {
       toast({
         title: "Area locked.",
