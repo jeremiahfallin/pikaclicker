@@ -13,6 +13,7 @@ import {
   Text,
   RadioGroup,
   Radio,
+  Center,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import { shops } from "@/constants";
@@ -31,7 +32,6 @@ export default function Shop({ isOpen, onClose }) {
   );
   const currentHex = useGameStore((state) => state.player.currentHex);
   const currentTown = getHexDetails(currentHex.q, currentHex.r);
-  console.log(currentTown);
   const shopItems = shops.find((shop) => shop.town === currentTown.name).items;
 
   return (
@@ -106,11 +106,13 @@ export default function Shop({ isOpen, onClose }) {
 
         <ModalFooter gap={10}>
           <RadioGroup value={purchaseAmount} onChange={setPurchaseAmount}>
-            <Box>Amount:</Box>
-            <Radio value={"1"}>1</Radio>
-            <Radio value={"10"}>10</Radio>
-            <Radio value={"50"}>50</Radio>
-            <Radio value={"100"}>100</Radio>
+            <Center gap={2}>
+              <Box>Amount:</Box>
+              <Radio value={"1"}>1</Radio>
+              <Radio value={"10"}>10</Radio>
+              <Radio value={"50"}>50</Radio>
+              <Radio value={"100"}>100</Radio>
+            </Center>
           </RadioGroup>
           <Box>Coins: {coins}</Box>
         </ModalFooter>
