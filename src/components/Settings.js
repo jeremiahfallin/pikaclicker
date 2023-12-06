@@ -3,6 +3,9 @@ import useGameStore from "@/hooks/useGameStore";
 import {
   Box,
   Button,
+  Editable,
+  EditableInput,
+  EditablePreview,
   Flex,
   Heading,
   Select,
@@ -10,22 +13,27 @@ import {
   Text,
   useClipboard,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import superjson from "superjson";
 
 // TODO: Right now only the ball is implemented, everything else is just visual
 export default function Settings() {
+  const [load, setLoad] = useState("");
   const { onCopy, setValue, hasCopied } = useClipboard("");
   const settings = useGameStore((state) => state.settings);
   const items = useGameStore((state) => state.player.items);
   const data = useGameStore();
   const { saveData, loadData } = useAuth();
 
+  const loadGameFromText = () => {
+    useGameStore.setState(load);
+  };
+
   return (
     <Box>
       <Heading as="h3" size="md">
         Settings
       </Heading>
-
       <Flex direction="row" justify="space-between">
         <Text>Repeat Pokemon</Text>
         <Switch
@@ -37,7 +45,6 @@ export default function Settings() {
           isChecked={settings.repeatPokemon}
         />
       </Flex>
-
       <Flex direction="row" justify="space-between">
         <Text>New Pokemon</Text>
         <Switch
@@ -49,7 +56,6 @@ export default function Settings() {
           isChecked={settings.newPokemon}
         />
       </Flex>
-
       <Flex direction="row" justify="space-between">
         <Text>Shiny Pokemon</Text>
         <Switch
@@ -98,6 +104,9 @@ export default function Settings() {
         >
           {hasCopied ? "Copied!" : "Copy"}
         </Button>
+        <Button size="xs" onClick={loadGameFromText}>
+          Load from Text
+        </Button>
         <Button size="xs" onClick={saveData}>
           Save
         </Button>
@@ -105,6 +114,23 @@ export default function Settings() {
           Load
         </Button>
       </Flex>
+      <Editable
+        defaultValue={superjson.stringify(data)}
+        onChange={(value) => {
+          try {
+            const parsed = superjson.parse(value);
+            setLoad(parsed);
+          } catch (e) {
+            console.error(e);
+          }
+        }}
+        w="300px"
+        h="100px"
+        overflow="hidden"
+      >
+        <EditablePreview />
+        <EditableInput />
+      </Editable>
     </Box>
   );
 }
