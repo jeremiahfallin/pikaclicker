@@ -22,9 +22,7 @@ A Pokemon Clicker game made at BGCUV.
 - Name everything (Towns, region, gym leaders, etc.)
 - Slow down progression
 - Add tutorial
-- Add way to get espeon/umbreon (day/night?)
 - Add mega?
-- Add buying multiple items at once
 - BUGFIX: Can currently swap pokemon from bank when in gym
 
 # Stretch Goals

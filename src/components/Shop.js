@@ -11,12 +11,16 @@ import {
   Box,
   Heading,
   Text,
+  RadioGroup,
+  Radio,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import { shops } from "@/constants";
 import { getHexDetails } from "@/utils";
+import { useState } from "react";
 
 export default function Shop({ isOpen, onClose }) {
+  const [purchaseAmount, setPurchaseAmount] = useState(1);
   const coins = useGameStore((state) => state.player.coins);
   const playerItems = useGameStore((state) => state.player.items);
   const updateItems = useGameStore((state) => state.updateItems);
@@ -73,19 +77,20 @@ export default function Shop({ isOpen, onClose }) {
                   <Button
                     size="sm"
                     onClick={() => {
-                      if (coins >= item.price) {
-                        updateCoins(coins - item.price);
+                      const amount = parseInt(purchaseAmount);
+                      if (coins >= item.price * amount) {
+                        updateCoins(coins - item.price * amount);
                         const itemIndex = playerItems.findIndex(
                           (i) => i.name === item.name
                         );
                         if (itemIndex !== -1) {
                           const newItems = [...playerItems];
-                          newItems[itemIndex].quantity += 1;
+                          newItems[itemIndex].quantity += amount;
                           updateItems(newItems);
                         } else {
                           updateItems([
                             ...playerItems,
-                            { ...item, quantity: 1 },
+                            { ...item, quantity: amount },
                           ]);
                         }
                       }
@@ -98,7 +103,17 @@ export default function Shop({ isOpen, onClose }) {
             })}
           </Flex>
         </ModalBody>
-        <ModalFooter>Coins: {coins}</ModalFooter>
+
+        <ModalFooter gap={10}>
+          <RadioGroup value={purchaseAmount} onChange={setPurchaseAmount}>
+            <Box>Amount:</Box>
+            <Radio value={"1"}>1</Radio>
+            <Radio value={"10"}>10</Radio>
+            <Radio value={"50"}>50</Radio>
+            <Radio value={"100"}>100</Radio>
+          </RadioGroup>
+          <Box>Coins: {coins}</Box>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
