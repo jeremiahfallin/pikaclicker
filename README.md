@@ -2,7 +2,6 @@ A Pokemon Clicker game made at BGCUV.
 
 # TODO
 
-- Indicate that a player can't go somewhere
 - Add Elite 4
 - Add Champion
 - Add different Aegislash forms
@@ -19,24 +18,13 @@ A Pokemon Clicker game made at BGCUV.
 - Add Toxtricity forms (How do we decide what form it evolves into?)
 - Different Gastrodon forms?
 - Name everything (Towns, region, gym leaders, etc.)
-- Slow down progression
 - Add tutorial
 - Add mega?
 - BUGFIX: Can currently swap pokemon from bank when in gym
-- Add Ogerpon
 - Add Raging Bolt
-- Add Walking Wake
 - Add Terapagos
-- Add Dipplin
-- Add Fezandipiti
 - Add Poltchageist/Sinistcha
-- Koraidon
-- Miraidon
-- Chien-Pao
-- Chi-Yu
 - Maybe Ting-Lu/Wo-Chien
-- Add Iron Moth
-- Add Iron Hands
 
 # Stretch Goals
 
