@@ -23,6 +23,20 @@ A Pokemon Clicker game made at BGCUV.
 - Add tutorial
 - Add mega?
 - BUGFIX: Can currently swap pokemon from bank when in gym
+- Add Ogerpon
+- Add Raging Bolt
+- Add Walking Wake
+- Add Terapagos
+- Add Dipplin
+- Add Fezandipiti
+- Add Poltchageist/Sinistcha
+- Koraidon
+- Miraidon
+- Chien-Pao
+- Chi-Yu
+- Maybe Ting-Lu/Wo-Chien
+- Add Iron Moth
+- Add Iron Hands
 
 # Stretch Goals
 
