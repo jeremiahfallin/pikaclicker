@@ -20,7 +20,7 @@ import { getHexDetails } from "@/utils";
 import { useState } from "react";
 
 export default function Shop({ isOpen, onClose }) {
-  const [purchaseAmount, setPurchaseAmount] = useState(1);
+  const [purchaseAmount, setPurchaseAmount] = useState("1");
   const coins = useGameStore((state) => state.player.coins);
   const playerItems = useGameStore((state) => state.player.items);
   const updateItems = useGameStore((state) => state.updateItems);

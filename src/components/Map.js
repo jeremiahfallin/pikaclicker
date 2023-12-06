@@ -1,10 +1,12 @@
-import { memo, useCallback, useMemo, useEffect } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { HexGrid, Layout, Hexagon, Pattern } from "react-hexgrid";
+import { useToast } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import { useShallow } from "zustand/react/shallow";
 
 import axial from "../map_axial";
 import hex from "../hex";
+import areas from "../areas";
 
 const hexIds = new Set();
 axial.forEach((hex) => {
@@ -25,8 +27,23 @@ hex.tiles.forEach((tile) => {
 const HexagonMemo = memo(Hexagon);
 
 const HexagonContainer = ({ q, r, s, hexId, fill, isSelected }) => {
+  const toast = useToast();
   const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
+  const unlockedAreas = useGameStore((state) => state.player.unlockedAreas);
   const onClick = useCallback(() => {
+    let hexArea =
+      areas.find((area) =>
+        area.hexes.some((h) => h.q === hex.q && h.r === hex.r)
+      )?.name || "";
+    if (!unlockedAreas.has(hexArea)) {
+      toast({
+        title: "Area locked.",
+        description: "You have not unlocked this area yet.",
+        status: "error",
+        duration: 1000,
+        isClosable: true,
+      });
+    }
     updateCurrentHex({ q, r });
     console.log({ q, r, s });
   }, [q, r, s, updateCurrentHex]);

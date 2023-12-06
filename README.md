@@ -18,7 +18,6 @@ A Pokemon Clicker game made at BGCUV.
 - Add different Unown forms
 - Add Toxtricity forms (How do we decide what form it evolves into?)
 - Different Gastrodon forms?
-- Different Lycanroc forms?
 - Name everything (Towns, region, gym leaders, etc.)
 - Slow down progression
 - Add tutorial
