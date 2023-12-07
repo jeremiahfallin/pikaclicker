@@ -136,7 +136,9 @@ export default function Game() {
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
           />
-          <Items selectedPokemon={selectedPokemon} />
+          <Box w="100%">
+            <Items selectedPokemon={selectedPokemon} />
+          </Box>
           <Bank
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
