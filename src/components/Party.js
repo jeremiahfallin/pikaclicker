@@ -56,7 +56,7 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
   };
 
   return (
-    <Box>
+    <Box w="100%">
       <Heading size="md">Party</Heading>
 
       <SimpleGrid columns={2} spacing={1}>
