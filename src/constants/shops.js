@@ -294,6 +294,12 @@ const gyms = [
         price: 10000,
         type: "evolution-item",
       },
+      {
+        name: "Syrupy Apple",
+        slug: "syrupy-apple",
+        price: 10000,
+        type: "evolution-item",
+      },
     ],
   },
 ];
