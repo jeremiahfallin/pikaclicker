@@ -21,10 +21,20 @@ A Pokemon Clicker game made at BGCUV.
 - Add tutorial
 - Add mega?
 - BUGFIX: Can currently swap pokemon from bank when in gym
+- Add Ogerpon - Area 12
 - Add Raging Bolt
+- Add Walking Wake - Area 14 - 9 Rarity - Legendary
 - Add Terapagos
+- Add Dipplin
+- Add Fezandipiti - Area 7
 - Add Poltchageist/Sinistcha
+- Koraidon - Area 10
+- Miraidon - Area 5
+- Chien-Pao - Area 8 - 9 Rarity
+- Chi-Yu - Area 15 - 9 Rarity
 - Maybe Ting-Lu/Wo-Chien
+- Add Iron Moth - Area 4 - 9 Rarity
+- Add Iron Hands - Area 5 - 9 Rarity
 
 # Stretch Goals
 

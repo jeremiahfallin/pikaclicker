@@ -92,32 +92,41 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
   };
 
   return (
-    <Box>
-      <Heading size="md">Bank</Heading>
-      <RadioGroup value={sortBy} onChange={setSortBy}>
-        <Stack direction="row" gap={8} align="center">
-          <Radio value={"id"}>ID</Radio>
-          <Radio value={"level"}>Level</Radio>
-          <Radio value={"name"}>Name</Radio>
-        </Stack>
-      </RadioGroup>
-      <Input value={searchTerm} onChange={handleSearch} size="xs" />
-      <Flex
-        spacing={1}
-        maxH="300px"
-        overflowY={"scroll"}
-        scrollBehavior={"smooth"}
-        ref={parentRef}
-        sx={{
-          "&::-webkit-scrollbar": { width: "9px" },
-          "&::-webkit-scrollbar-track": { background: "transparent" },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "gray.400",
-            borderRadius: "24px",
-            border: "2px solid transparent",
-          },
-        }}
+    <Box
+      w="100%"
+      flexGrow={1}
+      overflowY={"scroll"}
+      scrollBehavior={"smooth"}
+      ref={parentRef}
+      sx={{
+        "&::-webkit-scrollbar": { width: "9px" },
+        "&::-webkit-scrollbar-track": { background: "transparent" },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "gray.400",
+          borderRadius: "24px",
+          border: "2px solid transparent",
+        },
+      }}
+    >
+      <Box
+        position={"sticky"}
+        top={0}
+        zIndex={1}
+        backgroundColor={"white"}
+        p={1}
+        borderTopRadius={"md"}
       >
+        <Heading size="md">Bank</Heading>
+        <RadioGroup value={sortBy} onChange={setSortBy}>
+          <Stack direction="row" gap={8} align="center">
+            <Radio value={"id"}>ID</Radio>
+            <Radio value={"level"}>Level</Radio>
+            <Radio value={"name"}>Name</Radio>
+          </Stack>
+        </RadioGroup>
+        <Input value={searchTerm} onChange={handleSearch} size="xs" />
+      </Box>
+      <Flex direction="column">
         <Box
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,

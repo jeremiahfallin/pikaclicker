@@ -15,6 +15,7 @@ import {
   Heading,
   Image,
   SimpleGrid,
+  VStack,
 } from "@chakra-ui/react";
 import Map from "./Map";
 import useGameStore, { unlockArea, updatePokedex } from "@/hooks/useGameStore";
@@ -130,34 +131,19 @@ export default function Game() {
         </Grid>
 
         {/* Right column: Party, Items, Bank */}
-        <Grid
-          gridTemplateRows="auto auto 1fr"
-          maxW="100%"
-          w="100%"
-          minW="0"
-          maxH="100vh"
-          overflowY="auto"
-          scrollBehavior={"smooth"}
-          sx={{
-            "&::-webkit-scrollbar": { width: "9px" },
-            "&::-webkit-scrollbar-track": { background: "transparent" },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "gray.700",
-              borderRadius: "24px",
-              border: "2px solid transparent",
-            },
-          }}
-        >
+        <VStack maxH="100vh" w="100%" height="calc(100vh - 26px)">
           <Party
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
           />
-          <Items selectedPokemon={selectedPokemon} />
+          <Box w="100%">
+            <Items selectedPokemon={selectedPokemon} />
+          </Box>
           <Bank
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
           />
-        </Grid>
+        </VStack>
       </SimpleGrid>
     </>
   );
