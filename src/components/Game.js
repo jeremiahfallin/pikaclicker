@@ -131,7 +131,7 @@ export default function Game() {
         </Grid>
 
         {/* Right column: Party, Items, Bank */}
-        <VStack maxH="100vh" w="100%" height="calc(100vh - 26px)">
+        <VStack maxH="100vh" height="calc(100vh - 26px)">
           <Party
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}

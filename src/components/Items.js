@@ -19,7 +19,7 @@ export default function Items({ selectedPokemon }) {
   };
 
   return (
-    <Box overflowX="hidden" maxW="100%" w="100%">
+    <Box overflowX="hidden">
       <Heading as="h3" size="md">
         Items
       </Heading>
