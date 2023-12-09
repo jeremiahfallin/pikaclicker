@@ -23,7 +23,7 @@ export default function Settings() {
   const settings = useGameStore((state) => state.settings);
   const items = useGameStore((state) => state.player.items);
   const data = useGameStore();
-  const { saveData, loadData } = useAuth();
+  const { user, saveData, loadData } = useAuth();
 
   const loadGameFromText = () => {
     useGameStore.setState(load);
@@ -107,12 +107,16 @@ export default function Settings() {
         <Button size="xs" onClick={loadGameFromText}>
           Load from Text
         </Button>
-        <Button size="xs" onClick={saveData}>
-          Save
-        </Button>
-        <Button size="xs" onClick={loadData}>
-          Load
-        </Button>
+        {user && (
+          <>
+            <Button size="xs" onClick={saveData}>
+              Save
+            </Button>
+            <Button size="xs" onClick={loadData}>
+              Load
+            </Button>
+          </>
+        )}
       </Flex>
       <Editable
         defaultValue={superjson.stringify(data)}
