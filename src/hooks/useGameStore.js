@@ -11,7 +11,7 @@ import {
   getWildPokemon,
   random,
   homeHex,
-  legendaryIds,
+  legendaryNames,
   fastGrowth,
   slowGrowth,
   erraticGrowth,
@@ -92,6 +92,7 @@ const useGameStore = create(
         newPokemon: true,
         repeatPokemon: true,
         shinyPokemon: true,
+        legendaryPokemon: true,
         minimumIVPercent: 0,
       },
       attemptCatch: (pokemon) => {
@@ -115,14 +116,19 @@ const useGameStore = create(
           pokemon.level
         );
         const randomNum = random(0, 100);
-        const { newPokemon, repeatPokemon, shinyPokemon } = settings;
+        const { newPokemon, repeatPokemon, shinyPokemon, legendaryPokemon } =
+          settings;
         const isCaught = pokedex.caught.has(pokemon.id);
         const isShiny = pokemon.isShiny;
+        const isLegendary = [...legendaryNames, "cosmog"].includes(
+          pokemon.name
+        );
 
         if (
           (isShiny && shinyPokemon) ||
           (isCaught && repeatPokemon) ||
-          (newPokemon && !isCaught)
+          (newPokemon && !isCaught) ||
+          (isLegendary && legendaryPokemon)
         ) {
           if (randomNum <= chance) {
             if (party.length < 6) {
@@ -203,6 +209,29 @@ const useGameStore = create(
         }
 
         if (hex.isTown) {
+          const { party } = get().player;
+          const mimikyuBusted = party.filter(
+            (poke) => poke.name === "mimikyu-busted"
+          );
+          if (mimikyuBusted.length > 0) {
+            const newParty = party.map((poke) => {
+              if (poke.name === "mimikyu-busted") {
+                return {
+                  ...poke,
+                  ...createPokemon(
+                    "mimikyu-disguised",
+                    poke.level,
+                    poke.uuid,
+                    poke.isShiny,
+                    poke.pokemonKnockedOut,
+                    poke.bisharpKnockedOut
+                  ),
+                };
+              }
+              return poke;
+            });
+            get().updateParty(newParty);
+          }
           set((state) => ({
             ...state,
             battle: {
@@ -224,7 +253,7 @@ const useGameStore = create(
           let newPokemon = getWildPokemon(hex);
           // if legendary and already caught, reroll
           while (
-            legendaryIds.includes(newPokemon.id) &&
+            legendaryNames.includes(newPokemon.name) &&
             caught.has(newPokemon.id)
           ) {
             newPokemon = getWildPokemon(hex);
@@ -326,7 +355,8 @@ const useGameStore = create(
         const isInTown = get().player.isInTown;
         const party = get().player.party;
         const bank = get().player.bank;
-        if (isInTown) {
+        const battleLength = get().battle.pokemon?.length || 0;
+        if (isInTown && battleLength === 0) {
           if (place1 === "party" && place2 === "party") {
             const idx1 = party.findIndex((poke) => poke.uuid === uuid1);
             const idx2 = party.findIndex((poke) => poke.uuid === uuid2);
@@ -348,7 +378,17 @@ const useGameStore = create(
             const idx2 = bank.findIndex((poke) => poke.uuid === uuid2);
             const newParty = [...party];
             const newBank = [...bank];
-            const temp = newParty[idx1];
+            let temp = newParty[idx1];
+            if (temp.name === "shaymin-sky") {
+              temp = createPokemon(
+                "shaymin-land",
+                temp.level,
+                temp.uuid,
+                temp.isShiny,
+                temp.pokemonKnockedOut,
+                temp.bisharpKnockedOut
+              );
+            }
             newParty[idx1] = newBank[idx2];
             newBank[idx2] = temp;
             get().updateParty(newParty);
@@ -358,7 +398,17 @@ const useGameStore = create(
             const idx2 = party.findIndex((poke) => poke.uuid === uuid2);
             const newParty = [...party];
             const newBank = [...bank];
-            const temp = newBank[idx1];
+            let temp = newBank[idx1];
+            if (temp.name === "shaymin-sky") {
+              temp = createPokemon(
+                "shaymin-land",
+                temp.level,
+                temp.uuid,
+                temp.isShiny,
+                temp.pokemonKnockedOut,
+                temp.bisharpKnockedOut
+              );
+            }
             newBank[idx1] = newParty[idx2];
             newParty[idx2] = temp;
             get().updateParty(newParty);
@@ -390,26 +440,37 @@ const useGameStore = create(
           }
 
           if (newLevel > poke.level) {
-            const evolutionName = checkEvolve(poke, newLevel, null, null);
+            const evolutionName = checkEvolve(poke, newLevel);
 
             if (!!evolutionName) {
               const evolution = pokes.find((p) => p.name === evolutionName);
               updatePokedex(evolution.id, true);
               const newPokemon = createPokemon(
-                evolution.id,
+                evolution.name,
                 newLevel,
                 poke.uuid,
-                poke.isShiny
+                poke.isShiny,
+                poke.pokemonKnockedOut,
+                poke.bisharpKnockedOut
               );
               return {
                 ...poke,
                 ...newPokemon,
+                level: newLevel,
+                xp: newExperience,
               };
             }
 
             return {
               ...poke,
-              ...createPokemon(poke.id, newLevel, poke.uuid, poke.isShiny),
+              ...createPokemon(
+                poke.name,
+                newLevel,
+                poke.uuid,
+                poke.isShiny,
+                poke.pokemonKnockedOut,
+                poke.bisharpKnockedOut
+              ),
               level: newLevel,
               xp: newExperience,
             };
@@ -432,32 +493,64 @@ const useGameStore = create(
         });
         get().updateParty(newParty);
       },
+      updateKnockedOut: (pokemon) => {
+        const party = get().player.party;
+        const leadPokemon = party[0];
+        if (pokemon === "bisharp") {
+          const newParty = [
+            {
+              ...leadPokemon,
+              pokemonKnockedOut: leadPokemon.pokemonKnockedOut + 1 || 1,
+              bisharpKnockedOut: leadPokemon.bisharpKnockedOut + 1 || 1,
+            },
+            ...party.slice(1),
+          ];
+          get().updateParty(newParty);
+        } else {
+          const newParty = [
+            {
+              ...leadPokemon,
+              pokemonKnockedOut: leadPokemon.pokemonKnockedOut + 1 || 1,
+            },
+            ...party.slice(1),
+          ];
+          get().updateParty(newParty);
+        }
+      },
       applyItemOnPokemon: (item, uuid, place) => {
         const idx = get().player[place].findIndex((poke) => poke.uuid === uuid);
-
         const pokemon = get().player[place][idx];
         const newPlace = [...get().player[place]];
         const newItems = [...get().player.items];
         const itemIndex = newItems.findIndex((i) => i.name === item.name);
         if (
           item.type === "evolution-item" &&
-          newItems[itemIndex].quantity > 0
+          newItems[itemIndex].quantity >= 0
         ) {
           const basePokemon = pokes.find((p) => p.id === pokemon.id);
           const evolutionName = checkEvolve(basePokemon, null, null, item.slug);
+          let itemsNeeded = 1;
+          if (evolutionName === "gholdengo") {
+            itemsNeeded = 999;
+          }
+          if (newItems[itemIndex].quantity < itemsNeeded) {
+            return;
+          }
           if (!!evolutionName) {
             const evolution = pokes.find((p) => p.name === evolutionName);
             const newPokemon = createPokemon(
-              evolution.id,
+              evolution.name,
               pokemon.level,
               pokemon.uuid,
-              pokemon.isShiny
+              pokemon.isShiny,
+              pokemon.pokemonKnockedOut,
+              pokemon.bisharpKnockedOut
             );
             newPlace[idx] = {
               ...pokemon,
               ...newPokemon,
             };
-            newItems[itemIndex].quantity -= 1;
+            newItems[itemIndex].quantity -= itemsNeeded;
             if (newItems[itemIndex].quantity <= 0) {
               newItems.splice(itemIndex, 1);
             }
@@ -499,6 +592,24 @@ const useGameStore = create(
           );
           get().updateExperience(enemyPokemon);
           get().updateHappiness();
+          get().updateKnockedOut(enemyPokemon.name);
+          if (enemyPokemon.name === "gimmighoul") {
+            const newItems = [...player.items];
+            const itemIndex = newItems.findIndex(
+              (i) => i.slug === "gimmighoul-coins"
+            );
+            if (itemIndex === -1) {
+              newItems.push({
+                name: "Gimmighoul Coins",
+                slug: "gimmighoul-coins",
+                quantity: 1,
+                type: "evolution-item",
+              });
+            } else {
+              newItems[itemIndex].quantity += 1;
+            }
+            get().updateItems(newItems);
+          }
 
           if (battle.isTrainer) {
             const battlePokemon = get().battle.pokemon;
@@ -592,6 +703,24 @@ const useGameStore = create(
           );
           get().updateExperience(pokemon);
           get().updateHappiness();
+          get().updateKnockedOut(pokemon.name);
+          if (pokemon.name === "gimmighoul") {
+            const newItems = [...player.items];
+            const itemIndex = newItems.findIndex(
+              (i) => i.slug === "gimmighoul-coins"
+            );
+            if (itemIndex === -1) {
+              newItems.push({
+                name: "Gimmighoul Coins",
+                slug: "gimmighoul-coins",
+                quantity: 1,
+                type: "evolution-item",
+              });
+            } else {
+              newItems[itemIndex].quantity += 1;
+            }
+            get().updateItems(newItems);
+          }
 
           if (battle.isTrainer) {
             const battlePokemon = get().battle.pokemon;
@@ -624,29 +753,113 @@ const useGameStore = create(
             return;
           }
         }
-        const playerPokemon = party[0];
+        let playerPokemon = party[0];
 
         const enemyPokemon = pokemon;
-        const dmgTaken = calcDamage(
-          enemyPokemon.level,
-          Math.max(enemyPokemon.attack, enemyPokemon.spAttack),
-          20,
-          enemyPokemon.attack > enemyPokemon.spAttack
-            ? playerPokemon.defense
-            : playerPokemon.spDefense,
-          1,
-          1
-        );
-        const dmgDealt = calcDamage(
-          playerPokemon.level,
-          Math.max(playerPokemon.attack, playerPokemon.spAttack),
-          20,
-          playerPokemon.attack > playerPokemon.spAttack
-            ? enemyPokemon.defense
-            : enemyPokemon.spDefense,
-          1,
-          1
-        );
+        const criticalAttack = random(0, 25) === 0 ? 1.5 : 1;
+        const criticalDefense = random(0, 25) === 0 ? 1.5 : 1;
+        const dmgTaken =
+          calcDamage(
+            enemyPokemon.level,
+            Math.max(enemyPokemon.attack, enemyPokemon.spAttack),
+            20,
+            enemyPokemon.attack > enemyPokemon.spAttack
+              ? playerPokemon.defense
+              : playerPokemon.spDefense,
+            1,
+            1
+          ) / criticalDefense;
+        const dmgDealt =
+          calcDamage(
+            playerPokemon.level,
+            Math.max(playerPokemon.attack, playerPokemon.spAttack),
+            20,
+            playerPokemon.attack > playerPokemon.spAttack
+              ? enemyPokemon.defense
+              : enemyPokemon.spDefense,
+            1,
+            1
+          ) * criticalAttack;
+        if (
+          playerPokemon.name === "aegislash-blade" &&
+          initiative === undefined &&
+          criticalDefense === 1.5
+        ) {
+          const party = get().player.party;
+          const idx = party.findIndex(
+            (poke) => poke.uuid === playerPokemon.uuid
+          );
+          const newParty = [...party];
+          const newPokemon = createPokemon(
+            "aegislash-shield",
+            playerPokemon.level,
+            playerPokemon.uuid,
+            playerPokemon.isShiny,
+            playerPokemon.pokemonKnockedOut,
+            playerPokemon.bisharpKnockedOut
+          );
+          newParty[idx] = {
+            ...playerPokemon,
+            ...newPokemon,
+            currentHP: playerPokemon.currentHP,
+          };
+          get().updateParty(newParty);
+          updatePokedex(newPokemon.id, true);
+          playerPokemon = newPokemon;
+        } else if (
+          playerPokemon.name === "aegislash-shield" &&
+          initiative === "player" &&
+          criticalAttack === 1.5
+        ) {
+          const party = get().player.party;
+          const idx = party.findIndex(
+            (poke) => poke.uuid === playerPokemon.uuid
+          );
+          const newParty = [...party];
+          const newPokemon = createPokemon(
+            "aegislash-blade",
+            playerPokemon.level,
+            playerPokemon.uuid,
+            playerPokemon.isShiny,
+            playerPokemon.pokemonKnockedOut,
+            playerPokemon.bisharpKnockedOut
+          );
+          newParty[idx] = {
+            ...playerPokemon,
+            ...newPokemon,
+            currentHP: playerPokemon.currentHP,
+          };
+          get().updateParty(newParty);
+          updatePokedex(newPokemon.id, true);
+          playerPokemon = newPokemon;
+        }
+        if (
+          initiative === undefined &&
+          dmgTaken > 0 &&
+          playerPokemon.name === "mimikyu-disguised"
+        ) {
+          const party = get().player.party;
+          const idx = party.findIndex(
+            (poke) => poke.uuid === playerPokemon.uuid
+          );
+          const newParty = [...party];
+          const newPokemon = createPokemon(
+            "mimikyu-busted",
+            playerPokemon.level,
+            playerPokemon.uuid,
+            playerPokemon.isShiny,
+            playerPokemon.pokemonKnockedOut,
+            playerPokemon.bisharpKnockedOut
+          );
+          newParty[idx] = {
+            ...playerPokemon,
+            ...newPokemon,
+            currentHP: playerPokemon.currentHP,
+          };
+          get().updateParty(newParty);
+          updatePokedex(newPokemon.id, true);
+          playerPokemon = newPokemon;
+        }
         const newPlayerHP = Math.max(playerPokemon.currentHP - dmgTaken, 0);
         if (isPlayerTurn) {
           get().updateBattle({
@@ -751,6 +964,7 @@ function updateBadges(badge) {
   if (badge === "Fossil") {
     unlockArea("Area 14");
     unlockArea("Area 15");
+    unlockArea("Elite 4");
   }
 
   useGameStore.setState((state) => ({

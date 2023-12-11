@@ -148,7 +148,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                 height={`${item.size}px`}
                 transform={`translateY(${item.start}px)`}
               >
-                <Center flexDir="row" w="100%">
+                <Center flexDir="row" w="100%" justifyContent={"space-between"}>
                   <Center
                     onClick={() => setPokemon(uuid)}
                     background={
@@ -163,6 +163,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                   </Center>
                   <Button
                     colorScheme={uuid === release ? "red" : "gray"}
+                    size="xs"
                     onClick={() => {
                       setSelectedPokemon({
                         uuid: null,

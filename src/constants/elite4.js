@@ -1,60 +1,62 @@
 import { createPokemon } from "@/utils";
 
-const elite4 = [
-  {
-    name: "",
-    type: "water",
-    leader: "",
-    town: "",
-    pokemon: [
-      createPokemon(186, 100), // Politoed
-      createPokemon(199, 100), // Slowking
-      createPokemon(134, 100), // Vaporeon
-      createPokemon(230, 100), // Kingdra
-      createPokemon(272, 100), // Ludicolo
-      createPokemon(350, 100), // Milotic
-    ],
-  },
-  {
-    name: "",
-    type: "fairy",
-    leader: "",
-    town: "",
-    pokemon: [
-      createPokemon(184, 100), // Azumarill
-      createPokemon(282, 100), // Gardevoir
-      createPokemon(700, 100), // Sylveon
-      createPokemon(959, 100), // Tinkaton
-      createPokemon(861, 100), // Grimmsnarl
-      createPokemon(730, 100), // Primarina
-    ],
-  },
-  {
-    name: "",
-    type: "psychic",
-    leader: "",
-    town: "",
-    pokemon: [
-      createPokemon(196, 100), // Espeon
-      createPokemon(475, 100), // Gallade
-      createPokemon(10172, 100), // Slowking-Galar
-      createPokemon(956, 100), // Espathra
-      createPokemon(65, 100), // Alakazam
-      createPokemon(468, 100), // Togekiss
-    ],
-  },
-  {
-    name: "",
-    type: "steel",
-    leader: "",
-    town: "",
-    pokemon: [
-      createPokemon(983, 100), // Kingambit
-      createPokemon(1000, 100), // Gholdengo
-      createPokemon(376, 100), // Metagross
-      createPokemon(823, 100), // Corviknight
-      createPokemon(303, 100), // Mawile
-      createPokemon(706, 100), // Goodra
-    ],
-  },
-];
+const elite4 = {
+  town: "Elite 4",
+  badge: "Elite4",
+  leaders: [
+    {
+      name: "",
+      type: "water",
+      leader: "",
+      pokemon: [
+        createPokemon("politoed", 100), // Politoed
+        createPokemon("slowking", 100), // Slowking
+        createPokemon("vaporeon", 100), // Vaporeon
+        createPokemon("kingdra", 100), // Kingdra
+        createPokemon("ludicolo", 100), // Ludicolo
+        createPokemon("milotic", 100), // Milotic
+      ],
+    },
+    {
+      name: "",
+      type: "fairy",
+      leader: "",
+      pokemon: [
+        createPokemon("azumarill", 100), // Azumarill
+        createPokemon("gardevoir", 100), // Gardevoir
+        createPokemon("sylveon", 100), // Sylveon
+        createPokemon("tinkaton", 100), // Tinkaton
+        createPokemon("grimmsnarl", 100), // Grimmsnarl
+        createPokemon("primarina", 100), // Primarina
+      ],
+    },
+    {
+      name: "",
+      type: "psychic",
+      leader: "",
+      pokemon: [
+        createPokemon("espeon", 100), // Espeon
+        createPokemon("gallade", 100), // Gallade
+        createPokemon("slowking-galar", 100), // Slowking-Galar
+        createPokemon("espathra", 100), // Espathra
+        createPokemon("alakazam", 100), // Alakazam
+        createPokemon("togekiss", 100), // Togekiss
+      ],
+    },
+    {
+      name: "",
+      type: "steel",
+      leader: "",
+      pokemon: [
+        createPokemon("kingambit", 100), // Kingambit
+        createPokemon("gholdengo", 100), // Gholdengo
+        createPokemon("metagross", 100), // Metagross
+        createPokemon("corviknight", 100), // Corviknight
+        createPokemon("mawile", 100), // Mawile
+        createPokemon("goodra-hisui", 100), // Goodra
+      ],
+    },
+  ],
+};
+
+export default elite4;

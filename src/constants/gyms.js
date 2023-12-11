@@ -8,12 +8,12 @@ const gyms = [
     leader: "Yara",
     town: "Home",
     pokemon: [
-      createPokemon(1, 12), // Bulbasaur
-      createPokemon(15, 12), // Beedrill
-      createPokemon(285, 16), // Shroomish
-      createPokemon(44, 18), // Gloom
-      createPokemon(470, 18), // Leafeon
-      createPokemon(10237, 18), // Liligant-Hisui
+      createPokemon("bulbasaur", 12), // Bulbasaur
+      createPokemon("beedrill", 12), // Beedrill
+      createPokemon("shroomish", 16), // Shroomish
+      createPokemon("gloom", 18), // Gloom
+      createPokemon("leafeon", 18), // Leafeon
+      createPokemon("lilligant-hisui", 18), // Lilligant-Hisui
     ],
   },
   {
@@ -23,12 +23,12 @@ const gyms = [
     leader: "Richter",
     town: "Volcano Town",
     pokemon: [
-      createPokemon(935, 20), // Charcadet
-      createPokemon(78, 20), // Rapidash
-      createPokemon(59, 24), // Arcanine
-      createPokemon(136, 24), // Flareon
-      createPokemon(851, 28), // Centiskorch
-      createPokemon(910, 28), // Crocalor
+      createPokemon("charcadet", 20), // Charcadet
+      createPokemon("rapidash", 20), // Rapidash
+      createPokemon("arcanine", 24), // Arcanine
+      createPokemon("flareon", 24), // Flareon
+      createPokemon("centiskorch", 28), // Centiskorch
+      createPokemon("crocalor", 28), // Crocalor
     ],
   },
   {
@@ -38,12 +38,12 @@ const gyms = [
     leader: "",
     town: "Swamp Town",
     pokemon: [
-      createPokemon(93, 32), // Haunter
-      createPokemon(980, 32), // Clodsire
-      createPokemon(609, 32), // Chandelure
-      createPokemon(24, 34), // Arbok
-      createPokemon(302, 36), // Sableye
-      createPokemon(10113, 36), // Muk-Alola
+      createPokemon("haunter", 32), // Haunter
+      createPokemon("clodsire", 32), // Clodsire
+      createPokemon("chandelure", 32), // Chandelure
+      createPokemon("arbok", 34), // Arbok
+      createPokemon("sableye", 36), // Sableye
+      createPokemon("muk-alola", 36), // Muk-Alola
     ],
   },
   {
@@ -53,12 +53,12 @@ const gyms = [
     leader: "",
     town: "Rock Town",
     pokemon: [
-      createPokemon(10230, 40), // Arcanine-Hisui
-      createPokemon(213, 42), // Shuckle
-      createPokemon(248, 44), // Tyranitar
-      createPokemon(558, 44), // Crustle
-      createPokemon(306, 46), // Aggron
-      createPokemon(464, 50), // Rhyperior
+      createPokemon("arcanine-hisui", 40), // Arcanine-Hisui
+      createPokemon("shuckle", 42), // Shuckle
+      createPokemon("tyranitar", 44), // Tyranitar
+      createPokemon("crustle", 44), // Crustle
+      createPokemon("aggron", 46), // Aggron
+      createPokemon("rhyperior", 50), // Rhyperior
     ],
   },
   {
@@ -68,12 +68,12 @@ const gyms = [
     leader: "",
     town: "Electric Town",
     pokemon: [
-      createPokemon(26, 54), // Raichu-Alola
-      createPokemon(404, 54), // Luxray
-      createPokemon(135, 56), // Jolteon
-      createPokemon(778, 58), // Mimikyu
-      createPokemon(596, 58), // Galvantula
-      createPokemon(181, 60), // Ampharos
+      createPokemon("raichu-alola", 54), // Raichu-Alola
+      createPokemon("luxray", 54), // Luxray
+      createPokemon("jolteon", 56), // Jolteon
+      createPokemon("mimikyu-disguised", 58), // Mimikyu
+      createPokemon("galvantula", 58), // Galvantula
+      createPokemon("ampharos", 60), // Ampharos
     ],
   },
   {
@@ -83,12 +83,12 @@ const gyms = [
     leader: "",
     town: "Desert Town",
     pokemon: [
-      createPokemon(34, 62), // Nidoking
-      createPokemon(31, 64), // Nidoqueen
-      createPokemon(248, 66), // Tyranitar
-      createPokemon(445, 68), // Garchomp
-      createPokemon(553, 68), // Krookodile
-      createPokemon(330, 70), // Flygon
+      createPokemon("nidoking", 62), // Nidoking
+      createPokemon("nidoqueen", 64), // Nidoqueen
+      createPokemon("tyranitar", 66), // Tyranitar
+      createPokemon("garchomp", 68), // Garchomp
+      createPokemon("krookodile", 68), // Krookodile
+      createPokemon("flygon", 70), // Flygon
     ],
   },
   {
@@ -98,12 +98,12 @@ const gyms = [
     leader: "",
     town: "Flying Town",
     pokemon: [
-      createPokemon(130, 72), // Gyarados
-      createPokemon(142, 72), // Aerodactyl
-      createPokemon(149, 73), // Dragonite
-      createPokemon(169, 74), // Crobat
-      createPokemon(962, 75), // Bombirdier
-      createPokemon(334, 76), // Altaria
+      createPokemon("gyarados", 72), // Gyarados
+      createPokemon("aerodactyl", 72), // Aerodactyl
+      createPokemon("dragonite", 73), // Dragonite
+      createPokemon("crobat", 74), // Crobat
+      createPokemon("bombirdier", 75), // Bombirdier
+      createPokemon("altaria", 76), // Altaria
     ],
   },
   {
@@ -113,12 +113,12 @@ const gyms = [
     leader: "",
     town: "Ice Town",
     pokemon: [
-      createPokemon(10102, 80), // Sandslash-alola
-      createPokemon(10104, 80), // Ninetales-alola
-      createPokemon(873, 82), //Frosmoth
-      createPokemon(471, 86), //Glaceon
-      createPokemon(131, 86), //lapras
-      createPokemon(478, 88), //Froslass
+      createPokemon("sandslash-alola", 80), // Sandslash-alola
+      createPokemon("ninetales-alola", 80), // Ninetales-alola
+      createPokemon("frosmoth", 82), //Frosmoth
+      createPokemon("glaceon", 86), //Glaceon
+      createPokemon("lapras", 86), //lapras
+      createPokemon("froslass", 88), //Froslass
     ],
   },
   {
@@ -128,12 +128,12 @@ const gyms = [
     leader: "",
     town: "Fossil Town",
     pokemon: [
-      createPokemon(139, 90), // Omastar
-      createPokemon(141, 92), // Kabutops
-      createPokemon(348, 94), // Armaldo
-      createPokemon(567, 96), // Archeops
-      createPokemon(699, 98), // Aurorus
-      createPokemon(409, 100), // Rampardos
+      createPokemon("omastar", 90), // Omastar
+      createPokemon("kabutops", 92), // Kabutops
+      createPokemon("armaldo", 94), // Armaldo
+      createPokemon("archeops", 96), // Archeops
+      createPokemon("aurorus", 98), // Aurorus
+      createPokemon("rampardos", 100), // Rampardos
     ],
   },
 ];

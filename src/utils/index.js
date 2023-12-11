@@ -3,10 +3,49 @@ import areas from "../areas";
 import pokes from "../pokes";
 
 const homeHex = { q: 13, r: 2, s: 11 };
-const legendaryIds = [
-  144, 10169, 145, 146, 150, 151, 243, 244, 245, 249, 250, 251, 380, 381, 382,
-  383, 384, 385, 386, 491, 492, 493, 494, 648, 716, 717, 773, 790, 791, 792,
-  802, 888, 889, 10001, 10002, 10003, 10006, 10018,
+const legendaryNames = [
+  "lugia",
+  "ho-oh",
+  "kyogre",
+  "groudon",
+  "chi-yu",
+  "walking-wake",
+  "deoxys-normal",
+  "deoxys-attack",
+  "deoxys-defense",
+  "deoxys-speed",
+  "rayquaza",
+  "jirachi",
+  "darkrai",
+  "shaymin-land",
+  "shaymin-sky",
+  "arceus",
+  "victini",
+  "miraidon",
+  "koraidon",
+  "chi-yu",
+  "articuno",
+  "articuno-galar",
+  "zapdos",
+  "zapdos-galar",
+  "moltres",
+  "moltres-galar",
+  "darkrai",
+  "latios",
+  "latias",
+  "mew",
+  "mewtwo",
+  "suicune",
+  "entei",
+  "raikou",
+  "celebi",
+  "kartana",
+  "guzzlord",
+  "marshadow",
+  "type-null",
+  "ogerpon",
+  "zacian",
+  "zamazenta",
 ];
 
 /**
@@ -81,10 +120,10 @@ const getHexDetails = (q, r) => {
  */
 const getWildPokemon = (hex) => {
   const potentialPokemon = hex.pokemon;
-  const randomPokemonId = determineSpawn(potentialPokemon);
+  const randomPokemonName = determineSpawn(potentialPokemon);
   const randomLevel = random(hex.minLevel, hex.maxLevel);
-  let level = legendaryIds.includes(randomPokemonId) ? 70 : randomLevel;
-  const randomPokemon = createPokemon(randomPokemonId, level);
+  let level = legendaryNames.includes(randomPokemonName) ? 70 : randomLevel;
+  const randomPokemon = createPokemon(randomPokemonName, level);
   return randomPokemon;
 };
 
@@ -166,14 +205,20 @@ const catchChance = (captureRate, hp, maxHP, status, ball, level) => {
  * @param {number} level - The level of the Pokémon.
  * @returns {Object} A new Pokémon object.
  */
-const createPokemon = (id, level, uuid = short.generate(), isShiny = null) => {
-  const newLevel = Math.min(Math.max(1, level), 100);
-  const pokemon = pokes.find((poke) => poke.id === id);
+const createPokemon = (
+  name,
+  level,
+  uuid = short.generate(),
+  isShiny = Math.random() < 1 / 4096 ? true : false,
+  pokemonKnockedOut = 0,
+  bisharpKnockedOut = 0
+) => {
+  const newLevel = level;
+  const pokemon = pokes.find((poke) => poke.name === name);
+
+  const id = pokemon.id;
   let image = pokemon.sprites.front_default;
-  if (pokemon.sprites?.front_shiny && typeof isShiny === null) {
-    isShiny = Math.random() < 1 / 4096 ? true : false;
-  }
-  if (isShiny) {
+  if (isShiny && pokemon.sprites?.front_shiny) {
     image = isShiny
       ? pokemon.sprites.front_shiny
       : pokemon.sprites.front_default;
@@ -234,6 +279,8 @@ const createPokemon = (id, level, uuid = short.generate(), isShiny = null) => {
     growthRate: pokemon.growthRate,
     happiness: 0,
     affection: 0,
+    pokemonKnockedOut,
+    bisharpKnockedOut,
   };
 };
 
@@ -325,8 +372,9 @@ const experienceGain = (base, levelEnemy, levelTrainer) => {
 function getTotalRarity(pokemonList) {
   const pokemonRarity = {};
   const totalRarity = pokemonList.reduce((total, pokemon) => {
-    const poke = pokes.find((p) => p.id === pokemon);
-    pokemonRarity[pokemon] = poke.rarity;
+    const poke = pokes.find((p) => p.name === pokemon);
+
+    pokemonRarity[pokemon] = poke?.rarity || 0;
     if (!poke) {
       return total;
     }
@@ -363,7 +411,13 @@ const affectionLevels = [0, 1, 50, 100, 150, 255];
  * @param {string} item The item used on the Pokémon.
  * @returns {(string|boolean)} The name of the Pokémon it evolves into, or false if it doesn't evolve.
  */
-function checkEvolve(pokemon, level = 1, area = null, item = null) {
+function checkEvolve(
+  pokemon,
+  level = 1,
+  area = null,
+  item = null,
+  location = null
+) {
   const evolutions = pokes.find((p) => p.id === pokemon.id).evolvesTo;
   if (!evolutions) {
     return false;
@@ -376,6 +430,12 @@ function checkEvolve(pokemon, level = 1, area = null, item = null) {
             return evolution.pokemon_name;
           }
         }
+      } else if (!!location) {
+        if (condition.trigger === "location") {
+          if (condition.location === location) {
+            return evolution.pokemon_name;
+          }
+        }
       } else {
         if (condition.trigger === "level-up") {
           if (
@@ -383,6 +443,13 @@ function checkEvolve(pokemon, level = 1, area = null, item = null) {
             !(pokemon.happiness < affectionLevels[condition.min_affection]) &&
             !(pokemon.happiness < condition.min_happiness)
           ) {
+            return evolution.pokemon_name;
+          }
+        } else if (condition.trigger === "other") {
+          if (pokemon.pokemonKnockedOut < condition.knock_outs) {
+            return evolution.pokemon_name;
+          }
+          if (pokemon.bisharpKnockedOut > condition.bisharp_knock_outs) {
             return evolution.pokemon_name;
           }
         }
@@ -405,7 +472,7 @@ export {
   random,
   getHexDetails,
   homeHex,
-  legendaryIds,
+  legendaryNames,
   fastGrowth,
   slowGrowth,
   erraticGrowth,

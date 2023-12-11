@@ -68,6 +68,20 @@ export default function Settings() {
         />
       </Flex>
       <Flex direction="row" justify="space-between">
+        <Text>Legendary Pokemon</Text>
+        <Switch
+          onChange={() =>
+            useGameStore.setState({
+              settings: {
+                ...settings,
+                legendaryPokemon: !settings.legendaryPokemon,
+              },
+            })
+          }
+          isChecked={settings.legendaryPokemon}
+        />
+      </Flex>
+      <Flex direction="row" justify="space-between">
         <Text>Ball</Text>
         <Select
           width="120px"

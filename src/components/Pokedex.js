@@ -22,8 +22,7 @@ import { getHexDetails } from "@/utils";
 export default function Pokedex() {
   const [sortBy, setSortBy] = useState("id");
   const [inArea, setInArea] = useState(false);
-  const seen = useGameStore((state) => state.player.pokedex.seen);
-  const caught = useGameStore((state) => state.player.pokedex.caught);
+  const { caught, seen } = useGameStore((state) => state.player.pokedex);
 
   // 1. Find hex you're on
   const { q, r } = useGameStore((state) => state.player.currentHex);
@@ -41,6 +40,17 @@ export default function Pokedex() {
   const handleAreaCheckbox = (e) => {
     setInArea(e.target.checked);
   };
+
+  const uncaughtPokemon = [];
+
+  pokes.forEach((poke) => {
+    if (pokedex.findIndex((p) => p.id === poke.id) !== -1) {
+      return;
+    }
+    uncaughtPokemon.push(poke);
+  });
+
+  console.log(uncaughtPokemon);
 
   return (
     <Box>
@@ -93,7 +103,7 @@ export default function Pokedex() {
             if (!inArea) {
               return true;
             }
-            if (pokemonInArea.pokemon.includes(poke.id)) {
+            if (pokemonInArea.pokemon.includes(poke.name)) {
               return true;
             }
             return false;

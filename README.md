@@ -23,7 +23,6 @@ A Pokemon Clicker game made at BGCUV.
 - BUGFIX: Can currently swap pokemon from bank when in gym
 - Add Raging Bolt
 - Add Terapagos
-- Add Dipplin
 - Add Poltchageist/Sinistcha
 - Maybe Ting-Lu/Wo-Chien
 

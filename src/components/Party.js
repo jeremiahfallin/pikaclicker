@@ -66,6 +66,7 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
           const nextLevelXp =
             levelFormulas[pokemon.growthRate](pokemon.level + 1) || 0;
           const uuid = pokemon.uuid;
+
           return (
             <Center
               key={`${pokemon.id}-${uuid}`}

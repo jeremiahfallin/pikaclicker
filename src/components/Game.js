@@ -39,7 +39,7 @@ const starters = [
 const PickPokemon = ({ starter }) => {
   const updateParty = useGameStore((state) => state.updateParty);
   const starterIndex = pokes.findIndex((val) => val.name === starter);
-  const starterDetails = createPokemon(pokes[starterIndex].id, 5);
+  const starterDetails = createPokemon(pokes[starterIndex].name, 5);
 
   // On click, unlock area and update the party with the selected starter.
   return (

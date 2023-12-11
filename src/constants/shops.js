@@ -20,8 +20,8 @@ const gyms = [
         type: "evolution-item",
       },
       {
-        name: "Metal Coat",
-        slug: "metal-coat",
+        name: "Gracidea",
+        slug: "gracidea",
         price: 10000,
         type: "evolution-item",
       },
@@ -122,6 +122,12 @@ const gyms = [
       {
         name: "Black Augurite",
         slug: "black-augurite",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Metal Coat",
+        slug: "metal-coat",
         price: 10000,
         type: "evolution-item",
       },
@@ -248,6 +254,12 @@ const gyms = [
         price: 10000,
         type: "evolution-item",
       },
+      {
+        name: "Galarica Wreath",
+        slug: "galarica-wreath",
+        price: 10000,
+        type: "evolution-item",
+      },
     ],
   },
   {
@@ -277,12 +289,6 @@ const gyms = [
         type: "evolution-item",
       },
       {
-        name: "Galarica Wreath",
-        slug: "galarica-wreath",
-        price: 10000,
-        type: "evolution-item",
-      },
-      {
         name: "Tart Apple",
         slug: "tart-apple",
         price: 10000,
@@ -299,6 +305,40 @@ const gyms = [
         slug: "syrupy-apple",
         price: 10000,
         type: "evolution-item",
+      },
+      {
+        name: "Teal Mask",
+        slug: "teal-mask",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Wellspring Mask",
+        slug: "wellspring-mask",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Hearthflame Mask",
+        slug: "hearthflame-mask",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Cornerstone Mask",
+        slug: "cornerstone-mask",
+        price: 10000,
+        type: "evolution-item",
+      },
+    ],
+  },
+  {
+    town: "Elite 4",
+    items: [
+      {
+        name: "Ultra Ball",
+        price: 1000,
+        type: "ball",
       },
     ],
   },
