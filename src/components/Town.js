@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import Gym from "./Gym";
@@ -35,13 +35,19 @@ export default function Town() {
   // Find the meteor associated with the current town.
   const meteor = meteors.find((m) => m.town === currentTown.name);
 
+  useEffect(() => {
+    setInGym(false);
+    setInElite4(false);
+    setInMeteor(false);
+  }, [currentTown.name]);
+
   // If the player is in the Gym, render the Gym component.
-  if (inGym && gym.town === currentTown.name) {
+  if (inGym && gym?.town === currentTown.name) {
     return <Gym gym={gym} setInGym={setInGym} />;
   }
 
   // If the player is in Elite 4, render the Elite 4 component.
-  if (inElite4) {
+  if (inElite4 && elite4?.town === currentTown.name) {
     return <Elite4 elite4={elite4} setInElite4={setInElite4} />;
   }
 
@@ -72,7 +78,7 @@ export default function Town() {
                 setInGym(true);
               }}
             >
-              Gym
+              {currentTown.name === "Champion" ? "Champion" : "Gym"}
             </Button>
           )}
           {elite4.town === currentTown.name && (

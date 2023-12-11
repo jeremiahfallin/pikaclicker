@@ -9,6 +9,7 @@ export default function Elite4({ elite4, setInElite4 }) {
   const [elite4Stage, setElite4Stage] = useState(0); // State to track the current stage of the Elite 4.
   const updateBattle = useGameStore((state) => state.updateBattle);
   const isComplete = useGameStore((state) => state.battle.isComplete);
+  const enemyPokemon = useGameStore((state) => state.battle?.pokemon?.[0]);
   const background = inBattle
     ? `${elite4?.type}-elite4-battle`
     : `${elite4?.type}-elite4`;
@@ -16,30 +17,26 @@ export default function Elite4({ elite4, setInElite4 }) {
   useEffect(() => {
     updateBattle({
       pokemon: null,
-      isTrainer: true,
+      isTrainer: false,
       isComplete: false,
     });
-  }, []);
+  }, [isComplete]);
 
   // Check if the battle is complete to update the badges and reset battle state.
   useEffect(() => {
-    if (isComplete && elite4Stage === 4) {
+    if (elite4Stage === 4) {
       updateBadges(elite4.badge);
       setElite4Stage((prev) => prev + 1);
       setInBattle(false);
-    } else if (isComplete) {
+      setElite4Stage(0);
+    } else if (isComplete && elite4Stage < 4) {
       setElite4Stage((prev) => prev + 1);
       setInBattle(false);
-      updateBattle({
-        pokemon: null,
-        isTrainer: true,
-        isComplete: false,
-      });
     }
   }, [isComplete, elite4.badge, elite4Stage]);
 
   // If in battle and not complete, render the Battle component.
-  if (inBattle && !isComplete) {
+  if (inBattle && !isComplete && !!enemyPokemon) {
     return <Battle background={background} />;
   }
 
@@ -58,11 +55,11 @@ export default function Elite4({ elite4, setInElite4 }) {
           size={"sm"}
           colorScheme="green"
           onClick={() => {
-            // updateBattle({
-            //   pokemon: elite4.leaders[elite4Stage].pokemon,
-            //   isTrainer: true,
-            //   isComplete: false,
-            // });
+            updateBattle({
+              pokemon: elite4.leaders[elite4Stage].pokemon,
+              isTrainer: true,
+              isComplete: false,
+            });
             setInBattle(true);
           }}
         >

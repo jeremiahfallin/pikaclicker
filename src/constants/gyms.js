@@ -136,6 +136,21 @@ const gyms = [
       createPokemon("rampardos", 100), // Rampardos
     ],
   },
+  {
+    name: "Champion",
+    type: "normal",
+    badge: "Champion",
+    leader: "",
+    town: "Champion",
+    pokemon: [
+      createPokemon("dragonite", 300), // Dragonite
+      createPokemon("tyranitar", 300), // Tyranitar
+      createPokemon("garchomp", 300), // Garchomp
+      createPokemon("crobat", 300), // Crobat
+      createPokemon("aggron", 300), // Aggron
+      createPokemon("rhyperior", 300), // Rhyperior
+    ],
+  },
 ];
 
 export default gyms;

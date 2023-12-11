@@ -9,6 +9,7 @@ export default function Gym({ gym, setInGym }) {
   const updateBattle = useGameStore((state) => state.updateBattle);
   const isComplete = useGameStore((state) => state.battle.isComplete);
   const background = inBattle ? `${gym?.type}-gym-battle` : `${gym?.type}-gym`;
+  const battle = useGameStore((state) => state.battle.pokemon);
 
   // Check if the battle is complete to update the badges and reset battle state.
   useEffect(() => {
@@ -19,10 +20,8 @@ export default function Gym({ gym, setInGym }) {
   }, [isComplete, gym.badge]);
 
   // If in battle and not complete, render the Battle component.
-  if (inBattle && !isComplete) {
-    return (
-      <Battle gym={gym} setInBattle={setInBattle} background={background} />
-    );
+  if (inBattle && !isComplete && !!battle) {
+    return <Battle background={background} />;
   }
 
   // Render the gym interface with challenge and leave buttons.

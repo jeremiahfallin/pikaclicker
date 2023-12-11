@@ -237,6 +237,9 @@ const useGameStore = create(
             battle: {
               ...state.battle,
               pokemon: null,
+              isTrainer: false,
+              turn: 0,
+              isComplete: false,
             },
             player: {
               ...state.player,
@@ -965,6 +968,9 @@ function updateBadges(badge) {
     unlockArea("Area 14");
     unlockArea("Area 15");
     unlockArea("Elite 4");
+  }
+  if (badge === "Elite4") {
+    unlockArea("Champion");
   }
 
   useGameStore.setState((state) => ({

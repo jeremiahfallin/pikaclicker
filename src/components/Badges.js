@@ -7,9 +7,9 @@ export default function Badges() {
   return (
     <Box>
       <Heading size={"md"}>Badges</Heading>
-      <SimpleGrid col={3}>
+      <SimpleGrid columns={4}>
         {[...badges].map((badge) => (
-          <Text key={badge}>{badge}</Text>
+          <Box key={badge}>{badge}</Box>
         ))}
       </SimpleGrid>
     </Box>

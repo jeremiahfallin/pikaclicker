@@ -100,14 +100,11 @@ const InitiativeSlider = () => {
  */
 export default function Battle({ background = "forest" }) {
   const [showSlider, setShowSlider] = useState(true);
-  const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
   // Retrieving the player's first Pokémon in the party.
   const playerPokemon = useGameStore((state) => state.player.party[0]);
   // Retrieving the enemy Pokémon.
   const enemyPokemon = useGameStore((state) => state.battle?.pokemon?.[0]);
-  if (!enemyPokemon) {
-    updateCurrentHex(homeHex);
-  }
+  // State to track the current enemy Pokémon.
   const [currentEnemy, setCurrentEnemy] = useState(enemyPokemon.uuid);
   // Hook to handle game turns.
   const handleTurn = useGameStore((state) => state.handleClick);

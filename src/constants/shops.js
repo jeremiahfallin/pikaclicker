@@ -306,6 +306,26 @@ const gyms = [
         price: 10000,
         type: "evolution-item",
       },
+    ],
+  },
+  {
+    town: "Elite 4",
+    items: [
+      {
+        name: "Ultra Ball",
+        price: 1000,
+        type: "ball",
+      },
+    ],
+  },
+  {
+    town: "Champion",
+    items: [
+      {
+        name: "Ultra Ball",
+        price: 1000,
+        type: "ball",
+      },
       {
         name: "Teal Mask",
         slug: "teal-mask",
@@ -329,16 +349,6 @@ const gyms = [
         slug: "cornerstone-mask",
         price: 10000,
         type: "evolution-item",
-      },
-    ],
-  },
-  {
-    town: "Elite 4",
-    items: [
-      {
-        name: "Ultra Ball",
-        price: 1000,
-        type: "ball",
       },
     ],
   },

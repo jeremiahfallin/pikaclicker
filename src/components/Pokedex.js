@@ -41,17 +41,6 @@ export default function Pokedex() {
     setInArea(e.target.checked);
   };
 
-  const uncaughtPokemon = [];
-
-  pokes.forEach((poke) => {
-    if (pokedex.findIndex((p) => p.id === poke.id) !== -1) {
-      return;
-    }
-    uncaughtPokemon.push(poke);
-  });
-
-  console.log(uncaughtPokemon);
-
   return (
     <Box>
       <Heading as="h3" size="md">
