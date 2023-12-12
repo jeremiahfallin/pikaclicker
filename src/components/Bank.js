@@ -12,6 +12,8 @@ import {
   Flex,
   Divider,
   Heading,
+  Checkbox,
+  HStack,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -38,6 +40,7 @@ const levelFormulas = {
 export default function Bank({ selectedPokemon, setSelectedPokemon }) {
   const parentRef = useRef(null);
   const [sortBy, setSortBy] = useState("id");
+  const [isShiny, setIsShiny] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [release, setRelease] = useState(null);
   const swapPokemon = useGameStore((state) => state.swapPokemon);
@@ -78,7 +81,14 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
           return a.id - b.id;
       }
     })
-    .filter((poke) => poke.name.includes(searchTerm));
+    .filter((poke) => poke.name.includes(searchTerm))
+    .filter((poke) => {
+      if (isShiny) {
+        return poke.isShiny;
+      } else {
+        return true;
+      }
+    });
 
   const rowVirtualizer = useVirtualizer({
     count: pokemonBank.length,
@@ -117,13 +127,18 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
         borderTopRadius={"md"}
       >
         <Heading size="md">Bank</Heading>
-        <RadioGroup value={sortBy} onChange={setSortBy}>
-          <Stack direction="row" gap={8} align="center">
-            <Radio value={"id"}>ID</Radio>
-            <Radio value={"level"}>Level</Radio>
-            <Radio value={"name"}>Name</Radio>
-          </Stack>
-        </RadioGroup>
+        <Center gap={2}>
+          <RadioGroup value={sortBy} onChange={setSortBy}>
+            <Stack direction="row" gap={8} align="center">
+              <Radio value={"id"}>ID</Radio>
+              <Radio value={"level"}>Level</Radio>
+              <Radio value={"name"}>Name</Radio>
+            </Stack>
+          </RadioGroup>
+          <Checkbox onChange={() => setIsShiny((prev) => !prev)}>
+            Shiny Only
+          </Checkbox>
+        </Center>
         <Input value={searchTerm} onChange={handleSearch} size="xs" />
       </Box>
       <Flex direction="column">
