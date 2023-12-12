@@ -105,7 +105,11 @@ export default function Battle({ background = "forest" }) {
   // Retrieving the enemy Pokémon.
   const enemyPokemon = useGameStore((state) => state.battle?.pokemon?.[0]);
   // State to track the current enemy Pokémon.
-  const [currentEnemy, setCurrentEnemy] = useState(enemyPokemon.uuid);
+  const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
+  if (!enemyPokemon) {
+    updateCurrentHex(homeHex);
+  }
+  const [currentEnemy, setCurrentEnemy] = useState(enemyPokemon?.uuid);
   // Hook to handle game turns.
   const handleTurn = useGameStore((state) => state.handleClick);
   const handleClick = () => {
@@ -113,15 +117,17 @@ export default function Battle({ background = "forest" }) {
   };
 
   useEffect(() => {
-    if (enemyPokemon.uuid !== currentEnemy) {
+    if (enemyPokemon?.uuid !== currentEnemy) {
       setShowSlider(false);
-      setCurrentEnemy(enemyPokemon.uuid);
+      setCurrentEnemy(enemyPokemon?.uuid);
     }
-  }, [enemyPokemon.uuid, currentEnemy]);
+  }, [enemyPokemon?.uuid, currentEnemy]);
 
   useEffect(() => {
     setShowSlider(true);
   }, [showSlider]);
+
+  if (!playerPokemon || !enemyPokemon) return null;
 
   // Render the battle scene with the player's and enemy's Pokémon.
   return (

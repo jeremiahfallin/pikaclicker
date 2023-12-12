@@ -196,7 +196,6 @@ const useGameStore = create(
       },
       updateCurrentHex: (newHex) => {
         const unlockedAreas = get().player.unlockedAreas;
-
         const hex = getHexDetails(newHex.q, newHex.r);
 
         let hexArea =
