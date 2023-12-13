@@ -46,6 +46,8 @@ const legendaryNames = [
   "ogerpon",
   "zacian",
   "zamazenta",
+  "yveltal",
+  "xerneas",
 ];
 
 /**
