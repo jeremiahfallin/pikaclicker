@@ -125,7 +125,7 @@ const getWildPokemon = (hex, hasShinyCharm = false) => {
   const randomPokemonName = determineSpawn(potentialPokemon);
   const randomLevel = random(hex.minLevel, hex.maxLevel);
   let level = legendaryNames.includes(randomPokemonName) ? 70 : randomLevel;
-  const shinyChance = hasShinyCharm ? 1 / 512 : 1 / 4096;
+  const shinyChance = hasShinyCharm ? 512 : 4096;
   const randomPokemon = createPokemon(
     randomPokemonName,
     level,
