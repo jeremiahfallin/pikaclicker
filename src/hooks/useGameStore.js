@@ -391,6 +391,26 @@ const useGameStore = create(
                 temp.bisharpKnockedOut
               );
             }
+            if (temp.name === "zacian-crowned") {
+              temp = createPokemon(
+                "zacian",
+                temp.level,
+                temp.uuid,
+                temp.isShiny,
+                temp.pokemonKnockedOut,
+                temp.bisharpKnockedOut
+              );
+            }
+            if (temp.name === "zamazenta-crowned") {
+              temp = createPokemon(
+                "zamazenta",
+                temp.level,
+                temp.uuid,
+                temp.isShiny,
+                temp.pokemonKnockedOut,
+                temp.bisharpKnockedOut
+              );
+            }
             newParty[idx1] = newBank[idx2];
             newBank[idx2] = temp;
             get().updateParty(newParty);
@@ -404,6 +424,26 @@ const useGameStore = create(
             if (temp.name === "shaymin-sky") {
               temp = createPokemon(
                 "shaymin-land",
+                temp.level,
+                temp.uuid,
+                temp.isShiny,
+                temp.pokemonKnockedOut,
+                temp.bisharpKnockedOut
+              );
+            }
+            if (temp.name === "zacian-crowned") {
+              temp = createPokemon(
+                "zacian",
+                temp.level,
+                temp.uuid,
+                temp.isShiny,
+                temp.pokemonKnockedOut,
+                temp.bisharpKnockedOut
+              );
+            }
+            if (temp.name === "zamazenta-crowned") {
+              temp = createPokemon(
+                "zamazenta",
                 temp.level,
                 temp.uuid,
                 temp.isShiny,
