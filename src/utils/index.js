@@ -217,7 +217,7 @@ const createPokemon = (
   name,
   level,
   uuid = short.generate(),
-  isShiny = Math.random() < 1 / 4096 ? true : false,
+  isShiny = !random(0, 4096),
   pokemonKnockedOut = 0,
   bisharpKnockedOut = 0
 ) => {
