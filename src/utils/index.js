@@ -457,7 +457,7 @@ function checkEvolve(
             level >= condition.level &&
             !(pokemon.happiness < affectionLevels[condition.min_affection]) &&
             !(pokemon.happiness < condition.min_happiness) &&
-            !(pokemon.gender !== condition.gender)
+            !(condition.gender && pokemon.gender !== condition.gender)
           ) {
             return evolution.pokemon_name;
           }
