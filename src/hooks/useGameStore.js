@@ -390,7 +390,7 @@ const useGameStore = create(
                 temp.isShiny,
                 temp.pokemonKnockedOut,
                 temp.bisharpKnockedOut,
-                poke.gender
+                temp.gender
               );
             }
             if (temp.name === "zacian-crowned") {
@@ -401,7 +401,7 @@ const useGameStore = create(
                 temp.isShiny,
                 temp.pokemonKnockedOut,
                 temp.bisharpKnockedOut,
-                poke.gender
+                temp.gender
               );
             }
             if (temp.name === "zamazenta-crowned") {
@@ -412,7 +412,7 @@ const useGameStore = create(
                 temp.isShiny,
                 temp.pokemonKnockedOut,
                 temp.bisharpKnockedOut,
-                poke.gender
+                temp.gender
               );
             }
             newParty[idx1] = newBank[idx2];
@@ -433,7 +433,7 @@ const useGameStore = create(
                 temp.isShiny,
                 temp.pokemonKnockedOut,
                 temp.bisharpKnockedOut,
-                poke.gender
+                temp.gender
               );
             }
             if (temp.name === "zacian-crowned") {
@@ -444,7 +444,7 @@ const useGameStore = create(
                 temp.isShiny,
                 temp.pokemonKnockedOut,
                 temp.bisharpKnockedOut,
-                poke.gender
+                temp.gender
               );
             }
             if (temp.name === "zamazenta-crowned") {
@@ -455,7 +455,7 @@ const useGameStore = create(
                 temp.isShiny,
                 temp.pokemonKnockedOut,
                 temp.bisharpKnockedOut,
-                poke.gender
+                temp.gender
               );
             }
             newBank[idx1] = newParty[idx2];
@@ -596,7 +596,7 @@ const useGameStore = create(
               pokemon.isShiny,
               pokemon.pokemonKnockedOut,
               pokemon.bisharpKnockedOut,
-              poke.gender
+              pokemon.gender
             );
             newPlace[idx] = {
               ...pokemon,
@@ -849,7 +849,7 @@ const useGameStore = create(
             playerPokemon.isShiny,
             playerPokemon.pokemonKnockedOut,
             playerPokemon.bisharpKnockedOut,
-            poke.gender
+            playerPokemon.gender
           );
           newParty[idx] = {
             ...playerPokemon,
@@ -876,7 +876,7 @@ const useGameStore = create(
             playerPokemon.isShiny,
             playerPokemon.pokemonKnockedOut,
             playerPokemon.bisharpKnockedOut,
-            poke.gender
+            playerPokemon.gender
           );
           newParty[idx] = {
             ...playerPokemon,
@@ -904,7 +904,7 @@ const useGameStore = create(
             playerPokemon.isShiny,
             playerPokemon.pokemonKnockedOut,
             playerPokemon.bisharpKnockedOut,
-            poke.gender
+            playerPokemon.gender
           );
           newParty[idx] = {
             ...playerPokemon,

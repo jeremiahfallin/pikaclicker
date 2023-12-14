@@ -437,6 +437,7 @@ function checkEvolve(
   if (!evolutions) {
     return false;
   }
+  console.log("start");
   for (let evolution of evolutions) {
     for (let condition of evolution.evolution_conditions) {
       if (!!item) {
@@ -453,6 +454,7 @@ function checkEvolve(
         }
       } else {
         if (condition.trigger === "level-up") {
+          console.log("?");
           if (
             level >= condition.level &&
             !(pokemon.happiness < affectionLevels[condition.min_affection]) &&
