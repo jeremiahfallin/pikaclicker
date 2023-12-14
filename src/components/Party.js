@@ -85,7 +85,6 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
                 <Flex direction={"column"} fontSize="sm">
                   <Text>{pokemon.name}</Text>
                   <Box>Lvl. {pokemon.level}</Box>
-                  <Box>{pokemon.gender}</Box>
                 </Flex>
               </Center>
               <Box w="100%">
