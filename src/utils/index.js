@@ -462,7 +462,7 @@ function checkEvolve(
             return evolution.pokemon_name;
           }
         } else if (condition.trigger === "other") {
-          if (pokemon.pokemonKnockedOut < condition.knock_outs) {
+          if (pokemon.pokemonKnockedOut > condition.knock_outs) {
             return evolution.pokemon_name;
           }
           if (pokemon.bisharpKnockedOut > condition.bisharp_knock_outs) {
