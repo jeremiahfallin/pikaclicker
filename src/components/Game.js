@@ -67,6 +67,15 @@ export default function Game() {
   // Retrieve the player's party from the game store.
   const party = useGameStore((state) => state.player.party);
 
+  const cleanedPokes = JSON.parse(JSON.stringify(pokes));
+  cleanedPokes.forEach((poke) => {
+    if (poke.sprites !== null) {
+      delete poke.sprites["other"];
+      delete poke.sprites["versions"];
+    }
+  });
+  console.log(cleanedPokes);
+
   return (
     <>
       {/* Head component for setting the page title and meta tags. */}
