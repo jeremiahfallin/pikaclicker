@@ -220,7 +220,9 @@ const createPokemon = (
   isShiny = !random(0, 4096),
   pokemonKnockedOut = 0,
   bisharpKnockedOut = 0,
-  gender = null
+  gender = null,
+  happiness = 0,
+  affection = 0
 ) => {
   const newLevel = level;
   const pokemon = pokes.find((poke) => poke.name === name);
@@ -292,8 +294,8 @@ const createPokemon = (
     captureRate: pokemon.captureRate,
     baseExperience: pokemon.baseExperience,
     growthRate: pokemon.growthRate,
-    happiness: 0,
-    affection: 0,
+    happiness,
+    affection,
     pokemonKnockedOut,
     bisharpKnockedOut,
   };
@@ -437,7 +439,7 @@ function checkEvolve(
   if (!evolutions) {
     return false;
   }
-  console.log("start");
+
   for (let evolution of evolutions) {
     for (let condition of evolution.evolution_conditions) {
       if (!!item) {
@@ -454,9 +456,8 @@ function checkEvolve(
         }
       } else {
         if (condition.trigger === "level-up") {
-          console.log("?");
           if (
-            level >= condition.level &&
+            !(condition.level && level < condition.level) &&
             !(pokemon.happiness < affectionLevels[condition.min_affection]) &&
             !(pokemon.happiness < condition.min_happiness) &&
             !(condition.gender && pokemon.gender !== condition.gender)
