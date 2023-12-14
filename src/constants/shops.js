@@ -316,6 +316,18 @@ const gyms = [
         price: 1000,
         type: "ball",
       },
+      {
+        name: "Rusted Sword",
+        slug: "rusted-sword",
+        price: 10000,
+        type: "evolution-item",
+      },
+      {
+        name: "Rusted Shield",
+        slug: "rusted-shield",
+        price: 10000,
+        type: "evolution-item",
+      },
     ],
   },
   {

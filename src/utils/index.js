@@ -120,12 +120,18 @@ const getHexDetails = (q, r) => {
  * @param {number} areaIndex - The index of the area.
  * @returns {Object} A new wild Pokémon object.
  */
-const getWildPokemon = (hex) => {
+const getWildPokemon = (hex, hasShinyCharm = false) => {
   const potentialPokemon = hex.pokemon;
   const randomPokemonName = determineSpawn(potentialPokemon);
   const randomLevel = random(hex.minLevel, hex.maxLevel);
   let level = legendaryNames.includes(randomPokemonName) ? 70 : randomLevel;
-  const randomPokemon = createPokemon(randomPokemonName, level);
+  const shinyChance = hasShinyCharm ? 512 : 4096;
+  const randomPokemon = createPokemon(
+    randomPokemonName,
+    level,
+    short.generate(),
+    !random(0, shinyChance)
+  );
   return randomPokemon;
 };
 
@@ -211,7 +217,7 @@ const createPokemon = (
   name,
   level,
   uuid = short.generate(),
-  isShiny = Math.random() < 1 / 4096 ? true : false,
+  isShiny = !random(0, 4096),
   pokemonKnockedOut = 0,
   bisharpKnockedOut = 0
 ) => {
