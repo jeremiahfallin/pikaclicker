@@ -141,6 +141,7 @@ export default function Battle({ background = "forest" }) {
       userSelect={"none"}
       onClick={handleClick}
       overflow="hidden"
+      id="battle"
     >
       {showSlider && <InitiativeSlider {...{ playerPokemon, enemyPokemon }} />}
       {!!playerPokemon && (
