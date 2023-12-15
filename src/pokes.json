@@ -14889,57 +14889,6 @@
     "rarity": 3
   },
   {
-    "baseExperience": 270,
-    "baseHappiness": 100,
-    "captureRate": 3,
-    "evolvesTo": null,
-    "genderRate": -1,
-    "growthRate": "slow",
-    "hatchCounter": 120,
-    "id": 10018,
-    "isBaby": false,
-    "isLegendary": false,
-    "isMythical": true,
-    "name": "meloetta-pirouette",
-    "sprites": {
-      "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/648-pirouette.png",
-      "back_female": null,
-      "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/648-pirouette.png",
-      "back_shiny_female": null,
-      "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10018.png",
-      "front_female": null,
-      "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/648-pirouette.png",
-      "front_shiny_female": null
-    },
-    "stats": [
-      {
-        "base_stat": 100,
-        "effort": 0
-      },
-      {
-        "base_stat": 128,
-        "effort": 1
-      },
-      {
-        "base_stat": 90,
-        "effort": 1
-      },
-      {
-        "base_stat": 77,
-        "effort": 0
-      },
-      {
-        "base_stat": 77,
-        "effort": 0
-      },
-      {
-        "base_stat": 128,
-        "effort": 1
-      }
-    ],
-    "rarity": 3
-  },
-  {
     "baseExperience": 65,
     "baseHappiness": 50,
     "captureRate": 180,
