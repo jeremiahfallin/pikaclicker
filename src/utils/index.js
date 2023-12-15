@@ -219,7 +219,10 @@ const createPokemon = (
   uuid = short.generate(),
   isShiny = !random(0, 4096),
   pokemonKnockedOut = 0,
-  bisharpKnockedOut = 0
+  bisharpKnockedOut = 0,
+  gender = null,
+  happiness = 0,
+  affection = 0
 ) => {
   const newLevel = level;
   const pokemon = pokes.find((poke) => poke.name === name);
@@ -238,7 +241,13 @@ const createPokemon = (
   const spAttack = calcStat(pokemon.stats[3].base_stat, newLevel);
   const spDefense = calcStat(pokemon.stats[4].base_stat, newLevel);
   const speed = calcStat(pokemon.stats[5].base_stat, newLevel);
-  const gender = Math.random() > pokemon.genderRate / 8 ? "male" : "female";
+  let newGender = gender;
+  if (newGender === null) {
+    newGender = Math.random() > pokemon.genderRate / 8 ? "male" : "female";
+  }
+  if (pokemon.genderRate === -1) {
+    newGender = "genderless";
+  }
   let xp;
   switch (growthRate) {
     case "fast":
@@ -281,12 +290,12 @@ const createPokemon = (
     spAttack,
     spDefense,
     speed,
-    gender,
+    gender: newGender,
     captureRate: pokemon.captureRate,
     baseExperience: pokemon.baseExperience,
     growthRate: pokemon.growthRate,
-    happiness: 0,
-    affection: 0,
+    happiness,
+    affection,
     pokemonKnockedOut,
     bisharpKnockedOut,
   };
@@ -430,6 +439,7 @@ function checkEvolve(
   if (!evolutions) {
     return false;
   }
+
   for (let evolution of evolutions) {
     for (let condition of evolution.evolution_conditions) {
       if (!!item) {
@@ -447,14 +457,15 @@ function checkEvolve(
       } else {
         if (condition.trigger === "level-up") {
           if (
-            level >= condition.level &&
+            !(condition.level && level < condition.level) &&
             !(pokemon.happiness < affectionLevels[condition.min_affection]) &&
-            !(pokemon.happiness < condition.min_happiness)
+            !(pokemon.happiness < condition.min_happiness) &&
+            !(condition.gender && pokemon.gender !== condition.gender)
           ) {
             return evolution.pokemon_name;
           }
         } else if (condition.trigger === "other") {
-          if (pokemon.pokemonKnockedOut < condition.knock_outs) {
+          if (pokemon.pokemonKnockedOut > condition.knock_outs) {
             return evolution.pokemon_name;
           }
           if (pokemon.bisharpKnockedOut > condition.bisharp_knock_outs) {

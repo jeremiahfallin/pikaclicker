@@ -17471,13 +17471,22 @@
     "captureRate": 75,
     "evolvesTo": [
       {
-        "pokemon_name": "toxtricity",
+        "pokemon_name": "toxtricity-amped",
         "evolution_conditions": [
           {
             "trigger": "level-up",
             "level": 30,
-            "time_of_day": "",
-            "needs_overworld_rain": false
+            "gender": "male"
+          }
+        ]
+      },
+      {
+        "pokemon_name": "toxtricity-low-key",
+        "evolution_conditions": [
+          {
+            "trigger": "level-up",
+            "level": 30,
+            "gender": "female"
           }
         ]
       }
@@ -17485,7 +17494,7 @@
     "genderRate": 4,
     "growthRate": "medium-slow",
     "hatchCounter": 25,
-    "id": 848,
+    "id": 847,
     "isBaby": true,
     "isLegendary": false,
     "isMythical": false,
@@ -17523,6 +17532,108 @@
       },
       {
         "base_stat": 40,
+        "effort": 0
+      }
+    ],
+    "rarity": 75
+  },
+  {
+    "baseExperience": 48,
+    "baseHappiness": 50,
+    "captureRate": 75,
+    "evolvesTo": null,
+    "genderRate": 4,
+    "growthRate": "medium-slow",
+    "hatchCounter": 25,
+    "id": 848,
+    "isBaby": true,
+    "isLegendary": false,
+    "isMythical": false,
+    "name": "toxtricity-amped",
+    "sprites": {
+      "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/849.png",
+      "back_female": null,
+      "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/849.png",
+      "back_shiny_female": null,
+      "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/849.png",
+      "front_female": null,
+      "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/849.png",
+      "front_shiny_female": null
+    },
+    "stats": [
+      {
+        "base_stat": 75,
+        "effort": 0
+      },
+      {
+        "base_stat": 98,
+        "effort": 0
+      },
+      {
+        "base_stat": 70,
+        "effort": 0
+      },
+      {
+        "base_stat": 114,
+        "effort": 2
+      },
+      {
+        "base_stat": 70,
+        "effort": 0
+      },
+      {
+        "base_stat": 75,
+        "effort": 0
+      }
+    ],
+    "rarity": 75
+  },
+  {
+    "baseExperience": 48,
+    "baseHappiness": 50,
+    "captureRate": 75,
+    "evolvesTo": null,
+    "genderRate": 4,
+    "growthRate": "medium-slow",
+    "hatchCounter": 25,
+    "id": 849,
+    "isBaby": true,
+    "isLegendary": false,
+    "isMythical": false,
+    "name": "toxtricity-low-key",
+    "sprites": {
+      "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/10184.png",
+      "back_female": null,
+      "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/10184.png",
+      "back_shiny_female": null,
+      "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10184.png",
+      "front_female": null,
+      "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/10184.png",
+      "front_shiny_female": null
+    },
+    "stats": [
+      {
+        "base_stat": 75,
+        "effort": 0
+      },
+      {
+        "base_stat": 98,
+        "effort": 0
+      },
+      {
+        "base_stat": 70,
+        "effort": 0
+      },
+      {
+        "base_stat": 114,
+        "effort": 2
+      },
+      {
+        "base_stat": 70,
+        "effort": 0
+      },
+      {
+        "base_stat": 75,
         "effort": 0
       }
     ],

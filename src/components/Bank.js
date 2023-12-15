@@ -13,7 +13,6 @@ import {
   Divider,
   Heading,
   Checkbox,
-  HStack,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import { useVirtualizer } from "@tanstack/react-virtual";
