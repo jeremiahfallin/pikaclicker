@@ -78,7 +78,7 @@ const gyms = [
   },
   {
     name: "Desert",
-    type: "ground",
+    type: "desert",
     badge: "Desert",
     leader: "",
     town: "Desert Town",
@@ -123,7 +123,7 @@ const gyms = [
   },
   {
     name: "Fossil",
-    type: "rock",
+    type: "fossil",
     badge: "Fossil",
     leader: "",
     town: "Fossil Town",
