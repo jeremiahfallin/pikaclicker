@@ -3,6 +3,7 @@ import useGameStore from "@/hooks/useGameStore";
 
 export default function Items({ selectedPokemon }) {
   const items = useGameStore((state) => state.player.items);
+  const coins = useGameStore((state) => state.player.coins);
   const applyItemOnPokemon = useGameStore((state) => state.applyItemOnPokemon);
 
   const handleClick = (item) => {
@@ -12,9 +13,12 @@ export default function Items({ selectedPokemon }) {
 
   return (
     <Box overflowX="hidden" w="500px">
-      <Heading as="h3" size="md">
-        Items
-      </Heading>
+      <Flex gap={2} align={"center"}>
+        <Heading as="h3" size="md">
+          Items
+        </Heading>
+        <Text fontSize="sm"> - ({coins} coins)</Text>
+      </Flex>
       <Flex
         maxW="100%"
         minW="0"

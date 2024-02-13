@@ -10,6 +10,15 @@ import {
   Radio,
   Stack,
   Checkbox,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import pokes from "../pokes.json";
@@ -99,15 +108,37 @@ export default function Pokedex() {
           })
           .map((poke) => {
             if (caught.has(poke.id)) {
+              console.log(poke);
               return (
                 <Center key={poke.id} flexDirection={"column"}>
-                  <Text fontSize="sm">{poke.name}</Text>
-                  <Image alt={poke.name} src={poke.sprites.front_default} />
+                  <Popover trigger="hover">
+                    <PopoverTrigger>
+                      <Center flexDirection="column">
+                        <Text fontSize="sm">{poke.name}</Text>
+                        <Image
+                          alt={poke.name}
+                          src={poke.sprites.front_default}
+                        />
+                      </Center>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>Evolution details</PopoverHeader>
+                      <PopoverBody>
+                        <Text fontSize="sm">
+                          {poke.name} evolves into{" "}
+                          <pre>{JSON.stringify(poke.evolvesTo, null, 2)}</pre>
+                        </Text>
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
                 </Center>
               );
             }
             return (
               <Center key={poke.id} flexDirection={"column"}>
+                <Text fontSize="sm">{poke.name}</Text>
                 <Text fontSize="sm">{poke.name}</Text>
                 <Image
                   alt={poke.name}
