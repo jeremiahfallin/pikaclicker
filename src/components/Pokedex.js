@@ -108,10 +108,35 @@ export default function Pokedex() {
           })
           .map((poke) => {
             if (caught.has(poke.id)) {
-              console.log(poke);
+              let evolvesTo = poke.evolvesTo;
+              let evolvesString = "";
+              let evolvesToStrings = [];
+              if (evolvesTo === null) {
+                evolvesToStrings.push("Final evolution.");
+              } else {
+                evolvesTo.forEach((e) => {
+                  e.evolution_conditions.forEach((c) => {
+                    if (c.trigger === "level-up") {
+                      evolvesToStrings.push(
+                        `Evolves to ${e.pokemon_name} at level ${c.level}.`
+                      );
+                    } else if (c.trigger === "use-item") {
+                      evolvesToStrings.push(
+                        `Evolves to ${e.pokemon_name} when using ${c.item}.`
+                      );
+                    } else if (c.trigger === "other") {
+                      evolvesToStrings.push(
+                        `Evolves to ${e.pokemon_name} under special conditions.`
+                      );
+                    }
+                  });
+                });
+              }
+              evolvesString = evolvesToStrings.join(", ");
+
               return (
                 <Center key={poke.id} flexDirection={"column"}>
-                  <Popover trigger="hover">
+                  <Popover trigger="hover" matchWidth="true">
                     <PopoverTrigger>
                       <Center flexDirection="column">
                         <Text fontSize="sm">{poke.name}</Text>
@@ -126,10 +151,7 @@ export default function Pokedex() {
                       <PopoverCloseButton />
                       <PopoverHeader>Evolution details</PopoverHeader>
                       <PopoverBody>
-                        <Text fontSize="sm">
-                          {poke.name} evolves into{" "}
-                          <pre>{JSON.stringify(poke.evolvesTo, null, 2)}</pre>
-                        </Text>
+                        <Text fontSize="sm">{evolvesString}</Text>
                       </PopoverBody>
                     </PopoverContent>
                   </Popover>

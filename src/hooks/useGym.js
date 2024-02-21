@@ -17,7 +17,6 @@ export default function useGym(leader) {
   }, [gymLeader]);
 
   async function loadGymLeader() {
-    console.log(gymLeader);
     if (!gymLeader) return;
 
     if (gymLeader === "Olivia") {
