@@ -6,7 +6,7 @@ import Layout from "@/components/Layout";
 const theme = extendTheme({
   fonts: {
     heading: "'Zen Kaku Gothic New', sans-serif",
-    body: "'Open Sans', 'Google Sans', sans-serif",
+    body: "'Google Sans', 'Open Sans', sans-serif",
   },
   colors: {
     poke: {
