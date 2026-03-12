@@ -2,6 +2,9 @@ import short from "short-uuid";
 import areas from "../areas";
 import pokes from "../pokes";
 
+const pokesById = Object.fromEntries(pokes.map((p) => [p.id, p]));
+const pokesByName = Object.fromEntries(pokes.map((p) => [p.name, p]));
+
 const homeHex = { q: 13, r: 2, s: 11 };
 const legendaryNames = [
   "lugia",
@@ -225,7 +228,7 @@ const createPokemon = (
   affection = 0
 ) => {
   const newLevel = level;
-  const pokemon = pokes.find((poke) => poke.name === name);
+  const pokemon = pokesByName[name];
 
   const id = pokemon.id;
   let image = pokemon.sprites.front_default;
@@ -389,7 +392,7 @@ const experienceGain = (base, levelEnemy, levelTrainer) => {
 function getTotalRarity(pokemonList) {
   const pokemonRarity = {};
   const totalRarity = pokemonList.reduce((total, pokemon) => {
-    const poke = pokes.find((p) => p.name === pokemon);
+    const poke = pokesByName[pokemon];
 
     pokemonRarity[pokemon] = poke?.rarity || 0;
     if (!poke) {
@@ -435,7 +438,7 @@ function checkEvolve(
   item = null,
   location = null
 ) {
-  const evolutions = pokes.find((p) => p.id === pokemon.id).evolvesTo;
+  const evolutions = pokesById[pokemon.id].evolvesTo;
   if (!evolutions) {
     return false;
   }
@@ -499,4 +502,6 @@ export {
   mediumSlowGrowth,
   fluctuatingGrowth,
   determineSpawn,
+  pokesById,
+  pokesByName,
 };

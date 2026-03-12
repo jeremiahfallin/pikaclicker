@@ -12,6 +12,8 @@ import {
   random,
   homeHex,
   legendaryNames,
+  pokesByName,
+  pokesById,
   fastGrowth,
   slowGrowth,
   erraticGrowth,
@@ -19,7 +21,6 @@ import {
   mediumSlowGrowth,
   fluctuatingGrowth,
 } from "@/utils";
-import pokes from "../pokes";
 import areas from "../areas";
 
 const ballChances = {
@@ -506,7 +507,7 @@ const useGameStore = create(
             const evolutionName = checkEvolve(poke, newLevel);
 
             if (!!evolutionName) {
-              const evolution = pokes.find((p) => p.name === evolutionName);
+              const evolution = pokesByName[evolutionName];
               updatePokedex(evolution.id, true);
               const newPokemon = createPokemon(
                 evolution.name,
@@ -596,7 +597,7 @@ const useGameStore = create(
           item.type === "evolution-item" &&
           newItems[itemIndex].quantity >= 0
         ) {
-          const basePokemon = pokes.find((p) => p.id === pokemon.id);
+          const basePokemon = pokesById[pokemon.id];
           const evolutionName = checkEvolve(basePokemon, null, null, item.slug);
           let itemsNeeded = 1;
           if (evolutionName === "gholdengo") {
@@ -606,7 +607,7 @@ const useGameStore = create(
             return;
           }
           if (!!evolutionName) {
-            const evolution = pokes.find((p) => p.name === evolutionName);
+            const evolution = pokesByName[evolutionName];
             const newPokemon = createPokemon(
               evolution.name,
               pokemon.level,

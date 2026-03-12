@@ -17,6 +17,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import useStickyState from "@/hooks/useStickyState";
 import useSave from "@/hooks/useSave";
 import pokes from "../pokes";
+import { pokesByName } from "@/utils";
 import SuperJSON from "superjson";
 
 const selectablePokemon = pokes
@@ -138,8 +139,7 @@ const SaveLoadModal = ({ isOpen, onClose }) => {
                 <Image
                   src={
                     pokemon
-                      ? pokes.find((p) => p.name === pokemon).sprites
-                          .front_default
+                      ? pokesByName[pokemon].sprites.front_default
                       : null
                   }
                   alt={pokemon}
