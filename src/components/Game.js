@@ -85,7 +85,7 @@ export default function Game() {
         pt={0}
       >
         {/* Left column: Pokedex, Badges, Settings */}
-        <Box>
+        <VStack spacing={4} align="stretch">
           <Center>
             {/* If the player's party is empty, show starter selection. */}
             {party.length === 0 && (
@@ -103,13 +103,13 @@ export default function Game() {
               </Flex>
             )}
           </Center>
-          <Pokedex />
-          <Badges />
-          <Settings />
-        </Box>
+          <Box variant="panel"><Pokedex /></Box>
+          <Box variant="panel"><Badges /></Box>
+          <Box variant="panel"><Settings /></Box>
+        </VStack>
         {/* Center column: Scene and Map */}
-        <Grid
-          gridTemplateRows="auto 1fr"
+        <Flex
+          direction="column"
           maxW="100%"
           w="100%"
           minW="0"
@@ -126,23 +126,23 @@ export default function Game() {
             },
           }}
         >
-          <Scene />
-          <Map />
-        </Grid>
+          <Box variant="panel" mb={4}><Scene /></Box>
+          <Box variant="panel" display="flex" flex={1} overflow="hidden"><Map /></Box>
+        </Flex>
 
         {/* Right column: Party, Items, Bank */}
-        <VStack maxH="100vh" height="calc(100vh - 26px)">
-          <Party
+        <VStack maxH="100vh" height="calc(100vh - 26px)" spacing={4} align="stretch">
+          <Box variant="panel"><Party
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
-          />
-          <Box w="auto">
+          /></Box>
+          <Box variant="panel">
             <Items selectedPokemon={selectedPokemon} />
           </Box>
-          <Bank
+          <Box variant="panel" flex={1} overflow="hidden" display="flex" flexDirection="column"><Bank
             selectedPokemon={selectedPokemon}
             setSelectedPokemon={setSelectedPokemon}
-          />
+          /></Box>
         </VStack>
       </SimpleGrid>
     </>

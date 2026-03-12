@@ -138,7 +138,7 @@ export default function Pokedex() {
                 <Center key={poke.id} flexDirection={"column"}>
                   <Popover trigger="hover" matchWidth="true">
                     <PopoverTrigger>
-                      <Center flexDirection="column">
+                      <Center flexDirection="column" p={2} borderRadius="md" _hover={{ bg: "gray.100", transform: "scale(1.05)", transition: "all 0.2s" }} cursor="pointer">
                         <Text fontSize="sm">{poke.name}</Text>
                         <Image
                           alt={poke.name}
@@ -146,10 +146,10 @@ export default function Pokedex() {
                         />
                       </Center>
                     </PopoverTrigger>
-                    <PopoverContent>
+                    <PopoverContent bg="white" borderColor="poke.darkRed" borderWidth="2px" borderRadius="xl" boxShadow="lg" _focus={{ outline: 'none' }}>
                       <PopoverArrow />
                       <PopoverCloseButton />
-                      <PopoverHeader>Evolution details</PopoverHeader>
+                      <PopoverHeader fontWeight="bold" borderBottomWidth="1px" borderColor="gray.200">Evolution Details</PopoverHeader>
                       <PopoverBody>
                         <Text fontSize="sm">{evolvesString}</Text>
                       </PopoverBody>
@@ -159,8 +159,7 @@ export default function Pokedex() {
               );
             }
             return (
-              <Center key={poke.id} flexDirection={"column"}>
-                <Text fontSize="sm">{poke.name}</Text>
+              <Center key={poke.id} flexDirection={"column"} p={2} borderRadius="md" _hover={{ bg: "gray.100", transform: "scale(1.05)", transition: "all 0.2s" }}>
                 <Text fontSize="sm">{poke.name}</Text>
                 <Image
                   alt={poke.name}

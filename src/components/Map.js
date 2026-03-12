@@ -86,7 +86,7 @@ function Map() {
   return (
     <HexGrid
       width={"100%"}
-      height={"auto"}
+      height={"100%"}
       viewBox="-5 -5 160 190"
       preserveAspectRatio="xMidYMid meet"
     >

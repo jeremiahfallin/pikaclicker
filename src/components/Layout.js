@@ -1,5 +1,5 @@
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
-import { Box, Center, Link, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Link, useDisclosure, Text, Button } from "@chakra-ui/react";
 import SaveLoadModal from "./SaveLoadModal";
 import { auth } from "@/config";
 import useAuth from "@/hooks/useAuth";
@@ -18,15 +18,18 @@ export default function Layout({ children }) {
   return (
     <Box>
       <SaveLoadModal isOpen={isOpen} onClose={onClose} />
-      <Center bg="blue.200" justifyContent={"end"} p={1} gap={2}>
-        <Link as="button" type="button" onClick={onOpen} fontSize="xs">
-          Save/Load
-        </Link>
-        <Link as="button" type="button" onClick={onClick} fontSize="xs">
-          {user ? "Sign Out" : "Sign In"}
-        </Link>
-      </Center>
-      <Box>{children}</Box>
+      <Flex bg="poke.darkBlue" color="white" justifyContent="space-between" alignItems="center" p={2} mb={2} boxShadow="md">
+        <Text fontWeight="bold" fontSize="lg" fontFamily="'Zen Kaku Gothic New', sans-serif">PikaClicker</Text>
+        <Flex gap={4} alignItems="center">
+          <Button size="sm" variant="outline" colorScheme="whiteAlpha" onClick={onOpen}>
+            Save/Load
+          </Button>
+          <Button size="sm" variant="solid" colorScheme="yellow" color="poke.dark" onClick={onClick}>
+            {user ? "Sign Out" : "Sign In"}
+          </Button>
+        </Flex>
+      </Flex>
+      <Box px={2}>{children}</Box>
     </Box>
   );
 }
