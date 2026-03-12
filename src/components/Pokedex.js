@@ -31,6 +31,7 @@ import { getHexDetails } from "@/utils";
 export default function Pokedex() {
   const [sortBy, setSortBy] = useState("id");
   const [inArea, setInArea] = useState(false);
+  const [filterBy, setFilterBy] = useState("seen");
   const { caught, seen } = useGameStore((state) => state.player.pokedex);
 
   // 1. Find hex you're on
@@ -66,6 +67,12 @@ export default function Pokedex() {
             <Radio value="name">name</Radio>
           </Stack>
         </RadioGroup>
+        <RadioGroup value={filterBy} onChange={setFilterBy}>
+          <Stack direction="row" gap={8} align="center">
+            <Radio value="seen">seen</Radio>
+            <Radio value="caught">caught</Radio>
+          </Stack>
+        </RadioGroup>
         <Checkbox onChange={handleAreaCheckbox}>Current Area</Checkbox>
       </Stack>
 
@@ -98,6 +105,9 @@ export default function Pokedex() {
             }
           })
           .filter((poke) => {
+            if (filterBy === "caught" && !caught.has(poke.id)) {
+              return false;
+            }
             if (!inArea) {
               return true;
             }
