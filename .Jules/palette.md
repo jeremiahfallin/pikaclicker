@@ -1,0 +1,3 @@
+## 2024-05-24 - Chakra UI Search Input Accessibility
+**Learning:** The default Chakra UI `<Input>` component used for searching in the `Bank.js` component was completely missing both visual guidance (`placeholder`) and screen reader context (`aria-label`). Users relying on assistive technologies would land on an empty input field without knowing its purpose (searching the Pokémon bank).
+**Action:** Always verify that standalone `<Input>` components used for search or filtering have both a `placeholder` for visual users and an `aria-label` for screen readers, as they often lack an associated `<label>` element in this design system's pattern.
