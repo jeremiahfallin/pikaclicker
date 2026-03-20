@@ -1,0 +1,3 @@
+## 2024-03-20 - Two-Step Confirmation State Clarity
+**Learning:** Found a pattern where two-step confirmation buttons rely solely on color changes (e.g., `colorScheme="red"`) to indicate the secondary confirmation state. This is insufficient for accessibility and clarity as the text remains the same (e.g., "Release"), confusing users on whether they are initiating an action or confirming it.
+**Action:** When implementing or updating two-step confirmation buttons, always dynamically update the button text (e.g., "Confirm Release") and `aria-label` alongside any visual color changes to clearly communicate the current state to all users.
