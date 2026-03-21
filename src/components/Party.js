@@ -69,16 +69,33 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
 
           return (
             <Center
+              as="button"
               key={`${pokemon.id}-${uuid}`}
               flexDir={"column"}
+              w="100%"
               background={
                 selectedPokemon.uuid === uuid &&
                 selectedPokemon.place === "party"
                   ? "green.200"
-                  : null
+                  : "transparent"
               }
+              _hover={{
+                background:
+                  selectedPokemon.uuid === uuid &&
+                  selectedPokemon.place === "party"
+                    ? "green.300"
+                    : "blackAlpha.100",
+              }}
+              cursor="pointer"
+              aria-pressed={
+                selectedPokemon.uuid === uuid &&
+                selectedPokemon.place === "party"
+              }
+              aria-label={`Select ${pokemon.name}, Level ${pokemon.level}`}
               borderRadius={"md"}
               onClick={() => setPokemon(uuid)}
+              p={1}
+              transition="background 0.2s"
             >
               <Center gap={2}>
                 <Image alt={pokemon.name} src={pokemon.image} />
