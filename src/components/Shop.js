@@ -52,6 +52,9 @@ export default function Shop({ isOpen, onClose }) {
               </Text>
               <Button
                 size="sm"
+                isDisabled={coins < Math.floor(200 * Math.pow(1.5, clickMultiplier))}
+                title={coins < Math.floor(200 * Math.pow(1.5, clickMultiplier)) ? "Not enough coins" : `Buy Click Multiplier for ${Math.floor(200 * Math.pow(1.5, clickMultiplier))} coins`}
+                aria-label={`Buy Click Multiplier for ${Math.floor(200 * Math.pow(1.5, clickMultiplier))} coins`}
                 onClick={() => {
                   if (
                     coins >= Math.floor(200 * Math.pow(1.5, clickMultiplier))
@@ -73,9 +76,12 @@ export default function Shop({ isOpen, onClose }) {
                     {item.name}
                   </Heading>
                   <Text>{item.description}</Text>
-                  <Text>Cost: {item.price}</Text>
+                  <Text>Cost: {item.price * parseInt(purchaseAmount)}</Text>
                   <Button
                     size="sm"
+                    isDisabled={coins < item.price * parseInt(purchaseAmount)}
+                    title={coins < item.price * parseInt(purchaseAmount) ? "Not enough coins" : `Buy ${purchaseAmount} ${item.name} for ${item.price * parseInt(purchaseAmount)} coins`}
+                    aria-label={`Buy ${purchaseAmount} ${item.name} for ${item.price * parseInt(purchaseAmount)} coins`}
                     onClick={() => {
                       const amount = parseInt(purchaseAmount);
                       if (coins >= item.price * amount) {
