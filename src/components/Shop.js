@@ -52,6 +52,7 @@ export default function Shop({ isOpen, onClose }) {
               </Text>
               <Button
                 size="sm"
+                isDisabled={coins < Math.floor(200 * Math.pow(1.5, clickMultiplier))}
                 onClick={() => {
                   if (
                     coins >= Math.floor(200 * Math.pow(1.5, clickMultiplier))
@@ -67,19 +68,22 @@ export default function Shop({ isOpen, onClose }) {
               </Button>
             </Box>
             {shopItems.map((item, idx) => {
+              const amount = parseInt(purchaseAmount);
+              const totalCost = item.price * amount;
+
               return (
                 <Box key={`${item.name}-${idx}`}>
                   <Heading as="h3" size="sm">
                     {item.name}
                   </Heading>
                   <Text>{item.description}</Text>
-                  <Text>Cost: {item.price}</Text>
+                  <Text>Cost: {totalCost}</Text>
                   <Button
                     size="sm"
+                    isDisabled={coins < totalCost}
                     onClick={() => {
-                      const amount = parseInt(purchaseAmount);
-                      if (coins >= item.price * amount) {
-                        updateCoins(coins - item.price * amount);
+                      if (coins >= totalCost) {
+                        updateCoins(coins - totalCost);
                         const itemIndex = playerItems.findIndex(
                           (i) => i.name === item.name
                         );
