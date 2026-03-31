@@ -125,9 +125,9 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
         p={1}
         borderTopRadius={"md"}
       >
-        <Heading size="md">Bank</Heading>
-        <Center gap={2}>
-          <RadioGroup value={sortBy} onChange={setSortBy}>
+        <Heading size="md" mb={2}>Bank</Heading>
+        <Center gap={4} mb={2} flexWrap="wrap">
+          <RadioGroup value={sortBy} onChange={setSortBy} aria-label="Sort Pokémon">
             <Stack direction="row" gap={8} align="center">
               <Radio value={"id"}>ID</Radio>
               <Radio value={"level"}>Level</Radio>
@@ -138,7 +138,13 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
             Shiny Only
           </Checkbox>
         </Center>
-        <Input value={searchTerm} onChange={handleSearch} size="xs" />
+        <Input
+          value={searchTerm}
+          onChange={handleSearch}
+          size="sm"
+          placeholder="Search Pokémon..."
+          aria-label="Search Pokémon"
+        />
       </Box>
       <Flex direction="column">
         <Box
