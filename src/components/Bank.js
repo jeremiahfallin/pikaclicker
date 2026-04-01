@@ -138,7 +138,13 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
             Shiny Only
           </Checkbox>
         </Center>
-        <Input value={searchTerm} onChange={handleSearch} size="xs" />
+        <Input
+          value={searchTerm}
+          onChange={handleSearch}
+          size="xs"
+          placeholder="Search Pokémon..."
+          aria-label="Search Pokémon by name"
+        />
       </Box>
       <Flex direction="column">
         <Box
