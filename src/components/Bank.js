@@ -138,7 +138,13 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
             Shiny Only
           </Checkbox>
         </Center>
-        <Input value={searchTerm} onChange={handleSearch} size="xs" />
+        <Input
+          value={searchTerm}
+          onChange={handleSearch}
+          size="xs"
+          placeholder="Search Pokémon..."
+          aria-label="Search Bank"
+        />
       </Box>
       <Flex direction="column">
         <Box
@@ -164,10 +170,16 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
               >
                 <Center flexDir="row" w="100%" justifyContent={"space-between"}>
                   <Center
+                    as="button"
+                    cursor="pointer"
+                    aria-label={`Select ${pokemon.name}`}
                     onClick={() => setPokemon(uuid)}
                     background={
                       selectedPokemon.uuid === pokemon.uuid ? "green.200" : null
                     }
+                    _hover={{
+                      background: selectedPokemon.uuid === pokemon.uuid ? "green.300" : "gray.100",
+                    }}
                     borderRadius={"md"}
                   >
                     <Image alt={pokemon.name} src={pokemon.image} />
@@ -178,6 +190,11 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                   <Button
                     colorScheme={uuid === release ? "red" : "gray"}
                     size="xs"
+                    aria-label={
+                      uuid === release
+                        ? `Confirm release of ${pokemon.name}`
+                        : `Release ${pokemon.name}`
+                    }
                     onClick={() => {
                       setSelectedPokemon({
                         uuid: null,
@@ -191,7 +208,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                       }
                     }}
                   >
-                    Release
+                    {uuid === release ? "Confirm Release" : "Release"}
                   </Button>
                 </Center>
                 <Divider />
