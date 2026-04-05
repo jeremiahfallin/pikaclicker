@@ -141,64 +141,75 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
         <Input value={searchTerm} onChange={handleSearch} size="xs" />
       </Box>
       <Flex direction="column">
-        <Box
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            width: "100%",
-            position: "relative",
-          }}
-        >
-          {rowVirtualizer.getVirtualItems().map((item) => {
-            const pokemon = pokemonBank[item.index];
-            const uuid = pokemon.uuid;
-            return (
-              <Center
-                key={`${item.key}`}
-                position="absolute"
-                top={0}
-                left={0}
-                width="100%"
-                flexDir={"column"}
-                height={`${item.size}px`}
-                transform={`translateY(${item.start}px)`}
-              >
-                <Center flexDir="row" w="100%" justifyContent={"space-between"}>
-                  <Center
-                    onClick={() => setPokemon(uuid)}
-                    background={
-                      selectedPokemon.uuid === pokemon.uuid ? "green.200" : null
-                    }
-                    borderRadius={"md"}
-                  >
-                    <Image alt={pokemon.name} src={pokemon.image} />
-                    <Text>
-                      {pokemon.name} Lvl. {pokemon.level}
-                    </Text>
-                  </Center>
-                  <Button
-                    colorScheme={uuid === release ? "red" : "gray"}
-                    size="xs"
-                    onClick={() => {
-                      setSelectedPokemon({
-                        uuid: null,
-                        place: null,
-                      });
-                      if (uuid !== release) {
-                        setRelease(uuid);
-                      } else {
-                        releasePokemon(uuid);
-                        setRelease(null);
+        {pokemonBank.length === 0 ? (
+          <Center py={8}>
+            <Text color="gray.500">No Pokémon found.</Text>
+          </Center>
+        ) : (
+          <Box
+            style={{
+              height: `${rowVirtualizer.getTotalSize()}px`,
+              width: "100%",
+              position: "relative",
+            }}
+          >
+            {rowVirtualizer.getVirtualItems().map((item) => {
+              const pokemon = pokemonBank[item.index];
+              const uuid = pokemon.uuid;
+              return (
+                <Center
+                  key={`${item.key}`}
+                  position="absolute"
+                  top={0}
+                  left={0}
+                  width="100%"
+                  flexDir={"column"}
+                  height={`${item.size}px`}
+                  transform={`translateY(${item.start}px)`}
+                >
+                  <Center flexDir="row" w="100%" justifyContent={"space-between"}>
+                    <Center
+                      onClick={() => setPokemon(uuid)}
+                      background={
+                        selectedPokemon.uuid === pokemon.uuid ? "green.200" : null
                       }
-                    }}
-                  >
-                    Release
-                  </Button>
+                      borderRadius={"md"}
+                    >
+                      <Image alt={pokemon.name} src={pokemon.image} />
+                      <Text>
+                        {pokemon.name} Lvl. {pokemon.level}
+                      </Text>
+                    </Center>
+                    <Button
+                      colorScheme={uuid === release ? "red" : "gray"}
+                      size="xs"
+                      aria-label={
+                        uuid === release
+                          ? `Confirm release of ${pokemon.name}`
+                          : `Release ${pokemon.name}`
+                      }
+                      onClick={() => {
+                        setSelectedPokemon({
+                          uuid: null,
+                          place: null,
+                        });
+                        if (uuid !== release) {
+                          setRelease(uuid);
+                        } else {
+                          releasePokemon(uuid);
+                          setRelease(null);
+                        }
+                      }}
+                    >
+                      {uuid === release ? "Confirm" : "Release"}
+                    </Button>
+                  </Center>
+                  <Divider />
                 </Center>
-                <Divider />
-              </Center>
-            );
-          })}
-        </Box>
+              );
+            })}
+          </Box>
+        )}
       </Flex>
     </Box>
   );
