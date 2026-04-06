@@ -14,6 +14,7 @@ import {
   RadioGroup,
   Radio,
   Center,
+  Tooltip,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import { shops } from "@/constants";
@@ -50,21 +51,32 @@ export default function Shop({ isOpen, onClose }) {
               <Text>
                 Cost: {Math.floor(200 * Math.pow(1.5, clickMultiplier))}
               </Text>
-              <Button
-                size="sm"
-                onClick={() => {
-                  if (
-                    coins >= Math.floor(200 * Math.pow(1.5, clickMultiplier))
-                  ) {
-                    updateCoins(
-                      coins - Math.floor(200 * Math.pow(1.5, clickMultiplier))
-                    );
-                    updateClickMultiplier(clickMultiplier + 1);
-                  }
-                }}
+              <Tooltip
+                label="Not enough coins"
+                isDisabled={
+                  coins >= Math.floor(200 * Math.pow(1.5, clickMultiplier))
+                }
+                shouldWrapChildren={true}
               >
-                Buy
-              </Button>
+                <Button
+                  size="sm"
+                  isDisabled={
+                    coins < Math.floor(200 * Math.pow(1.5, clickMultiplier))
+                  }
+                  onClick={() => {
+                    if (
+                      coins >= Math.floor(200 * Math.pow(1.5, clickMultiplier))
+                    ) {
+                      updateCoins(
+                        coins - Math.floor(200 * Math.pow(1.5, clickMultiplier))
+                      );
+                      updateClickMultiplier(clickMultiplier + 1);
+                    }
+                  }}
+                >
+                  Buy
+                </Button>
+              </Tooltip>
             </Box>
             {shopItems.map((item, idx) => {
               return (
@@ -74,30 +86,37 @@ export default function Shop({ isOpen, onClose }) {
                   </Heading>
                   <Text>{item.description}</Text>
                   <Text>Cost: {item.price}</Text>
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      const amount = parseInt(purchaseAmount);
-                      if (coins >= item.price * amount) {
-                        updateCoins(coins - item.price * amount);
-                        const itemIndex = playerItems.findIndex(
-                          (i) => i.name === item.name
-                        );
-                        if (itemIndex !== -1) {
-                          const newItems = [...playerItems];
-                          newItems[itemIndex].quantity += amount;
-                          updateItems(newItems);
-                        } else {
-                          updateItems([
-                            ...playerItems,
-                            { ...item, quantity: amount },
-                          ]);
-                        }
-                      }
-                    }}
+                  <Tooltip
+                    label="Not enough coins"
+                    isDisabled={coins >= item.price * parseInt(purchaseAmount)}
+                    shouldWrapChildren={true}
                   >
-                    Buy
-                  </Button>
+                    <Button
+                      size="sm"
+                      isDisabled={coins < item.price * parseInt(purchaseAmount)}
+                      onClick={() => {
+                        const amount = parseInt(purchaseAmount);
+                        if (coins >= item.price * amount) {
+                          updateCoins(coins - item.price * amount);
+                          const itemIndex = playerItems.findIndex(
+                            (i) => i.name === item.name
+                          );
+                          if (itemIndex !== -1) {
+                            const newItems = [...playerItems];
+                            newItems[itemIndex].quantity += amount;
+                            updateItems(newItems);
+                          } else {
+                            updateItems([
+                              ...playerItems,
+                              { ...item, quantity: amount },
+                            ]);
+                          }
+                        }
+                      }}
+                    >
+                      Buy
+                    </Button>
+                  </Tooltip>
                 </Box>
               );
             })}

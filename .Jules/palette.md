@@ -1,0 +1,3 @@
+## 2024-04-06 - Tooltips on Disabled Elements in Chakra UI
+**Learning:** By default, Chakra UI's `Tooltip` does not trigger when its single child is a disabled element (like `<Button isDisabled={true}>`). This is because natively disabled elements don't fire events like `mouseenter` or `focus`, which the tooltip relies on to show itself.
+**Action:** Always use the `shouldWrapChildren={true}` prop on `Tooltip` when wrapping disabled elements. This automatically wraps the disabled element in a `span` that can receive the necessary hover/focus events to display the tooltip, making disabled states accessible and understandable.
