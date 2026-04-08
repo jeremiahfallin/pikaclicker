@@ -138,7 +138,13 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
             Shiny Only
           </Checkbox>
         </Center>
-        <Input value={searchTerm} onChange={handleSearch} size="xs" />
+        <Input
+          value={searchTerm}
+          onChange={handleSearch}
+          size="xs"
+          placeholder="Search Pokémon..."
+          aria-label="Search Pokémon in Bank"
+        />
       </Box>
       <Flex direction="column">
         <Box
@@ -164,11 +170,16 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
               >
                 <Center flexDir="row" w="100%" justifyContent={"space-between"}>
                   <Center
+                    as="button"
+                    aria-label={`Select ${pokemon.name}`}
+                    cursor="pointer"
                     onClick={() => setPokemon(uuid)}
                     background={
                       selectedPokemon.uuid === pokemon.uuid ? "green.200" : null
                     }
+                    _hover={{ bg: selectedPokemon.uuid === pokemon.uuid ? "green.300" : "gray.100" }}
                     borderRadius={"md"}
+                    p={1}
                   >
                     <Image alt={pokemon.name} src={pokemon.image} />
                     <Text>
@@ -191,7 +202,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                       }
                     }}
                   >
-                    Release
+                    {uuid === release ? "Confirm" : "Release"}
                   </Button>
                 </Center>
                 <Divider />
