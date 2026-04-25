@@ -1,0 +1,3 @@
+## 2024-04-25 - Bank Release Button Confirmation Feedback
+**Learning:** Destructive actions that use a "double-click to confirm" pattern (like releasing a Pokémon from the Bank) must provide explicit feedback indicating the required action. Relying solely on color changes (e.g., changing the button to red) is insufficient and inaccessible. Furthermore, dynamically updating `aria-label` based on the interaction state ("Release" vs "Confirm release of [Item]") provides critical context for screen reader users when performing destructive actions within lists.
+**Action:** Always update visible button text to "Confirm" (or similar explicit action) during pending destructive actions and dynamically update `aria-label` to explicitly state the action and target.
