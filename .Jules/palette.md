@@ -1,0 +1,3 @@
+## 2026-05-02 - Explicit Confirmation for Destructive Actions
+**Learning:** Destructive actions like releasing a Pokémon previously required a double-click on a button that did not visually change its label, making it inaccessible to screen readers and confusing for users as to whether the first click registered or what the second click would do.
+**Action:** Always update both the visible text and `aria-label` of confirmation buttons to explicitly state the action being confirmed (e.g., 'Confirm release of [Item Name]') to ensure clarity and accessibility, rather than relying solely on a color change or a secondary click.
