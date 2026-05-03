@@ -1,0 +1,3 @@
+## 2024-05-03 - Accessible Destructive Actions
+**Learning:** For destructive actions requiring a confirmation step (like releasing an item/Pokemon), changing only the button color to red is insufficient for accessibility and clarity.
+**Action:** Always update the visible text and `aria-label` to explicitly state the action being confirmed (e.g., 'Confirm release of [Item]') rather than relying solely on a secondary click.
