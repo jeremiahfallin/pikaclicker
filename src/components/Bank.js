@@ -178,6 +178,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                   <Button
                     colorScheme={uuid === release ? "red" : "gray"}
                     size="xs"
+                    aria-label={uuid === release ? `Confirm release of ${pokemon.name}` : `Release ${pokemon.name}`}
                     onClick={() => {
                       setSelectedPokemon({
                         uuid: null,
@@ -191,7 +192,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                       }
                     }}
                   >
-                    Release
+                    {uuid === release ? "Confirm release" : "Release"}
                   </Button>
                 </Center>
                 <Divider />
