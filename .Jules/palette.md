@@ -1,0 +1,3 @@
+## 2024-05-12 - Explicit Destructive Action Confirmations
+**Learning:** While color changes (like turning a button red) indicate state change during a two-click destructive flow, relying purely on the secondary click without changing the button text or `aria-label` leaves users uncertain about what exactly they are confirming. Screen reader users especially miss out on the context if the label remains the same.
+**Action:** When implementing two-step destructive actions (like releasing a Pokémon), dynamically update the button text (e.g., to "Confirm") and explicitly state the action in the `aria-label` (e.g., "Confirm release of [Item]") to ensure both visual and assistive clarity.
