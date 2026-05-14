@@ -1,0 +1,3 @@
+## 2024-05-14 - Improve destructive action clarity on Release button
+**Learning:** For destructive two-step UI actions (like releasing an item/Pokémon), changing only the button's color (e.g., to red) to signify the confirmation step is insufficient for accessibility and clarity. The text and `aria-label` must also reflect the confirmation state.
+**Action:** Update the visible text and `aria-label` to explicitly state the action being confirmed (e.g., 'Confirm release of [Item]') to ensure clarity and accessibility, rather than relying solely on a secondary click without text change.
