@@ -1,0 +1,3 @@
+## $(date +%Y-%m-%d) - Bank Pokemon Release Button Accessibility and UX
+**Learning:** Destructive actions, especially those requiring secondary confirmation within the same button component, require explicit context updates for accessibility tools and user clarity. Simply changing the button color isn't enough; the `aria-label` and visible text must clearly state the action being confirmed to prevent accidental deletions.
+**Action:** When creating double-click confirmation buttons for destructive actions, conditionally render both the visible text (e.g. "Confirm") and `aria-label` (e.g. `aria-label="Confirm release of [Item]"`) based on the confirmation state.
