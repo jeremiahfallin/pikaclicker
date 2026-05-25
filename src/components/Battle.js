@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, Image, Progress, keyframes } from "@chakra-ui/react";
+import { Box, Flex, Image, Progress } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import useGameStore from "@/hooks/useGameStore";
 import { homeHex } from "@/utils";
 
