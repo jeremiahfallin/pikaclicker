@@ -1,0 +1,3 @@
+## 2024-05-24 - Dynamic Destructive Confirmation
+**Learning:** In React components updating local state for inline confirmations (e.g., swapping a button's purpose from "Release" to "Confirm Release"), we can simultaneously update standard properties like button text along with accessibility attributes (`aria-label`) dynamically to maintain perfect sync between visual feedback and screen reader context.
+**Action:** When creating inline delete/release confirmations, always couple the `aria-label` dynamic logic to the exact same state flag used for the visual label swap (`{uuid === release ? "Confirm release..." : "Release..."}`).
