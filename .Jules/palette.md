@@ -1,0 +1,3 @@
+## 2024-05-30 - Destructive Action Confirmation UX
+**Learning:** In list views where users can perform destructive actions (like releasing a Pokémon), relying solely on color changes (e.g., button turning red) for the secondary confirmation click is insufficient for accessibility and clarity. Users with visual impairments or screen readers may not understand the state change.
+**Action:** Always update both the visible text (e.g., 'Confirm release of [Item]') and the `aria-label` during the confirmation state of a two-step destructive action to provide explicit, accessible feedback.
