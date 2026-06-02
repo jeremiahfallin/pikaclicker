@@ -1,0 +1,3 @@
+## 2024-03-20 - Dynamic ARIA Labels for Destructive Confirmation
+**Learning:** For destructive UI actions (like releasing an item or Pokémon), simply requiring a secondary click to confirm without explicit visual or semantic updates is a poor experience. It leaves users and screen readers unsure of what the subsequent click does, risking accidental data loss.
+**Action:** Always update the visible text and `aria-label` of the confirmation button to explicitly state the action being confirmed (e.g., 'Confirm release of [Item]') to ensure clarity and accessibility. Couple this dynamic logic to the exact same state flag used for the visual text swap.
