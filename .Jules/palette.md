@@ -1,0 +1,3 @@
+## 2026-06-03 - Explicit Confirmation Text and Labels for Destructive Actions
+**Learning:** Destructive actions like releasing items or Pokemon often rely on a secondary click, but the button text doesn't always reflect the magnitude of the action or what exactly is being destroyed. Relying on color change (e.g. gray to red) alone is not accessible.
+**Action:** Always update the visible text and `aria-label` of confirmation buttons to explicitly state the action being confirmed (e.g., 'Confirm release of [Item]') and couple this dynamic logic to the exact same state flag used for visual feedback.
