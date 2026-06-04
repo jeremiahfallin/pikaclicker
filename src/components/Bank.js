@@ -191,7 +191,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
                       }
                     }}
                   >
-                    Release
+                    {uuid === release ? `Confirm release of ${pokemon.name}` : "Release"}
                   </Button>
                 </Center>
                 <Divider />
