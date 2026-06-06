@@ -1,0 +1,3 @@
+## 2026-06-06 - Explicit Confirmation for Destructive Actions
+**Learning:** Secondary clicks for destructive UI actions (like releasing a Pokémon) need explicit textual cues to prevent confusion. Turning a button red is a helpful visual cue but does not sufficiently convey the action being confirmed, creating ambiguity and accessibility gaps.
+**Action:** Always update the visible text and `aria-label` of the confirmation button to explicitly state the action being confirmed (e.g., 'Confirm release of [Item]') rather than relying solely on a secondary click and color change. Couple this dynamic logic to the exact same state flag used for the visual swap.
