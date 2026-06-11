@@ -1,0 +1,3 @@
+## 2024-06-11 - Accessible Destructive State UI for Releasing Pokemon
+**Learning:** I encountered a component (`Bank.js`) that used a color-only state change (button turns red) to indicate a confirmation state for a destructive "Release" action, which fails to communicate the state change clearly to colorblind or screen-reader users, and lacks an explicit confirmation label.
+**Action:** When implementing two-step confirm actions, always update both the visual text (e.g., "Release" -> "Confirm") and the ARIA label (e.g., `Release [Pokemon]` -> `Confirm release of [Pokemon]`) dynamically based on the exact same state flag to ensure full accessibility and clarity.
