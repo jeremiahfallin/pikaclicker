@@ -1,0 +1,3 @@
+## 2026-06-27 - Dynamic ARIA Labels for Destructive Actions
+**Learning:** When implementing two-step destructive actions (like a "Release" button that requires confirmation), simply changing button color or appending "Confirm" visually isn't enough for screen readers. The `aria-label` must be dynamically updated alongside the visual text to convey the state change explicitly.
+**Action:** Always couple the `aria-label` logic to the exact same state flag used for the visual text swap to ensure screen reader users are explicitly warned of the impending destructive action (e.g., `Confirm release of [Item]`).
