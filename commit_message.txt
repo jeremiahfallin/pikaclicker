@@ -1,0 +1,11 @@
+🎨 Palette: Improve Bank Pokemon Release UX
+
+💡 What: Updated the destructive "Release" button in the Bank component to display explicit confirmation text ("Confirm release of [Pokemon]") and a matching aria-label when in the pending confirmation state. Included a fix for the `keyframes` import in Battle.js that prevented Next.js from building.
+
+🎯 Why: The previous implementation relied purely on a color change (gray to red) to indicate the pending destructive state. Explicit text and an aria-label provide clearer communication, prevent accidental releases, and enhance accessibility.
+
+📸 Before/After:
+Before: Button text remains "Release".
+After: Button text dynamically changes to "Confirm release of Pikachu" upon first click.
+
+♿ Accessibility: Added an explicit aria-label for screen reader users during the destructive confirmation step.
