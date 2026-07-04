@@ -1,0 +1,3 @@
+## 2025-01-20 - Explicit Context for Destructive Confirmations
+**Learning:** When using a two-click pattern (e.g., click once to intend to delete, click again to confirm), users (and especially screen reader users) can lose context if the UI visually looks identical and reads identical to the previous state.
+**Action:** For destructive UI actions (like releasing an item or Pokémon), always update the visible text and `aria-label` of the confirmation button to explicitly state the action being confirmed (e.g., 'Confirm release of [Item]') to ensure clarity and accessibility, rather than relying solely on a secondary click color change. Couple this dynamic logic to the exact same state flag used for the visual text swap.
