@@ -1,0 +1,3 @@
+## 2024-06-25 - Bank Release Confirmation UX
+**Learning:** For destructive actions within long virtualized lists (like the Pokémon Bank), secondary confirmation steps should provide dynamic, explicit context (e.g., "Confirm release of Bulbasaur") rather than relying purely on state tracking. The visual change in UI text directly reinforces to the user exactly what action they are about to perform before the final commit.
+**Action:** When implementing destructive UI patterns, directly couple the visible text change and `aria-label` updates to the exact same state flag that handles the confirmation block to ensure accessibility and clarity are synchronously aligned.
