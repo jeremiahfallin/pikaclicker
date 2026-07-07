@@ -1,0 +1,3 @@
+## 2024-11-20 - Destructive Action Confirmations (Zustand Component Pattern)
+**Learning:** Destructive actions (like releasing items/Pokémon) implementing a double-click-to-confirm pattern using Zustand or component state (like `uuid === release`) are highly inaccessible if the visible text and `aria-label` do not update during the intermediate "waiting for confirmation" step.
+**Action:** When a destructive button toggles a confirmation state without a separate dialog, dynamically swap the button's internal text and `aria-label` (e.g., from "Release" to "Confirm release of [Item]") directly tied to the exact same state flag to ensure screen readers and visually impaired users are explicitly informed of the action being confirmed.
