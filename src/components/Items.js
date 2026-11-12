@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, Text, Tooltip } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 
 export default function Items({ selectedPokemon }) {
@@ -40,17 +40,41 @@ export default function Items({ selectedPokemon }) {
         }}
       >
         {items.map((item) => {
+          const isDisabled = !selectedPokemon?.uuid || item.quantity === 0;
+          let tooltipMessage = "";
+          if (item.quantity === 0) {
+            tooltipMessage = `You have no ${item.name}s left.`;
+          } else if (!selectedPokemon?.uuid) {
+            tooltipMessage = "Select a Pokémon first to use an item.";
+          }
+
           return (
-            <Center
+            <Tooltip
               key={item.name}
-              flex="0 0 auto"
-              flexDir={"column"}
-              onClick={() => handleClick(item)}
-              p={2}
+              label={tooltipMessage}
+              isDisabled={!isDisabled}
+              hasArrow
+              shouldWrapChildren
             >
-              <Text>{item.name}</Text>
-              <Text>{item.quantity}</Text>
-            </Center>
+              <Center
+                as="button"
+                aria-label={`Use ${item.name} (${item.quantity} left)`}
+                aria-disabled={isDisabled}
+                disabled={isDisabled}
+                opacity={isDisabled ? 0.5 : 1}
+                cursor={isDisabled ? "not-allowed" : "pointer"}
+                _hover={!isDisabled ? { background: "gray.100" } : undefined}
+                _focusVisible={{ outline: "2px solid", outlineColor: "blue.400", outlineOffset: "2px" }}
+                borderRadius="md"
+                flex="0 0 auto"
+                flexDir={"column"}
+                onClick={() => handleClick(item)}
+                p={2}
+              >
+                <Text>{item.name}</Text>
+                <Text>{item.quantity}</Text>
+              </Center>
+            </Tooltip>
           );
         })}
       </Flex>
