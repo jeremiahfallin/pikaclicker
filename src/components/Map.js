@@ -44,7 +44,6 @@ const HexagonContainer = ({ q, r, s, hexId, fill, isSelected }) => {
       });
     }
     updateCurrentHex({ q, r });
-    console.log({ q, r, s });
   }, [q, r, s, updateCurrentHex, unlockedAreas]);
 
   const cellStyle = useMemo(() => {
