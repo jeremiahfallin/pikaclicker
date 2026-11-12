@@ -171,7 +171,6 @@ export default function Pokedex() {
             return (
               <Center key={poke.id} flexDirection={"column"}>
                 <Text fontSize="sm">{poke.name}</Text>
-                <Text fontSize="sm">{poke.name}</Text>
                 <Image
                   alt={poke.name}
                   src={poke.sprites.front_default}
