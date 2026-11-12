@@ -35,7 +35,7 @@ export default function Meteor({ meteor, setInMeteor }) {
   // Render the meteor interface with leave button.
   return (
     <Box
-      background={`url(backgrounds/${background}.png)`}
+      background={`url(backgrounds/${background}.webp)`}
       backgroundSize={"cover"}
       backgroundRepeat={"no-repeat"}
       backgroundPosition={"center"}

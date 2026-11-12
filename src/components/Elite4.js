@@ -43,7 +43,7 @@ export default function Elite4({ elite4, setInElite4 }) {
   // Render the elite4 interface with challenge and leave buttons.
   return (
     <Box
-      background={`url(backgrounds/${background}.png)`}
+      background={`url(backgrounds/${background}.webp)`}
       backgroundSize={"cover"}
       backgroundRepeat={"no-repeat"}
       backgroundPosition={"center"}

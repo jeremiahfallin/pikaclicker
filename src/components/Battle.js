@@ -132,7 +132,7 @@ export default function Battle({ background = "forest" }) {
   // Render the battle scene with the player's and enemy's Pokémon.
   return (
     <Box
-      background={`url(backgrounds/${background}.png)`}
+      background={`url(backgrounds/${background}.webp)`}
       backgroundSize={"cover"}
       backgroundRepeat={"no-repeat"}
       backgroundPosition={"center"}
