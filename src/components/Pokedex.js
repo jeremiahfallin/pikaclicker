@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import pokes from "../pokes.json";
-import { getHexDetails } from "@/utils";
+import { getHexDetails, pokesById } from "@/utils";
 
 // TODO: Add more info to the pokedex (e.g. id#, types, etc.)
 // TODO: Add filter for seen/caught
@@ -44,7 +44,7 @@ export default function Pokedex() {
     if (!poke) {
       return [];
     }
-    return pokes.find((p) => p.id === poke);
+    return pokesById[poke] || [];
   });
 
   const handleAreaCheckbox = (e) => {

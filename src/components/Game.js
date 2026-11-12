@@ -1,12 +1,11 @@
 import { useState } from "react";
 import Head from "next/head";
-import { createPokemon, random } from "../utils";
+import { createPokemon, random, pokesByName } from "../utils";
 import Bank from "./Bank";
 import Party from "./Party";
 import Scene from "./Scene";
 import Items from "./Items";
 
-import pokes from "../pokes";
 import {
   Box,
   Center,
@@ -38,8 +37,8 @@ const starters = [
 // Component for selecting a starter Pokémon.
 const PickPokemon = ({ starter }) => {
   const updateParty = useGameStore((state) => state.updateParty);
-  const starterIndex = pokes.findIndex((val) => val.name === starter);
-  const starterDetails = createPokemon(pokes[starterIndex].name, 5);
+  const starterData = pokesByName[starter];
+  const starterDetails = createPokemon(starterData.name, 5);
 
   // On click, unlock area and update the party with the selected starter.
   return (
@@ -47,11 +46,11 @@ const PickPokemon = ({ starter }) => {
       onClick={() => {
         unlockArea("Area 1");
         updateParty([{ ...starterDetails }]);
-        updatePokedex(pokes[starterIndex].id, true);
+        updatePokedex(starterData.id, true);
       }}
     >
       <span>{starter}</span>
-      <Image alt={starter} src={pokes[starterIndex].sprites.front_default} />
+      <Image alt={starter} src={starterData.sprites.front_default} />
     </div>
   );
 };
