@@ -265,7 +265,7 @@ const useGameStore = create(
           }
 
           const { seen } = get().player.pokedex;
-          if (!seen.has(newPokemon.id) && !newPokemon.id) {
+          if (!seen.has(newPokemon.id)) {
             updatePokedex(newPokemon.id, false);
           }
 
