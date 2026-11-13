@@ -315,7 +315,7 @@ const erraticGrowth = (level) => {
   } else if (level <= 68) {
     return (level ** 3 * (150 - level)) / 100;
   } else if (level <= 98) {
-    return (level ** 3 * Math.floor(1.274 - level / 50)) / 1;
+    return (level ** 3 * Math.floor((1911 - 10 * level) / 3)) / 500;
   } else {
     return (level ** 3 * (160 - level)) / 100;
   }
