@@ -20,6 +20,7 @@ import {
   getHexDetails,
   getWildPokemon,
   homeHex,
+  legendaryNames,
   mediumFastGrowth,
   mediumSlowGrowth,
   pokesByName,
@@ -224,6 +225,12 @@ describe("map", () => {
     for (let i = 0; i < 50; i++) {
       const wild = getWildPokemon(hex);
       expect(area1.pokemon).toContain(wild.name);
+      // Legendaries always come at level 70, whatever the area. Area 1 has
+      // one (Kartana), so now and then one of the 50 is it.
+      if (legendaryNames.includes(wild.name)) {
+        expect(wild.level).toBe(70);
+        continue;
+      }
       expect(wild.level).toBeGreaterThanOrEqual(area1.minLevel);
       expect(wild.level).toBeLessThan(area1.maxLevel);
     }
