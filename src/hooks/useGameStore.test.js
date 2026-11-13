@@ -6,28 +6,16 @@ import useGameStore, {
   updateBadges,
   updatePokedex,
 } from "@/hooks/useGameStore";
-import { fixRandom, hexOnlyIn, pokemon } from "@/test/helpers";
+import {
+  fixRandom,
+  hexOnlyIn,
+  pokemon,
+  startGame,
+  startWildBattle,
+} from "@/test/helpers";
 import { homeHex, mediumSlowGrowth } from "@/utils";
 
 const state = () => useGameStore.getState();
-
-// Starts every test from a new game, plus whatever the test passes in.
-const startGame = ({ player = {}, ...rest } = {}) => {
-  loadSave({ ...rest, player: { party: [], ...player } });
-};
-
-// Puts the player in the wild at `hex` facing `enemy`.
-const startWildBattle = (enemy, { party, hex = hexOnlyIn("Area 1") } = {}) => {
-  startGame({
-    player: {
-      party: party ?? [pokemon("bulbasaur", 10)],
-      currentHex: hex,
-      isInTown: false,
-      unlockedAreas: ["Home", "Area 1"],
-    },
-    battle: { pokemon: [enemy], isTrainer: false, turn: 0, isComplete: false },
-  });
-};
 
 beforeEach(() => {
   startGame();
@@ -173,6 +161,25 @@ describe("moving on the map", () => {
     expect(state().player.isInTown).toBe(false);
     expect(state().player.currentHex).toEqual(hex);
     expect(state().player.pokedex.seen.has(wild.id)).toBe(true);
+  });
+
+  it("starts a wild battle, not a trainer one, when leaving a gym battle", () => {
+    startGame({
+      player: {
+        party: [pokemon("bulbasaur", 20)],
+        unlockedAreas: ["Home", "Area 1"],
+      },
+      battle: {
+        pokemon: [pokemon("pikachu", 12)],
+        isTrainer: true,
+        isComplete: false,
+      },
+    });
+
+    state().updateCurrentHex(hexOnlyIn("Area 1"));
+
+    expect(state().battle.pokemon).toHaveLength(1);
+    expect(state().battle.isTrainer).toBe(false);
   });
 
   it("heals the party and ends the battle in a town", () => {

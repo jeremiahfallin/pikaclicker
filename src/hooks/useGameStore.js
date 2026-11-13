@@ -63,6 +63,10 @@ const addGimmighoulCoin = (items) => {
   );
 };
 
+// While true, changes aren't saved or passed on to the components showing
+// them. See batchUpdates.
+let batching = false;
+
 const storage = {
   getItem: (name) => {
     const str = localStorage.getItem(name);
@@ -70,10 +74,24 @@ const storage = {
     return superjson.parse(str);
   },
   setItem: (name, value) => {
+    if (batching) return;
     localStorage.setItem(name, superjson.stringify(value));
   },
   removeItem: (name) => localStorage.removeItem(name),
 };
+
+// Creates the store so batchUpdates can hold back change notifications.
+// Components hear about changes through the store's subscribe, so while a
+// batch runs their listeners wait.
+const createBatchableStore = (initializer) =>
+  create((set, get, api) => {
+    const subscribe = api.subscribe;
+    api.subscribe = (listener) =>
+      subscribe((state, previousState) => {
+        if (!batching) listener(state, previousState);
+      });
+    return initializer(set, get, api);
+  });
 
 // The saved part of the game state for a new game. A function so every call
 // gets its own Sets.
@@ -180,7 +198,7 @@ const isValidSave = (data) =>
   typeof data.player === "object" &&
   Array.isArray(data.player.party);
 
-const useGameStore = create(
+const useGameStore = createBatchableStore(
   persist(
     (set, get) => ({
       ...createInitialData(),
@@ -360,9 +378,12 @@ const useGameStore = create(
 
           set((state) => ({
             ...state,
+            // A wild battle, even if the player walked out of a gym battle.
             battle: {
               ...state.battle,
               pokemon: [newPokemon],
+              isTrainer: false,
+              isComplete: false,
             },
             player: {
               ...state.player,
@@ -1052,6 +1073,20 @@ const useGameStore = create(
   )
 );
 
+// Runs `fn`, then saves and updates the screen once. Normally the game does
+// both after every change; catching up on time away makes thousands of
+// changes, and saving and re-rendering for each one would take seconds.
+function batchUpdates(fn) {
+  batching = true;
+  try {
+    return fn();
+  } finally {
+    batching = false;
+    // Any change saves the current state and notifies every component.
+    useGameStore.setState({});
+  }
+}
+
 // Loads a save from the cloud. If the data isn't a save, returns false and
 // leaves the current game alone.
 function loadSave(data) {
@@ -1149,5 +1184,11 @@ function updateBadges(badge) {
 // Function to handle defeating a pokemon
 function defeatPokemon() {}
 
-export { loadSave, unlockArea, updatePokedex, updateBadges };
+export {
+  loadSave,
+  unlockArea,
+  updatePokedex,
+  updateBadges,
+  batchUpdates,
+};
 export default useGameStore;
