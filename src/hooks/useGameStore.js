@@ -4,6 +4,7 @@ import superjson from "superjson";
 import { reportHit } from "@/game/battleEvents";
 import {
   areaNameAt,
+  laterEvolutions,
   checkEvolve,
   calcDamage,
   catchChance,
@@ -140,6 +141,9 @@ const createInitialData = () => ({
     repeatPokemon: true,
     shinyPokemon: true,
     legendaryPokemon: true,
+    // Off to start, so games that switched repeats off don't start using
+    // balls on repeats without being asked.
+    missingEvolutionPokemon: false,
     minimumIVPercent: 0,
   },
 });
@@ -230,19 +234,31 @@ const useGameStore = createBatchableStore(
           pokemon.level
         );
         const randomNum = random(0, 100);
-        const { newPokemon, repeatPokemon, shinyPokemon, legendaryPokemon } =
-          settings;
+        const {
+          newPokemon,
+          repeatPokemon,
+          shinyPokemon,
+          legendaryPokemon,
+          missingEvolutionPokemon,
+        } = settings;
         const isCaught = pokedex.caught.has(pokemon.id);
         const isShiny = pokemon.isShiny;
         const isLegendary = [...legendaryNames, "cosmog"].includes(
           pokemon.name
         );
+        // Could evolve into something the player hasn't caught yet.
+        const hasMissingEvolution =
+          missingEvolutionPokemon &&
+          laterEvolutions(pokemon.name).some(
+            (name) => !pokedex.caught.has(pokesByName[name]?.id)
+          );
 
         if (
           (isShiny && shinyPokemon) ||
           (isCaught && repeatPokemon) ||
           (newPokemon && !isCaught) ||
-          (isLegendary && legendaryPokemon)
+          (isLegendary && legendaryPokemon) ||
+          hasMissingEvolution
         ) {
           if (randomNum <= chance) {
             if (party.length < 6) {

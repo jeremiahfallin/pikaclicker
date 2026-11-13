@@ -143,6 +143,10 @@ function Map() {
   const unlockedAreas = useGameStore((state) => state.player.unlockedAreas);
   const { q, r } = currentHex;
 
+  // The caption needs no z-index: being positioned already puts it above
+  // the map. Giving it one would put it level with the battle scene pinned
+  // above the map, and it would then show on top of the scene as the map
+  // scrolls up under it.
   return (
     <Box position="relative" sx={mapStyles}>
       <Flex
@@ -154,7 +158,6 @@ function Map() {
         align="center"
         wrap="wrap"
         gap={2}
-        zIndex={1}
         pointerEvents="none"
       >
         <Box {...pill} fontSize="sm" fontWeight={700}>

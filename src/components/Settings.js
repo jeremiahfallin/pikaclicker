@@ -8,16 +8,28 @@ import {
   Select,
   Stack,
   Switch,
+  Text,
 } from "@chakra-ui/react";
 import Panel from "./Panel";
 
-// One on/off setting. Clicking the label flips the switch too.
-function SettingSwitch({ id, label, setting }) {
+// One on/off setting. Clicking the label flips the switch too. A hint, if
+// given, explains it under the label.
+function SettingSwitch({ id, label, hint, setting }) {
   const settings = useGameStore((state) => state.settings);
   return (
-    <FormControl display="flex" alignItems="center" justifyContent="space-between">
+    <FormControl
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
+      gap={2}
+    >
       <FormLabel htmlFor={id} mb={0} fontSize="sm" fontWeight={400}>
         {label}
+        {hint && (
+          <Text as="span" display="block" fontSize="xs" color="sky.700">
+            {hint}
+          </Text>
+        )}
       </FormLabel>
       <Switch
         id={id}
@@ -32,7 +44,7 @@ function SettingSwitch({ id, label, setting }) {
   );
 }
 
-// TODO: Right now only the ball is implemented, everything else is just visual
+// Which wild Pokémon to throw a ball at: any that matches a switch that's on.
 export default function Settings() {
   const settings = useGameStore((state) => state.settings);
   const items = useGameStore((state) => state.player.items);
@@ -56,6 +68,12 @@ export default function Settings() {
           id="setting-legendary"
           label="Legendary Pokémon"
           setting="legendaryPokemon"
+        />
+        <SettingSwitch
+          id="setting-missing-evolution"
+          label="Missing evolutions"
+          hint="Catch repeats that evolve into one you haven't caught"
+          setting="missingEvolutionPokemon"
         />
         <FormControl
           display="flex"
