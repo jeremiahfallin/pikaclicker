@@ -88,8 +88,13 @@ export default function Shop({ isOpen, onClose }) {
                           (i) => i.name === item.name
                         );
                         if (itemIndex !== -1) {
-                          const newItems = [...playerItems];
-                          newItems[itemIndex].quantity += amount;
+                          // Replace the item instead of editing it, so the
+                          // previous game state is left untouched.
+                          const newItems = playerItems.map((owned, i) =>
+                            i === itemIndex
+                              ? { ...owned, quantity: owned.quantity + amount }
+                              : owned
+                          );
                           updateItems(newItems);
                         } else {
                           updateItems([

@@ -1,36 +1,44 @@
+import { useEffect } from "react";
 import { Box, Button, Flex } from "@chakra-ui/react";
 import useGameStore, { updatePokedex } from "@/hooks/useGameStore";
 import { checkEvolve, createPokemon } from "@/utils";
 
-// Gym component manages the gym interactions, including battles and challenges.
+// Meteor component: party members that change form at this meteor (Deoxys)
+// change when the player enters.
 export default function Meteor({ meteor, setInMeteor }) {
   const party = useGameStore((state) => state.player.party);
   const updateParty = useGameStore((state) => state.updateParty);
   const background = `${meteor?.type}`;
 
-  // Check if any of the party members can evolve.
-  const evolutions = party.map((pokemon) =>
-    checkEvolve(pokemon, null, null, null, meteor.type)
-  );
+  // Evolve in an effect, not during render, and build the whole new party in
+  // one pass so every evolving member is kept.
+  useEffect(() => {
+    let changed = false;
+    const newParty = party.map((pokemon) => {
+      const evolution = checkEvolve(pokemon, null, null, null, meteor.type);
+      if (!evolution) return pokemon;
 
-  // If any of the party members can evolve, evolve them.
-  evolutions.forEach((evolution, idx) => {
-    if (evolution) {
-      const pokemon = party[idx];
+      changed = true;
       const evolvedPokemon = createPokemon(
         evolution,
         pokemon.level,
         pokemon.uuid,
         pokemon.isShiny,
         pokemon.pokemonKnockedOut,
-        pokemon.bisharpKnockedOut
+        pokemon.bisharpKnockedOut,
+        pokemon.gender,
+        pokemon.happiness,
+        pokemon.affection
       );
-      const newParty = [...party];
-      newParty[idx] = evolvedPokemon;
-      updateParty(newParty);
       updatePokedex(evolvedPokemon.id, true);
+      // Keep progress toward the next level; createPokemon would reset it.
+      return { ...pokemon, ...evolvedPokemon, xp: pokemon.xp };
+    });
+
+    if (changed) {
+      updateParty(newParty);
     }
-  });
+  }, [party, meteor.type, updateParty]);
 
   // Render the meteor interface with leave button.
   return (

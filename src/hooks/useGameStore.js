@@ -42,6 +42,26 @@ const levelFormulas = {
   "slow-then-very-fast": fluctuatingGrowth,
 };
 
+// Returns a new items list with one more Gimmighoul Coin. Builds new objects
+// rather than editing the existing ones, which belong to the previous state.
+const addGimmighoulCoin = (items) => {
+  const itemIndex = items.findIndex((i) => i.slug === "gimmighoul-coins");
+  if (itemIndex === -1) {
+    return [
+      ...items,
+      {
+        name: "Gimmighoul Coins",
+        slug: "gimmighoul-coins",
+        quantity: 1,
+        type: "evolution-item",
+      },
+    ];
+  }
+  return items.map((item, i) =>
+    i === itemIndex ? { ...item, quantity: item.quantity + 1 } : item
+  );
+};
+
 const storage = {
   getItem: (name) => {
     const str = localStorage.getItem(name);
@@ -54,48 +74,96 @@ const storage = {
   removeItem: (name) => localStorage.removeItem(name),
 };
 
+// The saved part of the game state for a new game. A function so every call
+// gets its own Sets.
+const createInitialData = () => ({
+  battle: {
+    pokemon: null,
+    isTrainer: false,
+    turn: 0,
+    isComplete: false,
+  },
+  player: {
+    currentHex: { q: 13, r: 2, s: 11 },
+    party: [],
+    bank: [],
+    coins: 1000,
+    pokedex: {
+      seen: new Set(),
+      caught: new Set(),
+    },
+    unlockedAreas: new Set(["Home"]),
+    badges: new Set(),
+    isInTown: true,
+    items: [
+      {
+        name: "Pokeball",
+        quantity: 10,
+        type: "ball",
+      },
+    ],
+    catchingStatus: "ALL",
+  },
+  clickMultiplier: 1,
+  events: {
+    pickStarter: 0,
+  },
+  settings: {
+    ball: "Pokeball",
+    newPokemon: true,
+    repeatPokemon: true,
+    shinyPokemon: true,
+    legendaryPokemon: true,
+    minimumIVPercent: 0,
+  },
+});
+
+// Bump this when a change to the save's shape needs old saves converted, and
+// do the conversion in `migrate` below. Fields that are only added don't need
+// a bump: withDefaults fills them in.
+const SAVE_VERSION = 1;
+
+const toSet = (value, fallback) =>
+  value instanceof Set || Array.isArray(value) ? new Set(value) : fallback;
+
+// Fills in anything an older or partial save is missing from a new game's
+// defaults, and keeps only the parts of the state that belong in a save.
+const withDefaults = (saved) => {
+  const defaults = createInitialData();
+  if (!saved || typeof saved !== "object") {
+    return defaults;
+  }
+  const player = { ...defaults.player, ...saved.player };
+  return {
+    battle: { ...defaults.battle, ...saved.battle },
+    player: {
+      ...player,
+      pokedex: {
+        seen: toSet(player.pokedex?.seen, defaults.player.pokedex.seen),
+        caught: toSet(player.pokedex?.caught, defaults.player.pokedex.caught),
+      },
+      unlockedAreas: toSet(player.unlockedAreas, defaults.player.unlockedAreas),
+      badges: toSet(player.badges, defaults.player.badges),
+    },
+    clickMultiplier: saved.clickMultiplier ?? defaults.clickMultiplier,
+    events: { ...defaults.events, ...saved.events },
+    settings: { ...defaults.settings, ...saved.settings },
+  };
+};
+
+// Anything without a player and party (an empty text box, a typo, some other
+// data) is not a save.
+const isValidSave = (data) =>
+  !!data &&
+  typeof data === "object" &&
+  !!data.player &&
+  typeof data.player === "object" &&
+  Array.isArray(data.player.party);
+
 const useGameStore = create(
   persist(
     (set, get) => ({
-      battle: {
-        pokemon: null,
-        isTrainer: false,
-        turn: 0,
-        isComplete: false,
-      },
-      player: {
-        currentHex: { q: 13, r: 2, s: 11 },
-        party: [],
-        bank: [],
-        coins: 1000,
-        pokedex: {
-          seen: new Set(),
-          caught: new Set(),
-        },
-        unlockedAreas: new Set(["Home"]),
-        badges: new Set(),
-        isInTown: true,
-        items: [
-          {
-            name: "Pokeball",
-            quantity: 10,
-            type: "ball",
-          },
-        ],
-        catchingStatus: "ALL",
-      },
-      clickMultiplier: 1,
-      events: {
-        pickStarter: 0,
-      },
-      settings: {
-        ball: "Pokeball",
-        newPokemon: true,
-        repeatPokemon: true,
-        shinyPokemon: true,
-        legendaryPokemon: true,
-        minimumIVPercent: 0,
-      },
+      ...createInitialData(),
       attemptCatch: (pokemon) => {
         const player = get().player;
         const settings = get().settings;
@@ -593,6 +661,9 @@ const useGameStore = create(
         const newPlace = [...get().player[place]];
         const newItems = [...get().player.items];
         const itemIndex = newItems.findIndex((i) => i.name === item.name);
+        if (idx === -1 || itemIndex === -1) {
+          return;
+        }
         if (
           item.type === "evolution-item" &&
           newItems[itemIndex].quantity >= 0
@@ -623,9 +694,14 @@ const useGameStore = create(
               ...pokemon,
               ...newPokemon,
             };
-            newItems[itemIndex].quantity -= itemsNeeded;
-            if (newItems[itemIndex].quantity <= 0) {
+            const remaining = newItems[itemIndex].quantity - itemsNeeded;
+            if (remaining <= 0) {
               newItems.splice(itemIndex, 1);
+            } else {
+              newItems[itemIndex] = {
+                ...newItems[itemIndex],
+                quantity: remaining,
+              };
             }
             if (place === "party") {
               get().updateParty(newPlace);
@@ -667,21 +743,7 @@ const useGameStore = create(
           get().updateHappiness();
           get().updateKnockedOut(enemyPokemon.name);
           if (enemyPokemon.name === "gimmighoul") {
-            const newItems = [...player.items];
-            const itemIndex = newItems.findIndex(
-              (i) => i.slug === "gimmighoul-coins"
-            );
-            if (itemIndex === -1) {
-              newItems.push({
-                name: "Gimmighoul Coins",
-                slug: "gimmighoul-coins",
-                quantity: 1,
-                type: "evolution-item",
-              });
-            } else {
-              newItems[itemIndex].quantity += 1;
-            }
-            get().updateItems(newItems);
+            get().updateItems(addGimmighoulCoin(get().player.items));
           }
 
           if (battle.isTrainer) {
@@ -778,21 +840,7 @@ const useGameStore = create(
           get().updateHappiness();
           get().updateKnockedOut(pokemon.name);
           if (pokemon.name === "gimmighoul") {
-            const newItems = [...player.items];
-            const itemIndex = newItems.findIndex(
-              (i) => i.slug === "gimmighoul-coins"
-            );
-            if (itemIndex === -1) {
-              newItems.push({
-                name: "Gimmighoul Coins",
-                slug: "gimmighoul-coins",
-                quantity: 1,
-                type: "evolution-item",
-              });
-            } else {
-              newItems[itemIndex].quantity += 1;
-            }
-            get().updateItems(newItems);
+            get().updateItems(addGimmighoulCoin(get().player.items));
           }
 
           if (battle.isTrainer) {
@@ -973,9 +1021,26 @@ const useGameStore = create(
     {
       name: "pokeclicker",
       storage,
+      version: SAVE_VERSION,
+      // Version 0 saves have the same shape as version 1.
+      migrate: (persistedState) => persistedState,
+      merge: (persistedState, currentState) => ({
+        ...currentState,
+        ...withDefaults(persistedState),
+      }),
     }
   )
 );
+
+// Loads a save from pasted text or the cloud. If the data isn't a save,
+// returns false and leaves the current game alone.
+function loadSave(data) {
+  if (!isValidSave(data)) {
+    return false;
+  }
+  useGameStore.setState(withDefaults(data));
+  return true;
+}
 
 // Function to update the Pokédex
 function updatePokedex(id, isCaught) {
@@ -1064,5 +1129,5 @@ function updateBadges(badge) {
 // Function to handle defeating a pokemon
 function defeatPokemon() {}
 
-export { unlockArea, updatePokedex, updateBadges };
+export { loadSave, unlockArea, updatePokedex, updateBadges };
 export default useGameStore;

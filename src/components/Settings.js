@@ -1,5 +1,5 @@
 import useAuth from "@/hooks/useAuth";
-import useGameStore from "@/hooks/useGameStore";
+import useGameStore, { loadSave } from "@/hooks/useGameStore";
 import {
   Box,
   Button,
@@ -12,6 +12,7 @@ import {
   Switch,
   Text,
   useClipboard,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import superjson from "superjson";
@@ -20,13 +21,27 @@ import superjson from "superjson";
 export default function Settings() {
   const [load, setLoad] = useState("");
   const { onCopy, setValue, hasCopied } = useClipboard("");
+  const toast = useToast();
   const settings = useGameStore((state) => state.settings);
   const items = useGameStore((state) => state.player.items);
-  const data = useGameStore();
+  // Read the whole game only when it's needed, instead of subscribing to it:
+  // a subscription re-renders (and re-serializes) on every battle tick. The
+  // text box only uses its starting value, so it's built once.
+  const [initialSaveText] = useState(() =>
+    superjson.stringify(useGameStore.getState())
+  );
   const { user, saveData, loadData } = useAuth();
 
   const loadGameFromText = () => {
-    useGameStore.setState(load);
+    if (!loadSave(load)) {
+      toast({
+        title: "Couldn't load that save.",
+        description: "Paste the text from the Copy button, then try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -111,7 +126,7 @@ export default function Settings() {
         <Button
           size="xs"
           onClick={() => {
-            const saveData = superjson.stringify(data);
+            const saveData = superjson.stringify(useGameStore.getState());
             setValue(saveData);
             onCopy();
           }}
@@ -133,7 +148,7 @@ export default function Settings() {
         )}
       </Flex>
       <Editable
-        defaultValue={superjson.stringify(data)}
+        defaultValue={initialSaveText}
         onChange={(value) => {
           try {
             const parsed = superjson.parse(value);
