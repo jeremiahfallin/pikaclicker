@@ -89,6 +89,26 @@ const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
  * @param {number} s - The s coordinate of the hex.
  * @returns {Object} An object containing details about the hex.
  */
+// Every area each hex is in, in the order areas.json lists them. Hexes on
+// the border of two areas are in both.
+const areasByHex = new Map();
+for (const area of areas) {
+  for (const hex of area.hexes) {
+    const key = `${hex.q},${hex.r}`;
+    if (!areasByHex.has(key)) areasByHex.set(key, []);
+    areasByHex.get(key).push(area);
+  }
+}
+
+/** Every area the hex at q, r is in, in areas.json order. */
+const areasAt = (q, r) => areasByHex.get(`${q},${r}`) ?? [];
+
+/**
+ * The name of the area that decides whether the hex at q, r is unlocked:
+ * the first one listing it. "" for a hex in no area, which is never unlocked.
+ */
+const areaNameAt = (q, r) => areasAt(q, r)[0]?.name ?? "";
+
 const getHexDetails = (q, r) => {
   let spawnablePokemon = new Set();
   let isTown = false;
@@ -488,6 +508,8 @@ function checkEvolve(
 
 export {
   checkEvolve,
+  areaNameAt,
+  areasAt,
   axialDistance,
   calcDamage,
   calcMaxHP,

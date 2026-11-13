@@ -59,6 +59,18 @@ export function formatName(name) {
 }
 
 /**
+ * What the map says about an area: a town's name, or an area's name and the
+ * levels of its wild Pokémon. Spawns never reach an area's maxLevel, so the
+ * top level shown is one below it.
+ * @param {Object|undefined} area - An entry from areas.json.
+ */
+export function areaLabel(area) {
+  if (!area) return "Uncharted";
+  if (area.isTown) return area.name;
+  return `${area.name} · Lv ${area.minLevel}–${area.maxLevel - 1}`;
+}
+
+/**
  * Damage as shown in battle. Early clicks do well under 1 damage, so small
  * hits keep one decimal place ("0.4"); bigger ones are whole numbers.
  * @param {number} damage

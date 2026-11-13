@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import superjson from "superjson";
 import { reportHit } from "@/game/battleEvents";
 import {
+  areaNameAt,
   checkEvolve,
   calcDamage,
   catchChance,
@@ -23,7 +24,6 @@ import {
   fluctuatingGrowth,
   spriteFor,
 } from "@/utils";
-import areas from "../areas";
 
 const ballChances = {
   Pokeball: 1,
@@ -312,12 +312,7 @@ const useGameStore = createBatchableStore(
         const unlockedAreas = get().player.unlockedAreas;
         const hex = getHexDetails(newHex.q, newHex.r);
 
-        let hexArea =
-          areas.find((area) =>
-            area.hexes.some((h) => h.q === hex.q && h.r === hex.r)
-          )?.name || "";
-
-        if (!unlockedAreas.has(hexArea)) {
+        if (!unlockedAreas.has(areaNameAt(hex.q, hex.r))) {
           return;
         }
 

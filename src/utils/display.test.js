@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import pokes from "../pokes.json";
-import { formatDamage, formatName, formatSlug, hpColorScheme } from "./display";
+import areas from "../areas.json";
+import {
+  areaLabel,
+  formatDamage,
+  formatName,
+  formatSlug,
+  hpColorScheme,
+} from "./display";
 
 describe("formatName", () => {
   it("capitalizes plain names", () => {
@@ -62,6 +69,24 @@ describe("formatSlug", () => {
     expect(formatSlug("thunder-stone")).toBe("Thunder Stone");
     expect(formatSlug("kings-rock")).toBe("Kings Rock");
     expect(formatSlug("up-grade")).toBe("Up Grade");
+  });
+});
+
+describe("areaLabel", () => {
+  const area = (name) => areas.find((a) => a.name === name);
+
+  it("names a town", () => {
+    expect(areaLabel(area("Home"))).toBe("Home");
+    expect(areaLabel(area("Volcano Town"))).toBe("Volcano Town");
+  });
+
+  it("gives an area's levels, up to the highest a wild Pokémon can be", () => {
+    // Area 1 lists levels 1 to 10, but spawns never reach the top one.
+    expect(areaLabel(area("Area 1"))).toBe("Area 1 · Lv 1–9");
+  });
+
+  it("calls a hex in no area uncharted", () => {
+    expect(areaLabel(undefined)).toBe("Uncharted");
   });
 });
 
