@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import areas from "@/areas";
 import pokes from "@/pokes";
@@ -233,6 +235,18 @@ describe("game data", () => {
     for (const area of areas) {
       for (const name of area.pokemon) {
         expect(pokesByName, `${area.name}: ${name}`).toHaveProperty([name]);
+      }
+    }
+  });
+
+  it("serves every sprite pokes.json lists (run scripts/fetch-sprites.mjs)", () => {
+    for (const pokemon of pokes) {
+      for (const sprite of [pokemon.sprites.front_default, pokemon.sprites.front_shiny]) {
+        if (sprite === null) continue;
+        expect(
+          existsSync(fileURLToPath(new URL(`../../public${sprite}`, import.meta.url))),
+          `${pokemon.name}: ${sprite}`
+        ).toBe(true);
       }
     }
   });

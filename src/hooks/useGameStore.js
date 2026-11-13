@@ -20,6 +20,7 @@ import {
   mediumFastGrowth,
   mediumSlowGrowth,
   fluctuatingGrowth,
+  spriteFor,
 } from "@/utils";
 import areas from "../areas";
 
@@ -126,6 +127,22 @@ const SAVE_VERSION = 1;
 const toSet = (value, fallback) =>
   value instanceof Set || Array.isArray(value) ? new Set(value) : fallback;
 
+// Sprites used to be loaded from GitHub and are now served with the game, but
+// Pokémon in older saves still point at GitHub. Those get the sprite the game
+// serves now.
+const withServedSprites = (pokemonList) =>
+  Array.isArray(pokemonList)
+    ? pokemonList.map((pokemon) => {
+        const species = pokesByName[pokemon?.name];
+        const isOld =
+          typeof pokemon?.image === "string" &&
+          pokemon.image.startsWith("https://raw.githubusercontent.com/");
+        return isOld && species
+          ? { ...pokemon, image: spriteFor(species, pokemon.isShiny) }
+          : pokemon;
+      })
+    : pokemonList;
+
 // Fills in anything an older or partial save is missing from a new game's
 // defaults, and keeps only the parts of the state that belong in a save.
 const withDefaults = (saved) => {
@@ -134,10 +151,13 @@ const withDefaults = (saved) => {
     return defaults;
   }
   const player = { ...defaults.player, ...saved.player };
+  const battle = { ...defaults.battle, ...saved.battle };
   return {
-    battle: { ...defaults.battle, ...saved.battle },
+    battle: { ...battle, pokemon: withServedSprites(battle.pokemon) },
     player: {
       ...player,
+      party: withServedSprites(player.party),
+      bank: withServedSprites(player.bank),
       pokedex: {
         seen: toSet(player.pokedex?.seen, defaults.player.pokedex.seen),
         caught: toSet(player.pokedex?.caught, defaults.player.pokedex.caught),

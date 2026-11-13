@@ -1,13 +1,17 @@
-import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { Box, Center, Link, useDisclosure } from "@chakra-ui/react";
 import SaveLoadModal from "./SaveLoadModal";
-import { auth } from "@/config";
+import { loadFirebase } from "@/config";
 import useAuth from "@/hooks/useAuth";
 
 export default function Layout({ children }) {
   const { user } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const onClick = () => {
+  const onClick = async () => {
+    // useAuth starts loading Firebase when the page mounts, so by the time
+    // anyone clicks this has normally resolved and the sign-in popup opens
+    // within the click (browsers block popups opened later).
+    const { auth, GoogleAuthProvider, signInWithPopup, signOut } =
+      await loadFirebase();
     if (user) {
       signOut(auth);
     } else {

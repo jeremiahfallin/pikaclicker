@@ -82,6 +82,22 @@ describe("loadSave", () => {
     expect(typeof state().handleClick).toBe("function");
   });
 
+  it("moves Pokémon in older saves off GitHub-hosted sprites", () => {
+    const github = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon";
+    loadSave({
+      player: {
+        party: [pokemon("bulbasaur", 5, { image: `${github}/1.png` })],
+        bank: [
+          pokemon("pikachu", 5, { image: `${github}/shiny/25.png`, isShiny: true }),
+        ],
+      },
+      battle: { pokemon: [pokemon("weedle", 3, { image: `${github}/13.png` })] },
+    });
+    expect(state().player.party[0].image).toBe("/sprites/pokemon/1.png");
+    expect(state().player.bank[0].image).toBe("/sprites/pokemon/shiny/25.png");
+    expect(state().battle.pokemon[0].image).toBe("/sprites/pokemon/13.png");
+  });
+
   it("round-trips a game through a cloud save", () => {
     startGame({
       player: {
