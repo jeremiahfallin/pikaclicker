@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/config";
+import { loadFirebase } from "@/config";
 import superjson from "superjson";
 import useGameStore from "@/hooks/useGameStore";
 
@@ -17,7 +16,8 @@ export default function useGym(leader) {
   }, [gymLeader]);
 
   async function loadGymLeader() {
-    if (!gymLeader) return;
+    if (gymLeader !== "Olivia" && gymLeader !== "Chris") return;
+    const { db, doc, getDoc } = await loadFirebase();
 
     if (gymLeader === "Olivia") {
       const dataDoc = doc(

@@ -207,6 +207,16 @@ const catchChance = (captureRate, hp, maxHP, status, ball, level) => {
   return chance >= 100 ? 100 : chance;
 };
 
+/**
+ * Picks the sprite to show for a species. Species without a shiny sprite use
+ * their normal one when shiny.
+ * @param {Object} pokemon - The species' entry in pokes.json.
+ * @param {boolean} isShiny - Whether the Pokémon is shiny.
+ * @returns {string} The sprite's URL.
+ */
+const spriteFor = (pokemon, isShiny) =>
+  (isShiny && pokemon.sprites.front_shiny) || pokemon.sprites.front_default;
+
 // Right now every pokemon of a species that is the same level has the same stats, potential
 // TODO: implement IVs and maybe EVs
 // Also shiny check will run even when pokemon evolves
@@ -231,12 +241,7 @@ const createPokemon = (
   const pokemon = pokesByName[name];
 
   const id = pokemon.id;
-  let image = pokemon.sprites.front_default;
-  if (isShiny && pokemon.sprites?.front_shiny) {
-    image = isShiny
-      ? pokemon.sprites.front_shiny
-      : pokemon.sprites.front_default;
-  }
+  const image = spriteFor(pokemon, isShiny);
   const growthRate = pokemon.growthRate;
   const hp = calcMaxHP(pokemon.stats[0].base_stat, newLevel);
   const attack = calcStat(pokemon.stats[1].base_stat, newLevel);
@@ -315,7 +320,7 @@ const erraticGrowth = (level) => {
   } else if (level <= 68) {
     return (level ** 3 * (150 - level)) / 100;
   } else if (level <= 98) {
-    return (level ** 3 * Math.floor(1.274 - level / 50)) / 1;
+    return (level ** 3 * Math.floor((1911 - 10 * level) / 3)) / 500;
   } else {
     return (level ** 3 * (160 - level)) / 100;
   }
@@ -504,4 +509,5 @@ export {
   determineSpawn,
   pokesById,
   pokesByName,
+  spriteFor,
 };

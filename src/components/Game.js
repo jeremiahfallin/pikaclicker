@@ -21,6 +21,7 @@ import useGameStore, { unlockArea, updatePokedex } from "@/hooks/useGameStore";
 import Pokedex from "./Pokedex";
 import Settings from "./Settings";
 import Badges from "./Badges";
+import AwaySummary from "./AwaySummary";
 
 // Initialize starter Pokémon arrays.
 const waterStarters = ["squirtle", "totodile", "mudkip", "piplup"];
@@ -75,6 +76,9 @@ export default function Game() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      {/* What the party did while the player was away. */}
+      <AwaySummary />
 
       {/* Layout of the game using a grid. */}
       <SimpleGrid

@@ -20,6 +20,7 @@ import {
   mediumFastGrowth,
   mediumSlowGrowth,
   fluctuatingGrowth,
+  spriteFor,
 } from "@/utils";
 import areas from "../areas";
 
@@ -62,6 +63,10 @@ const addGimmighoulCoin = (items) => {
   );
 };
 
+// While true, changes aren't saved or passed on to the components showing
+// them. See batchUpdates.
+let batching = false;
+
 const storage = {
   getItem: (name) => {
     const str = localStorage.getItem(name);
@@ -69,10 +74,24 @@ const storage = {
     return superjson.parse(str);
   },
   setItem: (name, value) => {
+    if (batching) return;
     localStorage.setItem(name, superjson.stringify(value));
   },
   removeItem: (name) => localStorage.removeItem(name),
 };
+
+// Creates the store so batchUpdates can hold back change notifications.
+// Components hear about changes through the store's subscribe, so while a
+// batch runs their listeners wait.
+const createBatchableStore = (initializer) =>
+  create((set, get, api) => {
+    const subscribe = api.subscribe;
+    api.subscribe = (listener) =>
+      subscribe((state, previousState) => {
+        if (!batching) listener(state, previousState);
+      });
+    return initializer(set, get, api);
+  });
 
 // The saved part of the game state for a new game. A function so every call
 // gets its own Sets.
@@ -126,6 +145,22 @@ const SAVE_VERSION = 1;
 const toSet = (value, fallback) =>
   value instanceof Set || Array.isArray(value) ? new Set(value) : fallback;
 
+// Sprites used to be loaded from GitHub and are now served with the game, but
+// Pokémon in older saves still point at GitHub. Those get the sprite the game
+// serves now.
+const withServedSprites = (pokemonList) =>
+  Array.isArray(pokemonList)
+    ? pokemonList.map((pokemon) => {
+        const species = pokesByName[pokemon?.name];
+        const isOld =
+          typeof pokemon?.image === "string" &&
+          pokemon.image.startsWith("https://raw.githubusercontent.com/");
+        return isOld && species
+          ? { ...pokemon, image: spriteFor(species, pokemon.isShiny) }
+          : pokemon;
+      })
+    : pokemonList;
+
 // Fills in anything an older or partial save is missing from a new game's
 // defaults, and keeps only the parts of the state that belong in a save.
 const withDefaults = (saved) => {
@@ -134,10 +169,13 @@ const withDefaults = (saved) => {
     return defaults;
   }
   const player = { ...defaults.player, ...saved.player };
+  const battle = { ...defaults.battle, ...saved.battle };
   return {
-    battle: { ...defaults.battle, ...saved.battle },
+    battle: { ...battle, pokemon: withServedSprites(battle.pokemon) },
     player: {
       ...player,
+      party: withServedSprites(player.party),
+      bank: withServedSprites(player.bank),
       pokedex: {
         seen: toSet(player.pokedex?.seen, defaults.player.pokedex.seen),
         caught: toSet(player.pokedex?.caught, defaults.player.pokedex.caught),
@@ -151,8 +189,8 @@ const withDefaults = (saved) => {
   };
 };
 
-// Anything without a player and party (an empty text box, a typo, some other
-// data) is not a save.
+// Anything without a player and party (an empty document, some other data) is
+// not a save.
 const isValidSave = (data) =>
   !!data &&
   typeof data === "object" &&
@@ -160,7 +198,7 @@ const isValidSave = (data) =>
   typeof data.player === "object" &&
   Array.isArray(data.player.party);
 
-const useGameStore = create(
+const useGameStore = createBatchableStore(
   persist(
     (set, get) => ({
       ...createInitialData(),
@@ -340,9 +378,12 @@ const useGameStore = create(
 
           set((state) => ({
             ...state,
+            // A wild battle, even if the player walked out of a gym battle.
             battle: {
               ...state.battle,
               pokemon: [newPokemon],
+              isTrainer: false,
+              isComplete: false,
             },
             player: {
               ...state.player,
@@ -1032,8 +1073,22 @@ const useGameStore = create(
   )
 );
 
-// Loads a save from pasted text or the cloud. If the data isn't a save,
-// returns false and leaves the current game alone.
+// Runs `fn`, then saves and updates the screen once. Normally the game does
+// both after every change; catching up on time away makes thousands of
+// changes, and saving and re-rendering for each one would take seconds.
+function batchUpdates(fn) {
+  batching = true;
+  try {
+    return fn();
+  } finally {
+    batching = false;
+    // Any change saves the current state and notifies every component.
+    useGameStore.setState({});
+  }
+}
+
+// Loads a save from the cloud. If the data isn't a save, returns false and
+// leaves the current game alone.
 function loadSave(data) {
   if (!isValidSave(data)) {
     return false;
@@ -1129,5 +1184,11 @@ function updateBadges(badge) {
 // Function to handle defeating a pokemon
 function defeatPokemon() {}
 
-export { loadSave, unlockArea, updatePokedex, updateBadges };
+export {
+  loadSave,
+  unlockArea,
+  updatePokedex,
+  updateBadges,
+  batchUpdates,
+};
 export default useGameStore;
