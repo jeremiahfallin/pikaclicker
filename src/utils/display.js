@@ -59,6 +59,16 @@ export function formatName(name) {
 }
 
 /**
+ * Damage as shown in battle. Early clicks do well under 1 damage, so small
+ * hits keep one decimal place ("0.4"); bigger ones are whole numbers.
+ * @param {number} damage
+ */
+export function formatDamage(damage) {
+  if (damage < 10) return String(Math.round(damage * 10) / 10);
+  return String(Math.round(damage));
+}
+
+/**
  * Chakra color scheme for an HP bar: green while healthy, yellow from half
  * health, red at a fifth or less.
  * @param {number} percent - Current HP as a percentage of max HP.

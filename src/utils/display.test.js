@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import pokes from "../pokes.json";
-import { formatName, formatSlug, hpColorScheme } from "./display";
+import { formatDamage, formatName, formatSlug, hpColorScheme } from "./display";
 
 describe("formatName", () => {
   it("capitalizes plain names", () => {
@@ -62,6 +62,19 @@ describe("formatSlug", () => {
     expect(formatSlug("thunder-stone")).toBe("Thunder Stone");
     expect(formatSlug("kings-rock")).toBe("Kings Rock");
     expect(formatSlug("up-grade")).toBe("Up Grade");
+  });
+});
+
+describe("formatDamage", () => {
+  it("shows small hits to one decimal place", () => {
+    expect(formatDamage(0.36)).toBe("0.4");
+    expect(formatDamage(3.04)).toBe("3");
+    expect(formatDamage(7.25)).toBe("7.3");
+  });
+
+  it("rounds bigger hits to whole numbers", () => {
+    expect(formatDamage(9.96)).toBe("10");
+    expect(formatDamage(42.6)).toBe("43");
   });
 });
 

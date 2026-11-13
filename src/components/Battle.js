@@ -6,13 +6,17 @@ import { getTurnProgress } from "@/game/battleClock";
 import { homeHex } from "@/utils";
 import { formatName, hpColorScheme } from "@/utils/display";
 import SceneFrame from "./SceneFrame";
+import { DamageNumbers, useHitEffects } from "./BattleHits";
 
 /**
- * One fighter: a name plate (name, level, HP bar) above its sprite.
+ * One fighter: a name plate (name, level, HP bar) above its sprite, which
+ * shakes when hit, with the damage floating up from it.
  * @param {Object} details - The Pokémon: image, name, level and HP.
  * @param {"left"|"right"} side - Which bottom corner of the scene it stands in.
+ * @param {"player"|"enemy"} target - Whose Pokémon this is, to pick its hits.
  */
-function Pokemon({ details, side }) {
+function Pokemon({ details, side, target }) {
+  const { numbers, removeNumber, spriteRef } = useHitEffects(target);
   // Return null if no details are provided to prevent rendering errors.
   if (!details) return null;
   const name = formatName(details.name);
@@ -55,13 +59,16 @@ function Pokemon({ details, side }) {
       </Box>
       {/* Sprites have empty space at the top; tuck the plate into it so it
           sits just above the Pokémon. */}
-      <Image
-        src={details.image}
-        alt={name}
-        w="100%"
-        mt="-22%"
-        sx={{ imageRendering: "pixelated" }}
-      />
+      <Box position="relative" mt="-22%">
+        <Image
+          ref={spriteRef}
+          src={details.image}
+          alt={name}
+          w="100%"
+          sx={{ imageRendering: "pixelated" }}
+        />
+        <DamageNumbers numbers={numbers} onDone={removeNumber} />
+      </Box>
     </Flex>
   );
 }
@@ -163,8 +170,8 @@ export default function Battle({ background = "forest" }) {
       id="battle"
     >
       <InitiativeSlider />
-      <Pokemon details={playerPokemon} side="left" />
-      <Pokemon details={enemyPokemon} side="right" />
+      <Pokemon details={playerPokemon} side="left" target="player" />
+      <Pokemon details={enemyPokemon} side="right" target="enemy" />
     </SceneFrame>
   );
 }
