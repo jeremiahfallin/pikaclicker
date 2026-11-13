@@ -13,7 +13,7 @@ import {
   startGame,
   startWildBattle,
 } from "@/test/helpers";
-import { homeHex, mediumSlowGrowth } from "@/utils";
+import { homeHex, mediumSlowGrowth, pokesByName } from "@/utils";
 
 const state = () => useGameStore.getState();
 
@@ -301,6 +301,57 @@ describe("catching", () => {
 
     expect(state().player.party).toHaveLength(1);
     expect(state().player.items[0].quantity).toBe(10);
+  });
+
+  describe("Pokémon with a missing evolution", () => {
+    // A Bulbasaur the player has already caught, with repeats switched off,
+    // so only the missing-evolution setting can make the game throw a ball.
+    const caughtBulbasaur = (settings) => {
+      fixRandom(0); // the catch succeeds
+      const wild = pokemon("bulbasaur", 5, { currentHP: 0 });
+      startWildBattle(wild, { party: [pokemon("pikachu", 10)] });
+      updatePokedex(wild.id, true);
+      useGameStore.setState({
+        settings: { ...state().settings, repeatPokemon: false, ...settings },
+      });
+      return wild;
+    };
+
+    it("is switched off for new games and old saves", () => {
+      expect(state().settings.missingEvolutionPokemon).toBe(false);
+      loadSave({ player: { party: [] }, settings: { repeatPokemon: false } });
+      expect(state().settings.missingEvolutionPokemon).toBe(false);
+    });
+
+    it("catches one again when it can evolve into something not caught yet", () => {
+      const wild = caughtBulbasaur({ missingEvolutionPokemon: true });
+      updatePokedex(pokesByName.ivysaur.id, true); // Venusaur is still missing
+
+      state().attemptCatch(wild);
+
+      expect(state().player.party.map((p) => p.uuid)).toContain(wild.uuid);
+      expect(state().player.items[0].quantity).toBe(9);
+    });
+
+    it("leaves it once every evolution is caught", () => {
+      const wild = caughtBulbasaur({ missingEvolutionPokemon: true });
+      updatePokedex(pokesByName.ivysaur.id, true);
+      updatePokedex(pokesByName.venusaur.id, true);
+
+      state().attemptCatch(wild);
+
+      expect(state().player.party).toHaveLength(1);
+      expect(state().player.items[0].quantity).toBe(10);
+    });
+
+    it("leaves it while the setting is off", () => {
+      const wild = caughtBulbasaur({ missingEvolutionPokemon: false });
+
+      state().attemptCatch(wild);
+
+      expect(state().player.party).toHaveLength(1);
+      expect(state().player.items[0].quantity).toBe(10);
+    });
   });
 });
 

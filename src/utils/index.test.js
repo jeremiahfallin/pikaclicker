@@ -22,6 +22,7 @@ import {
   getHexDetails,
   getWildPokemon,
   homeHex,
+  laterEvolutions,
   legendaryNames,
   mediumFastGrowth,
   mediumSlowGrowth,
@@ -253,6 +254,31 @@ describe("map", () => {
       expect(wild.level).toBeGreaterThanOrEqual(area1.minLevel);
       expect(wild.level).toBeLessThan(area1.maxLevel);
     }
+  });
+});
+
+describe("laterEvolutions", () => {
+  it("lists every stage a Pokémon can evolve into", () => {
+    expect(laterEvolutions("bulbasaur")).toEqual(["ivysaur", "venusaur"]);
+    expect(laterEvolutions("ivysaur")).toEqual(["venusaur"]);
+  });
+
+  it("follows every branch", () => {
+    expect(laterEvolutions("eevee")).toEqual(
+      expect.arrayContaining(["vaporeon", "jolteon", "flareon", "sylveon"])
+    );
+  });
+
+  it("is empty for a final evolution or an unknown name", () => {
+    expect(laterEvolutions("venusaur")).toEqual([]);
+    expect(laterEvolutions("not-a-pokemon")).toEqual([]);
+  });
+
+  it("handles forms that change back and forth, leaving out the Pokémon itself", () => {
+    // Deoxys's forms all change into each other.
+    const forms = laterEvolutions("deoxys-normal");
+    expect(forms).toContain("deoxys-attack");
+    expect(forms).not.toContain("deoxys-normal");
   });
 });
 

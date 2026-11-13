@@ -5,6 +5,28 @@ import pokes from "../pokes";
 const pokesById = Object.fromEntries(pokes.map((p) => [p.id, p]));
 const pokesByName = Object.fromEntries(pokes.map((p) => [p.name, p]));
 
+/**
+ * Every Pokémon the named one can evolve or change into, at any stage and on
+ * every branch: ["ivysaur", "venusaur"] for "bulbasaur". Some forms change
+ * back and forth (Deoxys, Shaymin, Ogerpon), so each name is visited once
+ * and the Pokémon itself is left out.
+ * @param {string} name
+ * @returns {string[]}
+ */
+const laterEvolutions = (name) => {
+  const found = new Set();
+  const visit = (current) => {
+    for (const evolution of pokesByName[current]?.evolvesTo ?? []) {
+      const next = evolution.pokemon_name;
+      if (next === name || found.has(next)) continue;
+      found.add(next);
+      visit(next);
+    }
+  };
+  visit(name);
+  return [...found];
+};
+
 const homeHex = { q: 13, r: 2, s: 11 };
 const legendaryNames = [
   "lugia",
@@ -510,6 +532,7 @@ export {
   checkEvolve,
   areaNameAt,
   areasAt,
+  laterEvolutions,
   axialDistance,
   calcDamage,
   calcMaxHP,
