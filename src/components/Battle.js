@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Box, Flex, Image, Progress } from "@chakra-ui/react";
-import { keyframes } from "@emotion/react";
 import useGameStore from "@/hooks/useGameStore";
+import useBattleClock from "@/hooks/useBattleClock";
+import { getTurnProgress } from "@/game/battleClock";
 import { homeHex } from "@/utils";
 
 /**
@@ -37,54 +38,64 @@ function Pokemon({ details, top, left, bottom, right }) {
   );
 }
 
-// Animation for the initiative slider.
-const slide = keyframes`
-  0% {
-    left: -40px;
-  }
-  100% {
-    left: 100%;
-  }
-`;
+const SPRITE_SIZE = 40;
 
 /**
- * InitiativeSlider component to show turn order based on Pokémon speed stats.
- * @param {Array} pokemons - Array of Pokémon objects participating in the battle.
- * @returns A visual representation of the turn order.
+ * Shows how close each side is to its next turn: each sprite crosses the bar
+ * once per turn, so the faster Pokémon crosses more often. The battle clock
+ * decides when turns happen; this only draws it.
  */
 const InitiativeSlider = () => {
-  // Hook to handle game turns.
-  const handleTurn = useGameStore((state) => state.handleTurn);
   // Retrieving the player's first Pokémon in the party.
   const playerPokemon = useGameStore((state) => state.player.party[0]);
-  const playerSpeed = playerPokemon.speed;
   // Retrieving the enemy Pokémon.
   const enemyPokemon = useGameStore((state) => state.battle.pokemon[0]);
-  const enemySpeed = enemyPokemon.speed;
+  const trackRef = useRef(null);
+  const playerRef = useRef(null);
+  const enemyRef = useRef(null);
 
-  // Each sprite's animation loop is that side's turn. Give each sprite its own
-  // handler: telling them apart by name breaks when both are the same species.
-  const handlePlayerTurn = () => handleTurn("player");
-  const handleEnemyTurn = () => handleTurn();
+  // Move the sprites every frame without re-rendering.
+  useEffect(() => {
+    let frame;
+    const draw = () => {
+      const width = trackRef.current?.clientWidth ?? 0;
+      const progress = getTurnProgress();
+      const place = (sprite, amount) => {
+        if (sprite) {
+          sprite.style.left = `${-SPRITE_SIZE + amount * (width + SPRITE_SIZE)}px`;
+        }
+      };
+      place(playerRef.current, progress.player);
+      place(enemyRef.current, progress.enemy);
+      frame = requestAnimationFrame(draw);
+    };
+    frame = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
-  const speedNumerator = 100;
   return (
-    <Flex position="relative" h="50px" align="center" overflow="hidden">
+    <Flex
+      ref={trackRef}
+      position="relative"
+      h="50px"
+      align="center"
+      overflow="hidden"
+    >
       <Image
+        ref={playerRef}
         src={playerPokemon.image}
         alt={playerPokemon.name}
-        boxSize="40px"
+        boxSize={`${SPRITE_SIZE}px`}
         position="absolute"
-        animation={`${slide} ${speedNumerator / playerSpeed}s linear infinite`}
-        onAnimationIteration={handlePlayerTurn}
+        left={`${-SPRITE_SIZE}px`}
       />
       <Image
+        ref={enemyRef}
         src={enemyPokemon.image}
         alt={enemyPokemon.name}
-        boxSize="40px"
+        boxSize={`${SPRITE_SIZE}px`}
         position="absolute"
-        animation={`${slide} ${speedNumerator / enemySpeed}s linear infinite`}
-        onAnimationIteration={handleEnemyTurn}
+        left={`${-SPRITE_SIZE}px`}
       />
     </Flex>
   );
@@ -96,12 +107,12 @@ const InitiativeSlider = () => {
  * @returns A Box component representing the battle scene.
  */
 export default function Battle({ background = "forest" }) {
-  const [showSlider, setShowSlider] = useState(true);
+  // Play turns while the battle is on screen.
+  useBattleClock();
   // Retrieving the player's first Pokémon in the party.
   const playerPokemon = useGameStore((state) => state.player.party[0]);
   // Retrieving the enemy Pokémon.
   const enemyPokemon = useGameStore((state) => state.battle?.pokemon?.[0]);
-  // State to track the current enemy Pokémon.
   const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
   // With nothing to fight, send the player home. This changes game state, so
   // it runs in an effect after rendering rather than during it.
@@ -110,23 +121,7 @@ export default function Battle({ background = "forest" }) {
       updateCurrentHex(homeHex);
     }
   }, [enemyPokemon, updateCurrentHex]);
-  const [currentEnemy, setCurrentEnemy] = useState(enemyPokemon?.uuid);
-  // Hook to handle game turns.
-  const handleTurn = useGameStore((state) => state.handleClick);
-  const handleClick = () => {
-    handleTurn("player");
-  };
-
-  useEffect(() => {
-    if (enemyPokemon?.uuid !== currentEnemy) {
-      setShowSlider(false);
-      setCurrentEnemy(enemyPokemon?.uuid);
-    }
-  }, [enemyPokemon?.uuid, currentEnemy]);
-
-  useEffect(() => {
-    setShowSlider(true);
-  }, [showSlider]);
+  const handleClick = useGameStore((state) => state.handleClick);
 
   if (!playerPokemon || !enemyPokemon) return null;
 
@@ -140,23 +135,13 @@ export default function Battle({ background = "forest" }) {
       position={"relative"}
       h={200}
       userSelect={"none"}
-      onClick={handleClick}
+      onClick={() => handleClick()}
       overflow="hidden"
       id="battle"
     >
-      {showSlider && <InitiativeSlider {...{ playerPokemon, enemyPokemon }} />}
-      {!!playerPokemon && (
-        <Pokemon
-          details={{
-            ...playerPokemon,
-          }}
-          bottom={0}
-          left={0}
-        />
-      )}
-      {!!enemyPokemon && (
-        <Pokemon details={{ ...enemyPokemon }} bottom={0} right={0} />
-      )}
+      <InitiativeSlider />
+      <Pokemon details={{ ...playerPokemon }} bottom={0} left={0} />
+      <Pokemon details={{ ...enemyPokemon }} bottom={0} right={0} />
     </Box>
   );
 }
