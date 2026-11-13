@@ -1,14 +1,7 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Heading,
-  Image,
-  Progress,
-  SimpleGrid,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, Image, Progress, SimpleGrid, Text } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
+import { formatName, hpColorScheme } from "@/utils/display";
+import Panel from "./Panel";
 import {
   fastGrowth,
   slowGrowth,
@@ -56,75 +49,86 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
   };
 
   return (
-    <Box w="100%">
-      <Heading size="md">Party</Heading>
-
-      <SimpleGrid columns={2} spacing={1}>
+    <Panel title="Party" extra={<Text fontSize="sm">{party.length}/6</Text>}>
+      {party.length === 0 && (
+        <Text fontSize="sm" color="sky.700">
+          Choose your starter to begin.
+        </Text>
+      )}
+      <SimpleGrid columns={2} spacing={2}>
         {party.map((pokemon) => {
           const currentLevelXp =
             levelFormulas[pokemon.growthRate](pokemon.level) || 0;
           const nextLevelXp =
             levelFormulas[pokemon.growthRate](pokemon.level + 1) || 0;
           const uuid = pokemon.uuid;
+          const name = formatName(pokemon.name);
+          const hp = (100 * pokemon.currentHP) / pokemon.maxHP;
+          const isSelected =
+            selectedPokemon.uuid === uuid && selectedPokemon.place === "party";
 
           return (
-            <Center
+            <Flex
               as="button"
+              type="button"
               key={`${pokemon.id}-${uuid}`}
-              flexDir={"column"}
+              direction="column"
               w="100%"
-              background={
-                selectedPokemon.uuid === uuid &&
-                selectedPokemon.place === "party"
-                  ? "green.200"
-                  : "transparent"
-              }
-              _hover={{
-                background:
-                  selectedPokemon.uuid === uuid &&
-                  selectedPokemon.place === "party"
-                    ? "green.300"
-                    : "blackAlpha.100",
-              }}
-              cursor="pointer"
-              aria-pressed={
-                selectedPokemon.uuid === uuid &&
-                selectedPokemon.place === "party"
-              }
-              aria-label={`Select ${pokemon.name}, Level ${pokemon.level}`}
-              borderRadius={"md"}
+              bg={isSelected ? "gold.100" : "sky.50"}
+              border="2px solid"
+              borderColor={isSelected ? "gold.500" : "transparent"}
+              _hover={{ borderColor: isSelected ? "gold.500" : "sky.300" }}
+              _focusVisible={{ borderColor: "sky.500", outline: "none" }}
+              aria-pressed={isSelected}
+              aria-label={`Select ${name}, Level ${pokemon.level}`}
+              borderRadius="lg"
               onClick={() => setPokemon(uuid)}
-              p={1}
-              transition="background 0.2s"
+              p={2}
+              textAlign="left"
+              transition="all 0.15s"
             >
-              <Center gap={2}>
-                <Image alt={pokemon.name} src={pokemon.image} />
-                <Flex direction={"column"} fontSize="sm">
-                  <Text>{pokemon.name}</Text>
-                  <Box>Lvl. {pokemon.level}</Box>
-                </Flex>
-              </Center>
-              <Box w="100%">
-                <Progress
-                  size={"xs"}
-                  colorScheme="green"
-                  value={(100 * pokemon.currentHP) / pokemon.maxHP}
-                />
-              </Box>
-              <Box w="100%">
-                <Progress
-                  size={"xs"}
-                  colorScheme="pink"
-                  value={
-                    (100 * (pokemon.xp - currentLevelXp)) /
-                    (nextLevelXp - currentLevelXp)
-                  }
-                />
-              </Box>
-            </Center>
+              {/* Name beside the sprite on wide screens, below it otherwise.
+                  Decided by screen size so every card matches. */}
+              <Flex
+                direction={{ base: "column", xl: "row" }}
+                align="center"
+                justify="center"
+                gap={1}
+                minW="0"
+                maxW="100%"
+                textAlign={{ base: "center", xl: "left" }}
+              >
+                <Image alt="" src={pokemon.image} boxSize="72px" />
+                <Box minW="0" maxW="100%" fontSize="sm">
+                  <Text fontWeight={700} noOfLines={1}>
+                    {name}
+                  </Text>
+                  <Text color="sky.700">Lv {pokemon.level}</Text>
+                </Box>
+              </Flex>
+              <Progress
+                size="xs"
+                w="100%"
+                mt={1}
+                colorScheme={hpColorScheme(hp)}
+                value={hp}
+                aria-label={`${name} HP`}
+              />
+              <Progress
+                size="xs"
+                w="100%"
+                mt={1}
+                colorScheme="purple"
+                value={
+                  (100 * (pokemon.xp - currentLevelXp)) /
+                  (nextLevelXp - currentLevelXp)
+                }
+                aria-label={`${name} experience to next level`}
+              />
+            </Flex>
           );
         })}
       </SimpleGrid>
-    </Box>
+    </Panel>
   );
 }

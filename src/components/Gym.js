@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 import useGameStore, { updateBadges } from "@/hooks/useGameStore";
 import Battle from "@/components/Battle";
+import SceneFrame from "@/components/SceneFrame";
 
 // Gym component manages the gym interactions, including battles and challenges.
 export default function Gym({ gym, setInGym }) {
@@ -26,18 +27,11 @@ export default function Gym({ gym, setInGym }) {
 
   // Render the gym interface with challenge and leave buttons.
   return (
-    <Box
-      background={`url(backgrounds/${background}.webp)`}
-      backgroundSize={"cover"}
-      backgroundRepeat={"no-repeat"}
-      backgroundPosition={"center"}
-      position={"relative"}
-      h={200}
-    >
-      <Flex position={"absolute"} top={0} left={0} direction="column" gap={2}>
+    <SceneFrame background={background}>
+      <Flex position={"absolute"} top={2} left={2} direction="column" gap={2}>
         <Button
           size={"sm"}
-          colorScheme="green"
+          variant="scene"
           onClick={() => {
             updateBattle({
               pokemon: gym.pokemon,
@@ -51,7 +45,7 @@ export default function Gym({ gym, setInGym }) {
         </Button>
         <Button
           size={"sm"}
-          colorScheme="green"
+          variant="scene"
           onClick={() => {
             setInGym(false);
           }}
@@ -59,6 +53,6 @@ export default function Gym({ gym, setInGym }) {
           Leave
         </Button>
       </Flex>
-    </Box>
+    </SceneFrame>
   );
 }

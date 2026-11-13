@@ -5,6 +5,8 @@ import areas from "@/areas";
 import pokes from "@/pokes";
 import { fixRandom, hexOnlyIn } from "@/test/helpers";
 import {
+  areaNameAt,
+  areasAt,
   axialDistance,
   calcDamage,
   calcMaxHP,
@@ -20,6 +22,7 @@ import {
   getHexDetails,
   getWildPokemon,
   homeHex,
+  legendaryNames,
   mediumFastGrowth,
   mediumSlowGrowth,
   pokesByName,
@@ -211,6 +214,23 @@ describe("determineSpawn", () => {
 });
 
 describe("map", () => {
+  it("names the area that decides whether a hex is unlocked", () => {
+    expect(areaNameAt(homeHex.q, homeHex.r)).toBe("Home");
+    const { q, r } = hexOnlyIn("Area 1");
+    expect(areaNameAt(q, r)).toBe("Area 1");
+  });
+
+  it("uses the first area listed for a hex on the border of two", () => {
+    // 13,4 is in both Area 1 and Area 2.
+    expect(areasAt(13, 4).map((a) => a.name)).toEqual(["Area 1", "Area 2"]);
+    expect(areaNameAt(13, 4)).toBe("Area 1");
+  });
+
+  it("gives no area for a hex off the map", () => {
+    expect(areasAt(999, 999)).toEqual([]);
+    expect(areaNameAt(999, 999)).toBe("");
+  });
+
   it("treats the home hex as a town with no wild Pokémon", () => {
     const home = getHexDetails(homeHex.q, homeHex.r);
     expect(home).toMatchObject({ name: "Home", isTown: true, pokemon: [] });
@@ -224,6 +244,12 @@ describe("map", () => {
     for (let i = 0; i < 50; i++) {
       const wild = getWildPokemon(hex);
       expect(area1.pokemon).toContain(wild.name);
+      // Legendaries always come at level 70, whatever the area. Area 1 has
+      // one (Kartana), so now and then one of the 50 is it.
+      if (legendaryNames.includes(wild.name)) {
+        expect(wild.level).toBe(70);
+        continue;
+      }
       expect(wild.level).toBeGreaterThanOrEqual(area1.minLevel);
       expect(wild.level).toBeLessThan(area1.maxLevel);
     }

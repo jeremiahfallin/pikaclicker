@@ -1,8 +1,6 @@
 import { useState } from "react";
 import {
-  Box,
-  Center,
-  Heading,
+  Flex,
   Image,
   SimpleGrid,
   Text,
@@ -15,18 +13,64 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverBody,
-  PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
-  PopoverAnchor,
 } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import pokes from "../pokes.json";
 import { getHexDetails, pokesById } from "@/utils";
+import { formatName, formatSlug } from "@/utils/display";
+import { scrollbar } from "@/theme";
+import Panel from "./Panel";
 
 // TODO: Add more info to the pokedex (e.g. id#, types, etc.)
-// TODO: Add filter for seen/caught
-// TODO: Maybe add filter for the area you're in?
+
+// One entry: name over sprite. Pokémon seen but not caught are grayed out.
+function Entry({ poke, isCaught }) {
+  return (
+    <Flex
+      direction="column"
+      align="center"
+      bg="sky.50"
+      borderRadius="md"
+      p={1}
+      h="100%"
+      cursor={isCaught ? "help" : "default"}
+    >
+      <Text fontSize="xs" fontWeight={600} noOfLines={1} textAlign="center">
+        {formatName(poke.name)}
+      </Text>
+      <Image
+        alt={formatName(poke.name)}
+        src={poke.sprites.front_default}
+        maxW="100%"
+        filter={isCaught ? undefined : "grayscale(1)"}
+        opacity={isCaught ? 1 : 0.6}
+      />
+    </Flex>
+  );
+}
+
+// "Evolves to Ivysaur at level 16." for each way this Pokémon evolves.
+function evolutionText(poke) {
+  if (poke.evolvesTo === null) {
+    return "Final evolution.";
+  }
+  const lines = [];
+  poke.evolvesTo.forEach((e) => {
+    const target = formatName(e.pokemon_name);
+    e.evolution_conditions.forEach((c) => {
+      if (c.trigger === "level-up") {
+        lines.push(`Evolves to ${target} at level ${c.level}.`);
+      } else if (c.trigger === "use-item") {
+        lines.push(`Evolves to ${target} when using ${formatSlug(c.item)}.`);
+      } else if (c.trigger === "other") {
+        lines.push(`Evolves to ${target} under special conditions.`);
+      }
+    });
+  });
+  return lines.join(" ");
+}
 
 export default function Pokedex() {
   const [sortBy, setSortBy] = useState("id");
@@ -52,46 +96,39 @@ export default function Pokedex() {
   };
 
   return (
-    <Box>
-      <Heading as="h3" size="md">
-        <Box as="span">Pokedex</Box>{" "}
-        <Box as="span">
-          ({caught.size}/{pokes.length})
-        </Box>
-      </Heading>
-
-      <Stack direction="row" gap={8} align="center">
+    <Panel
+      title="Pokédex"
+      extra={
+        <Text fontSize="sm">
+          {caught.size}/{pokes.length} caught
+        </Text>
+      }
+    >
+      {/* Wraps onto more lines when the column is narrow. */}
+      <Flex wrap="wrap" align="center" columnGap={4} rowGap={1} mb={2}>
         <RadioGroup value={sortBy} onChange={setSortBy}>
-          <Stack direction="row" gap={8} align="center">
-            <Radio value="id">id</Radio>
-            <Radio value="name">name</Radio>
+          <Stack direction="row" gap={3} align="center">
+            <Radio value="id">Number</Radio>
+            <Radio value="name">Name</Radio>
           </Stack>
         </RadioGroup>
         <RadioGroup value={filterBy} onChange={setFilterBy}>
-          <Stack direction="row" gap={8} align="center">
-            <Radio value="seen">seen</Radio>
-            <Radio value="caught">caught</Radio>
+          <Stack direction="row" gap={3} align="center">
+            <Radio value="seen">Seen</Radio>
+            <Radio value="caught">Caught</Radio>
           </Stack>
         </RadioGroup>
-        <Checkbox onChange={handleAreaCheckbox}>Current Area</Checkbox>
-      </Stack>
+        <Checkbox onChange={handleAreaCheckbox}>This area</Checkbox>
+      </Flex>
 
-      <Stack direction="row" gap={8} align="center"></Stack>
+      {/* As many columns as fit, rather than a fixed three. */}
       <SimpleGrid
-        columns={3}
+        minChildWidth="80px"
         spacing={1}
         maxH="300px"
-        overflowY={"scroll"}
+        overflowY={"auto"}
         scrollBehavior={"smooth"}
-        sx={{
-          "&::-webkit-scrollbar": { width: "9px" },
-          "&::-webkit-scrollbar-track": { background: "transparent" },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "gray.400",
-            borderRadius: "24px",
-            border: "2px solid transparent",
-          },
-        }}
+        sx={scrollbar}
       >
         {pokedex
           .sort((a, b) => {
@@ -117,69 +154,30 @@ export default function Pokedex() {
             return false;
           })
           .map((poke) => {
-            if (caught.has(poke.id)) {
-              let evolvesTo = poke.evolvesTo;
-              let evolvesString = "";
-              let evolvesToStrings = [];
-              if (evolvesTo === null) {
-                evolvesToStrings.push("Final evolution.");
-              } else {
-                evolvesTo.forEach((e) => {
-                  e.evolution_conditions.forEach((c) => {
-                    if (c.trigger === "level-up") {
-                      evolvesToStrings.push(
-                        `Evolves to ${e.pokemon_name} at level ${c.level}.`
-                      );
-                    } else if (c.trigger === "use-item") {
-                      evolvesToStrings.push(
-                        `Evolves to ${e.pokemon_name} when using ${c.item}.`
-                      );
-                    } else if (c.trigger === "other") {
-                      evolvesToStrings.push(
-                        `Evolves to ${e.pokemon_name} under special conditions.`
-                      );
-                    }
-                  });
-                });
-              }
-              evolvesString = evolvesToStrings.join(", ");
-
-              return (
-                <Center key={poke.id} flexDirection={"column"}>
-                  <Popover trigger="hover" matchWidth="true">
-                    <PopoverTrigger>
-                      <Center flexDirection="column">
-                        <Text fontSize="sm">{poke.name}</Text>
-                        <Image
-                          alt={poke.name}
-                          src={poke.sprites.front_default}
-                        />
-                      </Center>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <PopoverArrow />
-                      <PopoverCloseButton />
-                      <PopoverHeader>Evolution details</PopoverHeader>
-                      <PopoverBody>
-                        <Text fontSize="sm">{evolvesString}</Text>
-                      </PopoverBody>
-                    </PopoverContent>
-                  </Popover>
-                </Center>
-              );
+            if (!caught.has(poke.id)) {
+              return <Entry key={poke.id} poke={poke} isCaught={false} />;
             }
             return (
-              <Center key={poke.id} flexDirection={"column"}>
-                <Text fontSize="sm">{poke.name}</Text>
-                <Image
-                  alt={poke.name}
-                  src={poke.sprites.front_default}
-                  filter={"grayscale(1)"}
-                />
-              </Center>
+              <Popover key={poke.id} trigger="hover">
+                <PopoverTrigger>
+                  <div>
+                    <Entry poke={poke} isCaught />
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverHeader fontFamily="heading">
+                    {formatName(poke.name)}
+                  </PopoverHeader>
+                  <PopoverBody>
+                    <Text fontSize="sm">{evolutionText(poke)}</Text>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
             );
           })}
       </SimpleGrid>
-    </Box>
+    </Panel>
   );
 }

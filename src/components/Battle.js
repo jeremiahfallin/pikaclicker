@@ -1,40 +1,75 @@
 import { useEffect, useRef } from "react";
-import { Box, Flex, Image, Progress } from "@chakra-ui/react";
+import { Box, Flex, Image, Progress, Text } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
 import useBattleClock from "@/hooks/useBattleClock";
 import { getTurnProgress } from "@/game/battleClock";
 import { homeHex } from "@/utils";
+import { formatName, hpColorScheme } from "@/utils/display";
+import SceneFrame from "./SceneFrame";
+import { DamageNumbers, useHitEffects } from "./BattleHits";
 
 /**
- * The Pokemon component displays an individual Pokémon with its sprite and health bar.
- * @param {Object} details - Details of the Pokémon, including image, name, and health points.
- * @param {string} top - CSS top property value for positioning.
- * @param {string} left - CSS left property value for positioning.
- * @param {string} bottom - CSS bottom property value for positioning.
- * @param {string} right - CSS right property value for positioning.
- * @returns A Box component containing the Pokémon image and health bar.
+ * One fighter: a name plate (name, level, HP bar) above its sprite, which
+ * shakes when hit, with the damage floating up from it.
+ * @param {Object} details - The Pokémon: image, name, level and HP.
+ * @param {"left"|"right"} side - Which bottom corner of the scene it stands in.
+ * @param {"player"|"enemy"} target - Whose Pokémon this is, to pick its hits.
  */
-function Pokemon({ details, top, left, bottom, right }) {
+function Pokemon({ details, side, target }) {
+  const { numbers, removeNumber, spriteRef } = useHitEffects(target);
   // Return null if no details are provided to prevent rendering errors.
   if (!details) return null;
-  let sprite = details?.image;
+  const name = formatName(details.name);
+  const hp = (100 * details.currentHP) / details.maxHP;
 
-  // Render a box with the Pokémon sprite and a progress bar indicating its current health.
+  // The sprite grows with the scene, so a big scene doesn't leave it tiny.
+  // Sprites are pixel art, so scale them without blurring.
   return (
-    <Box
+    <Flex
+      direction="column"
       position="absolute"
-      top={top}
-      right={right}
-      left={left}
-      bottom={bottom}
-      overflow="hidden"
+      bottom={2}
+      {...{ [side]: 2 }}
+      w="clamp(120px, 30%, 200px)"
     >
-      <Image src={sprite} alt={details?.name} />
-      <Progress
-        value={(100 * details.currentHP) / details.maxHP}
-        colorScheme="green"
-      />
-    </Box>
+      <Box
+        position="relative"
+        zIndex={1}
+        bg="whiteAlpha.900"
+        borderRadius="lg"
+        boxShadow="md"
+        px={2}
+        py={1}
+      >
+        <Flex justify="space-between" align="baseline" gap={2} fontSize="xs">
+          <Text fontWeight={700} noOfLines={1}>
+            {name}
+          </Text>
+          <Text flexShrink={0} color="sky.700" fontWeight={600}>
+            Lv {details.level}
+          </Text>
+        </Flex>
+        <Progress
+          value={hp}
+          size="sm"
+          mt={1}
+          colorScheme={hpColorScheme(hp)}
+          aria-label={`${name} HP`}
+        />
+      </Box>
+      {/* Sprites have empty space at the top; tuck the plate into it so it
+          sits just above the Pokémon. */}
+      <Box position="relative" mt="-22%">
+        <Image
+          ref={spriteRef}
+          src={details.image}
+          alt={name}
+          w="100%"
+          sx={{ imageRendering: "pixelated" }}
+        />
+        <DamageNumbers numbers={numbers} onDone={removeNumber} />
+      </Box>
+    </Flex>
   );
 }
 
@@ -127,21 +162,16 @@ export default function Battle({ background = "forest" }) {
 
   // Render the battle scene with the player's and enemy's Pokémon.
   return (
-    <Box
-      background={`url(backgrounds/${background}.webp)`}
-      backgroundSize={"cover"}
-      backgroundRepeat={"no-repeat"}
-      backgroundPosition={"center"}
-      position={"relative"}
-      h={200}
+    <SceneFrame
+      background={background}
       userSelect={"none"}
       onClick={() => handleClick()}
       overflow="hidden"
       id="battle"
     >
       <InitiativeSlider />
-      <Pokemon details={{ ...playerPokemon }} bottom={0} left={0} />
-      <Pokemon details={{ ...enemyPokemon }} bottom={0} right={0} />
-    </Box>
+      <Pokemon details={playerPokemon} side="left" target="player" />
+      <Pokemon details={enemyPokemon} side="right" target="enemy" />
+    </SceneFrame>
   );
 }

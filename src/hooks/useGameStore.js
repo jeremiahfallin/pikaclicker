@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import superjson from "superjson";
+import { reportHit } from "@/game/battleEvents";
 import {
+  areaNameAt,
   checkEvolve,
   calcDamage,
   catchChance,
@@ -22,7 +24,6 @@ import {
   fluctuatingGrowth,
   spriteFor,
 } from "@/utils";
-import areas from "../areas";
 
 const ballChances = {
   Pokeball: 1,
@@ -66,6 +67,12 @@ const addGimmighoulCoin = (items) => {
 // While true, changes aren't saved or passed on to the components showing
 // them. See batchUpdates.
 let batching = false;
+
+// Tells the battle screen about a hit, except while catching up on time
+// away: thousands of turns play at once then, too many to show.
+const showHit = (hit) => {
+  if (!batching) reportHit(hit);
+};
 
 const storage = {
   getItem: (name) => {
@@ -305,12 +312,7 @@ const useGameStore = createBatchableStore(
         const unlockedAreas = get().player.unlockedAreas;
         const hex = getHexDetails(newHex.q, newHex.r);
 
-        let hexArea =
-          areas.find((area) =>
-            area.hexes.some((h) => h.q === hex.q && h.r === hex.r)
-          )?.name || "";
-
-        if (!unlockedAreas.has(hexArea)) {
+        if (!unlockedAreas.has(areaNameAt(hex.q, hex.r))) {
           return;
         }
 
@@ -842,6 +844,14 @@ const useGameStore = createBatchableStore(
         get().updateBattle({
           pokemon: newPokemon,
         });
+        if (enemyPokemon.currentHP > 0) {
+          showHit({
+            target: "enemy",
+            damage: dmgDealt,
+            critical: false,
+            source: "click",
+          });
+        }
       },
       handleTurn: (initiative) => {
         const isPlayerTurn = initiative === "player";
@@ -1043,6 +1053,12 @@ const useGameStore = createBatchableStore(
               ...get().battle.pokemon.slice(1),
             ],
           });
+          showHit({
+            target: "enemy",
+            damage: dmgDealt,
+            critical: criticalAttack > 1,
+            source: "turn",
+          });
         } else {
           get().updatePlayer({
             party: [
@@ -1055,6 +1071,12 @@ const useGameStore = createBatchableStore(
               },
               ...party.slice(1),
             ],
+          });
+          showHit({
+            target: "player",
+            damage: dmgTaken,
+            critical: false,
+            source: "turn",
           });
         }
       },
