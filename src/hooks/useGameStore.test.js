@@ -159,6 +159,25 @@ describe("moving on the map", () => {
     expect(state().player.pokedex.seen.has(wild.id)).toBe(true);
   });
 
+  it("starts a wild battle, not a trainer one, when leaving a gym battle", () => {
+    startGame({
+      player: {
+        party: [pokemon("bulbasaur", 20)],
+        unlockedAreas: ["Home", "Area 1"],
+      },
+      battle: {
+        pokemon: [pokemon("pikachu", 12)],
+        isTrainer: true,
+        isComplete: false,
+      },
+    });
+
+    state().updateCurrentHex(hexOnlyIn("Area 1"));
+
+    expect(state().battle.pokemon).toHaveLength(1);
+    expect(state().battle.isTrainer).toBe(false);
+  });
+
   it("heals the party and ends the battle in a town", () => {
     const hurt = pokemon("bulbasaur", 10, { currentHP: 1 });
     startWildBattle(pokemon("pikachu", 5), { party: [hurt] });

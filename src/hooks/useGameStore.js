@@ -340,9 +340,12 @@ const useGameStore = create(
 
           set((state) => ({
             ...state,
+            // A wild battle, even if the player walked out of a gym battle.
             battle: {
               ...state.battle,
               pokemon: [newPokemon],
+              isTrainer: false,
+              isComplete: false,
             },
             player: {
               ...state.player,
