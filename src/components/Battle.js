@@ -61,14 +61,10 @@ const InitiativeSlider = () => {
   const enemyPokemon = useGameStore((state) => state.battle.pokemon[0]);
   const enemySpeed = enemyPokemon.speed;
 
-  // Function to handle the end of the animation.
-  const handleAnimationIteration = (e) => {
-    if (e.target.alt === playerPokemon.name) {
-      handleTurn("player");
-    } else {
-      handleTurn();
-    }
-  };
+  // Each sprite's animation loop is that side's turn. Give each sprite its own
+  // handler: telling them apart by name breaks when both are the same species.
+  const handlePlayerTurn = () => handleTurn("player");
+  const handleEnemyTurn = () => handleTurn();
 
   const speedNumerator = 100;
   return (
@@ -79,7 +75,7 @@ const InitiativeSlider = () => {
         boxSize="40px"
         position="absolute"
         animation={`${slide} ${speedNumerator / playerSpeed}s linear infinite`}
-        onAnimationIteration={handleAnimationIteration}
+        onAnimationIteration={handlePlayerTurn}
       />
       <Image
         src={enemyPokemon.image}
@@ -87,7 +83,7 @@ const InitiativeSlider = () => {
         boxSize="40px"
         position="absolute"
         animation={`${slide} ${speedNumerator / enemySpeed}s linear infinite`}
-        onAnimationIteration={handleAnimationIteration}
+        onAnimationIteration={handleEnemyTurn}
       />
     </Flex>
   );
@@ -106,9 +102,13 @@ export default function Battle({ background = "forest" }) {
   const enemyPokemon = useGameStore((state) => state.battle?.pokemon?.[0]);
   // State to track the current enemy Pokémon.
   const updateCurrentHex = useGameStore((state) => state.updateCurrentHex);
-  if (!enemyPokemon) {
-    updateCurrentHex(homeHex);
-  }
+  // With nothing to fight, send the player home. This changes game state, so
+  // it runs in an effect after rendering rather than during it.
+  useEffect(() => {
+    if (!enemyPokemon) {
+      updateCurrentHex(homeHex);
+    }
+  }, [enemyPokemon, updateCurrentHex]);
   const [currentEnemy, setCurrentEnemy] = useState(enemyPokemon?.uuid);
   // Hook to handle game turns.
   const handleTurn = useGameStore((state) => state.handleClick);

@@ -1,7 +1,7 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import superjson from "superjson";
 import { auth, db } from "@/config";
-import useGameStore from "@/hooks/useGameStore";
+import useGameStore, { loadSave } from "@/hooks/useGameStore";
 
 export default function useSave() {
   async function loadData(selectedPokemon) {
@@ -12,7 +12,7 @@ export default function useSave() {
     const docSnap = await getDoc(dataDoc);
     const data = docSnap.data();
     if (data) {
-      useGameStore.setState(superjson.parse(data.data));
+      loadSave(superjson.parse(data.data));
     }
   }
 
