@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 import useGameStore, { updateBadges } from "@/hooks/useGameStore";
 import Battle from "@/components/Battle";
+import SceneFrame from "@/components/SceneFrame";
 
 // Gym component manages the gym interactions, including battles and challenges.
 export default function Elite4({ elite4, setInElite4 }) {
@@ -42,14 +43,7 @@ export default function Elite4({ elite4, setInElite4 }) {
 
   // Render the elite4 interface with challenge and leave buttons.
   return (
-    <Box
-      background={`url(backgrounds/${background}.webp)`}
-      backgroundSize={"cover"}
-      backgroundRepeat={"no-repeat"}
-      backgroundPosition={"center"}
-      position={"relative"}
-      h={200}
-    >
+    <SceneFrame background={background}>
       <Flex position={"absolute"} top={0} left={0} direction="column" gap={2}>
         <Button
           size={"sm"}
@@ -75,6 +69,6 @@ export default function Elite4({ elite4, setInElite4 }) {
           Leave
         </Button>
       </Flex>
-    </Box>
+    </SceneFrame>
   );
 }

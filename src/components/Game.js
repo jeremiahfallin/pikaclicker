@@ -6,16 +6,7 @@ import Party from "./Party";
 import Scene from "./Scene";
 import Items from "./Items";
 
-import {
-  Box,
-  Center,
-  Flex,
-  Grid,
-  Heading,
-  Image,
-  SimpleGrid,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Center, Flex, Grid, Heading, Image } from "@chakra-ui/react";
 import Map from "./Map";
 import useGameStore, { unlockArea, updatePokedex } from "@/hooks/useGameStore";
 import Pokedex from "./Pokedex";
@@ -56,6 +47,22 @@ const PickPokemon = ({ starter }) => {
   );
 };
 
+const scrollbar = {
+  "&::-webkit-scrollbar": { width: "9px" },
+  "&::-webkit-scrollbar-track": { background: "transparent" },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "gray.400",
+    borderRadius: "24px",
+    border: "2px solid transparent",
+  },
+};
+
+// On phones everything is one column. The column boxes below drop out of the
+// layout there (display: contents), so their sections can be put in the order
+// that matters on a small screen: the battle first, then the party.
+const phoneOrder = (n) => ({ base: n, md: 0 });
+const column = (display) => ({ base: "contents", md: display });
+
 // Main game component.
 export default function Game() {
   // State to track the selected Pokémon.
@@ -80,18 +87,30 @@ export default function Game() {
       {/* What the party did while the player was away. */}
       <AwaySummary />
 
-      {/* Layout of the game using a grid. */}
-      <SimpleGrid
-        templateColumns={{ sm: "1fr", md: "2fr 4fr 3fr" }}
+      {/* Layout of the game using a grid. The middle column (the battle and
+          the map) gets the most room, and no column can be squeezed to
+          nothing by something wide inside another. */}
+      <Grid
+        templateColumns={{
+          base: "minmax(0, 1fr)",
+          md: "minmax(0, 2fr) minmax(0, 4fr) minmax(0, 3fr)",
+        }}
         gap={2}
         p={2}
-        pt={0}
+        h={{ md: "100%" }}
       >
         {/* Left column: Pokedex, Badges, Settings */}
-        <Box>
-          <Center>
-            {/* If the player's party is empty, show starter selection. */}
-            {party.length === 0 && (
+        <Flex
+          display={column("flex")}
+          direction="column"
+          gap={2}
+          minH="0"
+          overflowY="auto"
+          sx={scrollbar}
+        >
+          {/* If the player's party is empty, show starter selection. */}
+          {party.length === 0 && (
+            <Center order={phoneOrder(0)}>
               <Flex direction={"column"}>
                 <Heading as="h2">Choose a starter</Heading>
                 <Flex>
@@ -104,50 +123,74 @@ export default function Game() {
                   })}
                 </Flex>
               </Flex>
-            )}
-          </Center>
-          <Pokedex />
-          <Badges />
-          <Settings />
-        </Box>
-        {/* Center column: Scene and Map */}
-        <Grid
-          gridTemplateRows="auto 1fr"
-          maxW="100%"
-          w="100%"
-          minW="0"
-          overflowY="auto"
-          maxH={"100vh"}
-          scrollBehavior={"smooth"}
-          sx={{
-            "&::-webkit-scrollbar": { width: "9px" },
-            "&::-webkit-scrollbar-track": { background: "transparent" },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "gray.700",
-              borderRadius: "24px",
-              border: "2px solid transparent",
-            },
-          }}
-        >
-          <Scene />
-          <Map />
-        </Grid>
+            </Center>
+          )}
+          <Box order={phoneOrder(6)}>
+            <Pokedex />
+          </Box>
+          <Box order={phoneOrder(7)}>
+            <Badges />
+          </Box>
+          <Box order={phoneOrder(8)}>
+            <Settings />
+          </Box>
+        </Flex>
 
-        {/* Right column: Party, Items, Bank */}
-        <VStack maxH="100vh" height="calc(100vh - 26px)">
-          <Party
-            selectedPokemon={selectedPokemon}
-            setSelectedPokemon={setSelectedPokemon}
-          />
-          <Box w="auto">
+        {/* Center column: Scene and Map. The scene stays pinned at the top
+            while the map scrolls under it. */}
+        <Box
+          display={column("block")}
+          minH="0"
+          overflowY="auto"
+          scrollBehavior={"smooth"}
+          sx={scrollbar}
+        >
+          <Box
+            order={phoneOrder(1)}
+            position={{ md: "sticky" }}
+            top={0}
+            zIndex={1}
+          >
+            <Scene />
+          </Box>
+          <Box order={phoneOrder(4)}>
+            <Map />
+          </Box>
+        </Box>
+
+        {/* Right column: Party, Items, Bank. The bank fills what's left and
+            scrolls. On short screens the bank keeps a usable height and the
+            whole column scrolls instead. */}
+        <Flex
+          display={column("flex")}
+          direction="column"
+          gap={2}
+          minH="0"
+          overflowY="auto"
+          sx={scrollbar}
+        >
+          <Box order={phoneOrder(2)} flexShrink={0}>
+            <Party
+              selectedPokemon={selectedPokemon}
+              setSelectedPokemon={setSelectedPokemon}
+            />
+          </Box>
+          <Box order={phoneOrder(3)} flexShrink={0} minW="0">
             <Items selectedPokemon={selectedPokemon} />
           </Box>
-          <Bank
-            selectedPokemon={selectedPokemon}
-            setSelectedPokemon={setSelectedPokemon}
-          />
-        </VStack>
-      </SimpleGrid>
+          <Flex
+            order={phoneOrder(5)}
+            direction="column"
+            flex={{ md: "1" }}
+            minH={{ md: "240px" }}
+          >
+            <Bank
+              selectedPokemon={selectedPokemon}
+              setSelectedPokemon={setSelectedPokemon}
+            />
+          </Flex>
+        </Flex>
+      </Grid>
     </>
   );
 }

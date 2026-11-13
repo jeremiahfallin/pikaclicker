@@ -103,7 +103,11 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
   return (
     <Box
       w="100%"
-      flexGrow={1}
+      flex={{ md: "1" }}
+      minH="0"
+      // On phones the bank sits in the page, so it needs its own height
+      // to scroll in.
+      maxH={{ base: "70vh", md: "none" }}
       overflowY={"scroll"}
       scrollBehavior={"smooth"}
       ref={parentRef}
@@ -126,9 +130,9 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
         borderTopRadius={"md"}
       >
         <Heading size="md">Bank</Heading>
-        <Center gap={2}>
+        <Flex wrap="wrap" justify="center" align="center" columnGap={4} rowGap={1}>
           <RadioGroup value={sortBy} onChange={setSortBy}>
-            <Stack direction="row" gap={8} align="center">
+            <Stack direction="row" gap={3} align="center">
               <Radio value={"id"}>ID</Radio>
               <Radio value={"level"}>Level</Radio>
               <Radio value={"name"}>Name</Radio>
@@ -137,7 +141,7 @@ export default function Bank({ selectedPokemon, setSelectedPokemon }) {
           <Checkbox onChange={() => setIsShiny((prev) => !prev)}>
             Shiny Only
           </Checkbox>
-        </Center>
+        </Flex>
         <Input
           value={searchTerm}
           onChange={handleSearch}

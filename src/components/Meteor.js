@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 import useGameStore, { updatePokedex } from "@/hooks/useGameStore";
 import { checkEvolve, createPokemon } from "@/utils";
+import SceneFrame from "@/components/SceneFrame";
 
 // Meteor component: party members that change form at this meteor (Deoxys)
 // change when the player enters.
@@ -42,14 +43,7 @@ export default function Meteor({ meteor, setInMeteor }) {
 
   // Render the meteor interface with leave button.
   return (
-    <Box
-      background={`url(backgrounds/${background}.webp)`}
-      backgroundSize={"cover"}
-      backgroundRepeat={"no-repeat"}
-      backgroundPosition={"center"}
-      position={"relative"}
-      h={200}
-    >
+    <SceneFrame background={background}>
       <Flex position={"absolute"} top={0} left={0} direction="column" gap={2}>
         <Button
           size={"sm"}
@@ -61,6 +55,6 @@ export default function Meteor({ meteor, setInMeteor }) {
           Leave
         </Button>
       </Flex>
-    </Box>
+    </SceneFrame>
   );
 }

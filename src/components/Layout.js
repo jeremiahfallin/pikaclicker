@@ -1,4 +1,4 @@
-import { Box, Center, Link, useDisclosure } from "@chakra-ui/react";
+import { Box, Center, Flex, Link, useDisclosure } from "@chakra-ui/react";
 import SaveLoadModal from "./SaveLoadModal";
 import { loadFirebase } from "@/config";
 import useAuth from "@/hooks/useAuth";
@@ -19,10 +19,19 @@ export default function Layout({ children }) {
     }
   };
 
+  // On wider screens the page is exactly one screen tall and each column
+  // scrolls on its own. On phones the page just scrolls.
   return (
-    <Box>
+    <Flex direction="column" h={{ md: "100vh" }}>
       <SaveLoadModal isOpen={isOpen} onClose={onClose} />
-      <Center bg="blue.200" justifyContent={"end"} p={1} gap={2}>
+      <Center
+        as="header"
+        bg="blue.200"
+        justifyContent={"end"}
+        p={1}
+        gap={2}
+        flexShrink={0}
+      >
         <Link as="button" type="button" onClick={onOpen} fontSize="xs">
           Save/Load
         </Link>
@@ -30,7 +39,9 @@ export default function Layout({ children }) {
           {user ? "Sign Out" : "Sign In"}
         </Link>
       </Center>
-      <Box>{children}</Box>
-    </Box>
+      <Box as="main" flex="1" minH="0" overflowY={{ md: "auto" }}>
+        {children}
+      </Box>
+    </Flex>
   );
 }

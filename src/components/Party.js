@@ -97,7 +97,8 @@ export default function Party({ selectedPokemon, setSelectedPokemon }) {
               p={1}
               transition="background 0.2s"
             >
-              <Center gap={2}>
+              {/* The name drops below the sprite when the column is narrow. */}
+              <Center gap={2} flexWrap="wrap" minW="0" maxW="100%">
                 <Image alt={pokemon.name} src={pokemon.image} />
                 <Flex direction={"column"} fontSize="sm">
                   <Text>{pokemon.name}</Text>

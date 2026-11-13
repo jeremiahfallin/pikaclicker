@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   Box,
   Center,
+  Flex,
   Heading,
   Image,
   SimpleGrid,
@@ -60,25 +61,26 @@ export default function Pokedex() {
         </Box>
       </Heading>
 
-      <Stack direction="row" gap={8} align="center">
+      {/* Wraps onto more lines when the column is narrow. */}
+      <Flex wrap="wrap" align="center" columnGap={4} rowGap={1}>
         <RadioGroup value={sortBy} onChange={setSortBy}>
-          <Stack direction="row" gap={8} align="center">
+          <Stack direction="row" gap={3} align="center">
             <Radio value="id">id</Radio>
             <Radio value="name">name</Radio>
           </Stack>
         </RadioGroup>
         <RadioGroup value={filterBy} onChange={setFilterBy}>
-          <Stack direction="row" gap={8} align="center">
+          <Stack direction="row" gap={3} align="center">
             <Radio value="seen">seen</Radio>
             <Radio value="caught">caught</Radio>
           </Stack>
         </RadioGroup>
         <Checkbox onChange={handleAreaCheckbox}>Current Area</Checkbox>
-      </Stack>
+      </Flex>
 
-      <Stack direction="row" gap={8} align="center"></Stack>
+      {/* As many columns as fit, rather than a fixed three. */}
       <SimpleGrid
-        columns={3}
+        minChildWidth="88px"
         spacing={1}
         maxH="300px"
         overflowY={"scroll"}
@@ -153,6 +155,7 @@ export default function Pokedex() {
                         <Image
                           alt={poke.name}
                           src={poke.sprites.front_default}
+                          maxW="100%"
                         />
                       </Center>
                     </PopoverTrigger>
@@ -174,6 +177,7 @@ export default function Pokedex() {
                 <Image
                   alt={poke.name}
                   src={poke.sprites.front_default}
+                  maxW="100%"
                   filter={"grayscale(1)"}
                 />
               </Center>

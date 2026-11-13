@@ -12,7 +12,7 @@ export default function Items({ selectedPokemon }) {
   };
 
   return (
-    <Box overflowX="hidden" w="500px">
+    <Box overflowX="hidden" w="100%">
       <Flex gap={2} align={"center"}>
         <Heading as="h3" size="md">
           Items

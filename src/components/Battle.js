@@ -4,6 +4,7 @@ import useGameStore from "@/hooks/useGameStore";
 import useBattleClock from "@/hooks/useBattleClock";
 import { getTurnProgress } from "@/game/battleClock";
 import { homeHex } from "@/utils";
+import SceneFrame from "./SceneFrame";
 
 /**
  * The Pokemon component displays an individual Pokémon with its sprite and health bar.
@@ -20,6 +21,8 @@ function Pokemon({ details, top, left, bottom, right }) {
   let sprite = details?.image;
 
   // Render a box with the Pokémon sprite and a progress bar indicating its current health.
+  // The sprite grows with the scene, so a big scene doesn't leave it tiny.
+  // Sprites are pixel art, so scale them without blurring.
   return (
     <Box
       position="absolute"
@@ -27,9 +30,15 @@ function Pokemon({ details, top, left, bottom, right }) {
       right={right}
       left={left}
       bottom={bottom}
+      w="clamp(96px, 28%, 192px)"
       overflow="hidden"
     >
-      <Image src={sprite} alt={details?.name} />
+      <Image
+        src={sprite}
+        alt={details?.name}
+        w="100%"
+        sx={{ imageRendering: "pixelated" }}
+      />
       <Progress
         value={(100 * details.currentHP) / details.maxHP}
         colorScheme="green"
@@ -127,13 +136,8 @@ export default function Battle({ background = "forest" }) {
 
   // Render the battle scene with the player's and enemy's Pokémon.
   return (
-    <Box
-      background={`url(backgrounds/${background}.webp)`}
-      backgroundSize={"cover"}
-      backgroundRepeat={"no-repeat"}
-      backgroundPosition={"center"}
-      position={"relative"}
-      h={200}
+    <SceneFrame
+      background={background}
       userSelect={"none"}
       onClick={() => handleClick()}
       overflow="hidden"
@@ -142,6 +146,6 @@ export default function Battle({ background = "forest" }) {
       <InitiativeSlider />
       <Pokemon details={{ ...playerPokemon }} bottom={0} left={0} />
       <Pokemon details={{ ...enemyPokemon }} bottom={0} right={0} />
-    </Box>
+    </SceneFrame>
   );
 }
