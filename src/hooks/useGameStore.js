@@ -151,8 +151,8 @@ const withDefaults = (saved) => {
   };
 };
 
-// Anything without a player and party (an empty text box, a typo, some other
-// data) is not a save.
+// Anything without a player and party (an empty document, some other data) is
+// not a save.
 const isValidSave = (data) =>
   !!data &&
   typeof data === "object" &&
@@ -1032,8 +1032,8 @@ const useGameStore = create(
   )
 );
 
-// Loads a save from pasted text or the cloud. If the data isn't a save,
-// returns false and leaves the current game alone.
+// Loads a save from the cloud. If the data isn't a save, returns false and
+// leaves the current game alone.
 function loadSave(data) {
   if (!isValidSave(data)) {
     return false;
