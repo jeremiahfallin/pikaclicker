@@ -18,6 +18,8 @@ export default function SceneFrame({ background, children, ...rest }) {
       backgroundSize="cover"
       backgroundRepeat="no-repeat"
       backgroundPosition="center"
+      borderRadius="xl"
+      boxShadow="md"
       sx={{ aspectRatio: "7 / 4" }}
       {...rest}
     >

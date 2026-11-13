@@ -62,12 +62,12 @@ export default function Town() {
     <>
       <Shop isOpen={isOpen} onClose={onClose} />
       <SceneFrame background={background}>
-        <Flex position={"absolute"} top={0} left={0} direction="column" gap={2}>
+        <Flex position={"absolute"} top={2} left={2} direction="column" gap={2}>
           {/* Button to enter the Gym. Sets inGym to true. */}
           {gym && (
             <Button
               size={"sm"}
-              colorScheme="green"
+              variant="scene"
               onClick={() => {
                 setInGym(true);
               }}
@@ -78,7 +78,7 @@ export default function Town() {
           {elite4.town === currentTown.name && (
             <Button
               size={"sm"}
-              colorScheme="green"
+              variant="scene"
               onClick={() => {
                 setInElite4(true);
               }}
@@ -87,22 +87,22 @@ export default function Town() {
             </Button>
           )}
           {/* Button to open the Shop modal. */}
-          <Button size={"sm"} colorScheme="green" onClick={onOpen}>
+          <Button size={"sm"} variant="scene" onClick={onOpen}>
             Shop
           </Button>
         </Flex>
         {meteor && (
           <Flex
             position={"absolute"}
-            top={0}
-            right={0}
+            top={2}
+            right={2}
             direction="column"
             gap={2}
           >
             {/* Button to enter the Meteor. Sets inMeteor to true. */}
             <Button
               size={"sm"}
-              colorScheme="blue"
+              variant="scene"
               onClick={() => {
                 setInMeteor(true);
               }}

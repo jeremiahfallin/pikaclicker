@@ -6,13 +6,16 @@ import Party from "./Party";
 import Scene from "./Scene";
 import Items from "./Items";
 
-import { Box, Center, Flex, Grid, Heading, Image } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import Map from "./Map";
 import useGameStore, { unlockArea, updatePokedex } from "@/hooks/useGameStore";
 import Pokedex from "./Pokedex";
 import Settings from "./Settings";
 import Badges from "./Badges";
 import AwaySummary from "./AwaySummary";
+import Panel from "./Panel";
+import { formatName } from "@/utils/display";
+import { scrollbar } from "@/theme";
 
 // Initialize starter Pokémon arrays.
 const waterStarters = ["squirtle", "totodile", "mudkip", "piplup"];
@@ -34,27 +37,31 @@ const PickPokemon = ({ starter }) => {
 
   // On click, unlock area and update the party with the selected starter.
   return (
-    <div
+    <Flex
+      as="button"
+      type="button"
+      direction="column"
+      align="center"
+      bg="sky.50"
+      border="2px solid"
+      borderColor="transparent"
+      borderRadius="lg"
+      p={2}
+      transition="all 0.15s"
+      _hover={{ borderColor: "sky.300", transform: "translateY(-2px)" }}
+      _focusVisible={{ borderColor: "sky.500", outline: "none" }}
       onClick={() => {
         unlockArea("Area 1");
         updateParty([{ ...starterDetails }]);
         updatePokedex(starterData.id, true);
       }}
     >
-      <span>{starter}</span>
-      <Image alt={starter} src={starterData.sprites.front_default} />
-    </div>
+      <Image alt="" src={starterData.sprites.front_default} maxW="100%" />
+      <Text fontWeight={700} fontSize="sm">
+        {formatName(starter)}
+      </Text>
+    </Flex>
   );
-};
-
-const scrollbar = {
-  "&::-webkit-scrollbar": { width: "9px" },
-  "&::-webkit-scrollbar-track": { background: "transparent" },
-  "&::-webkit-scrollbar-thumb": {
-    backgroundColor: "gray.400",
-    borderRadius: "24px",
-    border: "2px solid transparent",
-  },
 };
 
 // On phones everything is one column. The column boxes below drop out of the
@@ -110,20 +117,17 @@ export default function Game() {
         >
           {/* If the player's party is empty, show starter selection. */}
           {party.length === 0 && (
-            <Center order={phoneOrder(0)}>
-              <Flex direction={"column"}>
-                <Heading as="h2">Choose a starter</Heading>
-                <Flex>
-                  {starters.map((starter) => {
-                    return (
-                      <div key={starter}>
-                        <PickPokemon starter={starter} />
-                      </div>
-                    );
-                  })}
-                </Flex>
-              </Flex>
-            </Center>
+            <Panel
+              title="Choose your starter"
+              order={phoneOrder(0)}
+              borderColor="gold.300"
+            >
+              <SimpleGrid columns={3} spacing={2}>
+                {starters.map((starter) => (
+                  <PickPokemon key={starter} starter={starter} />
+                ))}
+              </SimpleGrid>
+            </Panel>
           )}
           <Box order={phoneOrder(6)}>
             <Pokedex />
@@ -145,15 +149,19 @@ export default function Game() {
           scrollBehavior={"smooth"}
           sx={scrollbar}
         >
+          {/* The strip of page color under the scene hides the map as it
+              scrolls up behind it. */}
           <Box
             order={phoneOrder(1)}
             position={{ md: "sticky" }}
             top={0}
             zIndex={1}
+            bg="sky.100"
+            pb={{ md: 2 }}
           >
             <Scene />
           </Box>
-          <Box order={phoneOrder(4)}>
+          <Box order={phoneOrder(4)} borderRadius="xl" overflow="hidden">
             <Map />
           </Box>
         </Box>

@@ -44,10 +44,10 @@ export default function Elite4({ elite4, setInElite4 }) {
   // Render the elite4 interface with challenge and leave buttons.
   return (
     <SceneFrame background={background}>
-      <Flex position={"absolute"} top={0} left={0} direction="column" gap={2}>
+      <Flex position={"absolute"} top={2} left={2} direction="column" gap={2}>
         <Button
           size={"sm"}
-          colorScheme="green"
+          variant="scene"
           onClick={() => {
             updateBattle({
               pokemon: elite4.leaders[elite4Stage].pokemon,
@@ -61,7 +61,7 @@ export default function Elite4({ elite4, setInElite4 }) {
         </Button>
         <Button
           size={"sm"}
-          colorScheme="green"
+          variant="scene"
           onClick={() => {
             setInElite4(false);
           }}

@@ -1,7 +1,20 @@
-import { Box, Center, Flex, Link, useDisclosure } from "@chakra-ui/react";
+import dynamic from "next/dynamic";
+import { Box, Button, Flex, Heading, useDisclosure } from "@chakra-ui/react";
 import SaveLoadModal from "./SaveLoadModal";
 import { loadFirebase } from "@/config";
 import useAuth from "@/hooks/useAuth";
+
+// The coin count comes from the save in the browser, so don't draw it while
+// the page is built ahead of time.
+const Coins = dynamic(() => import("./Coins"), { ssr: false });
+
+const headerButton = {
+  size: "xs",
+  variant: "ghost",
+  color: "white",
+  _hover: { bg: "whiteAlpha.300" },
+  _active: { bg: "whiteAlpha.400" },
+};
 
 export default function Layout({ children }) {
   const { user } = useAuth();
@@ -24,21 +37,30 @@ export default function Layout({ children }) {
   return (
     <Flex direction="column" h={{ md: "100vh" }}>
       <SaveLoadModal isOpen={isOpen} onClose={onClose} />
-      <Center
+      <Flex
         as="header"
-        bg="blue.200"
-        justifyContent={"end"}
-        p={1}
-        gap={2}
+        bg="brand.500"
+        align="center"
+        justify="space-between"
+        gap={3}
+        px={3}
+        py={1.5}
         flexShrink={0}
+        boxShadow="sm"
       >
-        <Link as="button" type="button" onClick={onOpen} fontSize="xs">
-          Save/Load
-        </Link>
-        <Link as="button" type="button" onClick={onClick} fontSize="xs">
-          {user ? "Sign Out" : "Sign In"}
-        </Link>
-      </Center>
+        <Heading as="h1" size="md" color="white" letterSpacing="wide">
+          PikaClicker
+        </Heading>
+        <Flex align="center" gap={1}>
+          <Coins />
+          <Button {...headerButton} onClick={onOpen}>
+            Save/Load
+          </Button>
+          <Button {...headerButton} onClick={onClick}>
+            {user ? "Sign out" : "Sign in"}
+          </Button>
+        </Flex>
+      </Flex>
       <Box as="main" flex="1" minH="0" overflowY={{ md: "auto" }}>
         {children}
       </Box>

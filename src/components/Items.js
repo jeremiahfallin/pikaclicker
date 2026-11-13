@@ -1,10 +1,11 @@
-import { Box, Center, Flex, Heading, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import useGameStore from "@/hooks/useGameStore";
+import Panel from "./Panel";
 
 export default function Items({ selectedPokemon }) {
   const items = useGameStore((state) => state.player.items);
-  const coins = useGameStore((state) => state.player.coins);
   const applyItemOnPokemon = useGameStore((state) => state.applyItemOnPokemon);
+  const hasSelection = !!selectedPokemon?.uuid;
 
   const handleClick = (item) => {
     if (!selectedPokemon.uuid) return;
@@ -12,18 +13,22 @@ export default function Items({ selectedPokemon }) {
   };
 
   return (
-    <Box overflowX="hidden" w="100%">
-      <Flex gap={2} align={"center"}>
-        <Heading as="h3" size="md">
-          Items
-        </Heading>
-        <Text fontSize="sm"> - ({coins} coins)</Text>
-      </Flex>
+    <Panel
+      title="Items"
+      extra={
+        !hasSelection && (
+          <Text fontSize="xs" color="sky.700">
+            Pick a Pokémon to use one
+          </Text>
+        )
+      }
+    >
       <Flex
         maxW="100%"
         minW="0"
-        gap={4}
-        overflowX="scroll"
+        gap={2}
+        pb={1}
+        overflowX="auto"
         wrap="nowrap"
         whiteSpace="nowrap"
         scrollBehavior={"smooth"}
@@ -31,20 +36,18 @@ export default function Items({ selectedPokemon }) {
           "&::-webkit-scrollbar": { height: "5px" },
           "&::-webkit-scrollbar-track": { background: "transparent" },
           "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "gray.400",
+            backgroundColor: "sky.300",
             borderRadius: "24px",
-            border: "2px solid transparent",
           },
           scrollbarWidth: "thin",
-          scrollbarColor: "gray.400 transparent",
         }}
       >
         {items.map((item) => {
-          const isDisabled = !selectedPokemon?.uuid || item.quantity === 0;
+          const isDisabled = !hasSelection || item.quantity === 0;
           let tooltipMessage = "";
           if (item.quantity === 0) {
             tooltipMessage = `You have no ${item.name}s left.`;
-          } else if (!selectedPokemon?.uuid) {
+          } else if (!hasSelection) {
             tooltipMessage = "Select a Pokémon first to use an item.";
           }
 
@@ -56,28 +59,45 @@ export default function Items({ selectedPokemon }) {
               hasArrow
               shouldWrapChildren
             >
-              <Center
+              <Flex
                 as="button"
+                type="button"
                 aria-label={`Use ${item.name} (${item.quantity} left)`}
                 aria-disabled={isDisabled}
                 disabled={isDisabled}
-                opacity={isDisabled ? 0.5 : 1}
-                cursor={isDisabled ? "not-allowed" : "pointer"}
-                _hover={!isDisabled ? { background: "gray.100" } : undefined}
-                _focusVisible={{ outline: "2px solid", outlineColor: "blue.400", outlineOffset: "2px" }}
-                borderRadius="md"
+                align="center"
+                gap={1.5}
                 flex="0 0 auto"
-                flexDir={"column"}
+                bg="sky.50"
+                border="2px solid"
+                borderColor="transparent"
+                borderRadius="full"
+                px={3}
+                py={1}
+                fontSize="sm"
+                opacity={item.quantity === 0 ? 0.4 : hasSelection ? 1 : 0.7}
+                cursor={isDisabled ? "not-allowed" : "pointer"}
+                _hover={!isDisabled ? { borderColor: "sky.300" } : undefined}
+                _focusVisible={{ borderColor: "sky.500", outline: "none" }}
+                transition="all 0.15s"
                 onClick={() => handleClick(item)}
-                p={2}
               >
-                <Text>{item.name}</Text>
-                <Text>{item.quantity}</Text>
-              </Center>
+                <Text fontWeight={600}>{item.name}</Text>
+                <Box
+                  bg="white"
+                  color="sky.700"
+                  borderRadius="full"
+                  px={1.5}
+                  fontSize="xs"
+                  fontWeight={700}
+                >
+                  ×{item.quantity}
+                </Box>
+              </Flex>
             </Tooltip>
           );
         })}
       </Flex>
-    </Box>
+    </Panel>
   );
 }

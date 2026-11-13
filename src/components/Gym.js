@@ -28,10 +28,10 @@ export default function Gym({ gym, setInGym }) {
   // Render the gym interface with challenge and leave buttons.
   return (
     <SceneFrame background={background}>
-      <Flex position={"absolute"} top={0} left={0} direction="column" gap={2}>
+      <Flex position={"absolute"} top={2} left={2} direction="column" gap={2}>
         <Button
           size={"sm"}
-          colorScheme="green"
+          variant="scene"
           onClick={() => {
             updateBattle({
               pokemon: gym.pokemon,
@@ -45,7 +45,7 @@ export default function Gym({ gym, setInGym }) {
         </Button>
         <Button
           size={"sm"}
-          colorScheme="green"
+          variant="scene"
           onClick={() => {
             setInGym(false);
           }}

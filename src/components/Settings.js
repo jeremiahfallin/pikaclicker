@@ -1,14 +1,36 @@
 import useAuth from "@/hooks/useAuth";
 import useGameStore from "@/hooks/useGameStore";
 import {
-  Box,
   Button,
   Flex,
-  Heading,
+  FormControl,
+  FormLabel,
   Select,
+  Stack,
   Switch,
-  Text,
 } from "@chakra-ui/react";
+import Panel from "./Panel";
+
+// One on/off setting. Clicking the label flips the switch too.
+function SettingSwitch({ id, label, setting }) {
+  const settings = useGameStore((state) => state.settings);
+  return (
+    <FormControl display="flex" alignItems="center" justifyContent="space-between">
+      <FormLabel htmlFor={id} mb={0} fontSize="sm" fontWeight={400}>
+        {label}
+      </FormLabel>
+      <Switch
+        id={id}
+        onChange={() =>
+          useGameStore.setState({
+            settings: { ...settings, [setting]: !settings[setting] },
+          })
+        }
+        isChecked={settings[setting]}
+      />
+    </FormControl>
+  );
+}
 
 // TODO: Right now only the ball is implemented, everything else is just visual
 export default function Settings() {
@@ -17,85 +39,63 @@ export default function Settings() {
   const { user, saveData, loadData } = useAuth();
 
   return (
-    <Box>
-      <Heading as="h3" size="md">
-        Settings
-      </Heading>
-      <Flex direction="row" justify="space-between">
-        <Text>Repeat Pokemon</Text>
-        <Switch
-          onChange={() =>
-            useGameStore.setState({
-              settings: { ...settings, repeatPokemon: !settings.repeatPokemon },
-            })
-          }
-          isChecked={settings.repeatPokemon}
+    <Panel title="Settings">
+      <Stack spacing={1}>
+        <SettingSwitch
+          id="setting-repeat"
+          label="Repeat Pokémon"
+          setting="repeatPokemon"
         />
-      </Flex>
-      <Flex direction="row" justify="space-between">
-        <Text>New Pokemon</Text>
-        <Switch
-          onChange={() =>
-            useGameStore.setState({
-              settings: { ...settings, newPokemon: !settings.newPokemon },
-            })
-          }
-          isChecked={settings.newPokemon}
+        <SettingSwitch id="setting-new" label="New Pokémon" setting="newPokemon" />
+        <SettingSwitch
+          id="setting-shiny"
+          label="Shiny Pokémon"
+          setting="shinyPokemon"
         />
-      </Flex>
-      <Flex direction="row" justify="space-between">
-        <Text>Shiny Pokemon</Text>
-        <Switch
-          onChange={() =>
-            useGameStore.setState({
-              settings: { ...settings, shinyPokemon: !settings.shinyPokemon },
-            })
-          }
-          isChecked={settings.shinyPokemon}
+        <SettingSwitch
+          id="setting-legendary"
+          label="Legendary Pokémon"
+          setting="legendaryPokemon"
         />
-      </Flex>
-      <Flex direction="row" justify="space-between">
-        <Text>Legendary Pokemon</Text>
-        <Switch
-          onChange={() =>
-            useGameStore.setState({
-              settings: {
-                ...settings,
-                legendaryPokemon: !settings.legendaryPokemon,
-              },
-            })
-          }
-          isChecked={settings.legendaryPokemon}
-        />
-      </Flex>
-      <Flex direction="row" justify="space-between">
-        <Text>Ball</Text>
-        <Select
-          width="120px"
-          size="xs"
-          value={settings.ball}
-          onChange={(e) =>
-            useGameStore.setState({
-              settings: {
-                ...settings,
-                ball: e.target.value,
-              },
-            })
-          }
+        <FormControl
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
         >
-          {items
-            .filter((item) => item.type === "ball")
-            .map((item) => {
-              return (
-                <option key={item.name} value={item.name}>
-                  {item.name}
-                </option>
-              );
-            })}
-        </Select>
-      </Flex>
+          <FormLabel htmlFor="setting-ball" mb={0} fontSize="sm" fontWeight={400}>
+            Ball
+          </FormLabel>
+          <Select
+            id="setting-ball"
+            width="140px"
+            size="sm"
+            borderRadius="full"
+            bg="sky.50"
+            borderColor="sky.200"
+            value={settings.ball}
+            onChange={(e) =>
+              useGameStore.setState({
+                settings: {
+                  ...settings,
+                  ball: e.target.value,
+                },
+              })
+            }
+          >
+            {items
+              .filter((item) => item.type === "ball")
+              .map((item) => {
+                return (
+                  <option key={item.name} value={item.name}>
+                    {item.name}
+                  </option>
+                );
+              })}
+          </Select>
+        </FormControl>
+      </Stack>
       {user && (
-        <Flex direction="row" justify="space-between" p={2}>
+        <Flex direction="row" justify="space-between" pt={3}>
           <Button size="xs" onClick={saveData}>
             Save
           </Button>
@@ -104,6 +104,6 @@ export default function Settings() {
           </Button>
         </Flex>
       )}
-    </Box>
+    </Panel>
   );
 }
